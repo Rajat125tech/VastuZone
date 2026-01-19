@@ -1,0 +1,147 @@
+/* 🔒 FULL ISOLATION */
+.ecz-scope {
+  background: #f7f4dc;
+  padding: 24px;
+}
+
+/* CONTAINER */
+.ecz-wrapper {
+  max-width: 1500px;
+  margin: auto;
+}
+
+/* HEADER */
+.ecz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* MAIN GRID */
+.ecz-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 2.6fr; /* chat smaller, property bigger */
+  gap: 20px;
+}
+
+/* ================= CHAT ================= */
+
+.ecz-chat-box {
+  display: flex;
+  flex-direction: column;
+  height: 78vh;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.ecz-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ecz-empty {
+  text-align: center;
+  opacity: 0.6;
+  margin-top: 40px;
+}
+
+/* BUBBLES */
+.ecz-bubble {
+  max-width: 65%;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.ecz-bubble-user {
+  background: #f1f5f9;
+  align-self: flex-start;
+}
+
+.ecz-bubble-expert {
+  background: #4f46e5;
+  color: white;
+  align-self: flex-end;
+}
+
+.ecz-time {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-top: 4px;
+  text-align: right;
+}
+
+/* INPUT BAR — FIXED BOTTOM */
+.ecz-input-bar {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  border-top: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.ecz-input-bar textarea {
+  flex: 1;
+  resize: none;
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+
+.ecz-input-bar button {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 0 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ================= PROPERTY ================= */
+
+.ecz-property-box {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.ecz-property-item {
+  background: #f3f4f6;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.ecz-property-item.active {
+  background: #e0e7ff;
+}
+
+.ecz-property-item span {
+  display: block;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.ecz-pdf iframe {
+  width: 100%;
+  height: 65vh;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  margin-top: 10px;
+}
+
+.ecz-muted {
+  font-size: 13px;
+  opacity: 0.6;
+}

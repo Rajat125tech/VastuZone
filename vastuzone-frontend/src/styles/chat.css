@@ -1,0 +1,189 @@
+/* ================= USER CHAT PAGE ================= */
+
+.user-chat-page {
+  background: #f9f6df;
+  min-height: calc(100vh - 80px);
+}
+
+/* Full height shell */
+.user-chat-shell {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px 80px;
+}
+
+/* Chat card */
+.user-chat-card {
+  width: 100%;
+  max-width: 920px;
+  height: 620px;
+
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ================= HEADER ================= */
+
+.user-chat-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #eee;
+  background: #faf7ef;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.user-chat-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.user-chat-subtitle {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #666;
+  max-width: 420px;
+}
+
+/* Expert meta */
+.expert-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 13px;
+  gap: 4px;
+}
+
+.expert-status.online {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.expert-reply-time {
+  color: #888;
+}
+
+/* ================= MESSAGES ================= */
+
+.user-chat-messages {
+  flex: 1;
+  padding: 22px 24px;
+  overflow-y: auto;
+  background: #f8fafc;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Empty states */
+.chat-empty {
+  text-align: center;
+  margin-top: 80px;
+  color: #999;
+  font-size: 14px;
+}
+
+/* ================= BUBBLES ================= */
+
+.user-bubble {
+  max-width: 70%;
+  padding: 14px 18px;
+  border-radius: 16px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+/* User message */
+.user-bubble.user {
+  align-self: flex-end;
+  background: #e8f1ff;
+  color: #1e3a8a;
+  border-bottom-right-radius: 6px;
+}
+
+/* Expert message */
+.user-bubble.expert {
+  align-self: flex-start;
+  background: #f1f5f9;
+  color: #334155;
+  border-bottom-left-radius: 6px;
+}
+
+/* ================= INPUT BAR ================= */
+
+.user-chat-input {
+  padding: 14px;
+  border-top: 1px solid #eee;
+  background: #ffffff;
+
+  display: flex;
+  gap: 12px;
+}
+
+.user-chat-input input {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  outline: none;
+}
+
+.user-chat-input input:focus {
+  border-color: #ff8c66;
+}
+
+.user-chat-input button {
+  background: #ff8c66;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 0 22px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.user-chat-input button:hover {
+  background: #ff7448;
+}
+
+.appointment-cta {
+  background: #fff4f4;
+  border: 1px solid #f3c2c2;
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin: 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.appointment-cta p {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.book-btn {
+  background: #d62828;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.book-btn:hover {
+  background: #b81f1f;
+}

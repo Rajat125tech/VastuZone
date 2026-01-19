@@ -1,0 +1,111 @@
+/* ================= NAVBAR ================= */
+
+.navbar {
+  height: 64px;
+  padding: 0 32px;
+  background: #f7f5dc;
+  border-bottom: 1px solid #e6e3c8;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* LOGO */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.logo-img {
+  height: 34px;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c2c2c;
+}
+
+/* RIGHT SIDE */
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* LOGIN TEXT BUTTON */
+.login-btn {
+  background: transparent;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  color: #2c2c2c;
+}
+
+.login-btn:hover {
+  text-decoration: underline;
+}
+
+/* SIGNUP / LOGOUT BUTTON */
+.nav-signup-btn {
+  background: #d4a12f;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.nav-signup-btn:hover {
+  background: #b88c26;
+}
+
+/* SIGNUP / LOGOUT BUTTON */
+.nav-signup-btn {
+  background: #e25555;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 16px rgba(226, 85, 85, 0.25);
+}
+
+.nav-signup-btn:hover {
+  background: #c94444;
+  transform: translateY(-1px);
+}
+
+.nav-link {
+  margin-right: 16px;
+  text-decoration: none;
+  font-weight: 500;
+  color: #333;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+.nav-user {
+  margin-right: 12px;
+  font-size: 14px;
+  color: #555;
+}
+
+.logout-btn {
+  background: #e74c3c;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}

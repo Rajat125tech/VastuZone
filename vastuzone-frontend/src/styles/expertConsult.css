@@ -1,0 +1,84 @@
+.expert-consult-container {
+  padding: 30px;
+}
+
+.expert-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 25px;
+}
+
+.expert-property-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.pdf-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 14px;
+  background: #2c7be5;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.expert-chat-box {
+  background: #ffffff;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.chat-header {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.chat-messages {
+  padding: 15px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.chat-bubble {
+  max-width: 70%;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+}
+
+.chat-bubble.user {
+  background: #f1f3f5;
+}
+
+.chat-bubble.expert {
+  background: #2ecc71;
+  color: #fff;
+  margin-left: auto;
+}
+
+.chat-input {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  border-top: 1px solid #eee;
+}
+
+.chat-input textarea {
+  flex: 1;
+  resize: none;
+  padding: 10px;
+}
+
+.chat-input button {
+  padding: 10px 18px;
+  background: #2c7be5;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}

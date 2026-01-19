@@ -1,0 +1,146 @@
+.expert-dashboard {
+  padding: 40px 60px;
+  background: #f9f6df;
+  min-height: calc(100vh - 80px);
+}
+
+.expert-dashboard h1 {
+  font-size: 32px;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.section-title {
+  margin-top: 50px;
+  font-size: 26px;
+}
+
+/* ================= GRID ================= */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 22px;
+  margin-top: 20px;
+}
+
+/* ================= CARDS ================= */
+
+.dashboard-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card strong {
+  font-size: 16px;
+}
+
+.last-message {
+  margin: 10px 0;
+  color: #555;
+}
+
+.updated {
+  font-size: 12px;
+  color: #888;
+}
+
+/* ================= APPOINTMENTS ================= */
+
+.dashboard-card.appointment {
+  cursor: default;
+}
+
+.join-btn {
+  margin-top: 12px;
+  background: #d62828;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.join-btn:hover {
+  background: #b81f1f;
+}
+
+.meet-input {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 13px;
+}
+
+.meet-input {
+  margin-top: 12px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+/* ---------- SECTION SPACING ---------- */
+
+.section-title {
+  margin-top: 60px;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: #777;
+  margin-bottom: 18px;
+}
+
+/* ---------- APPOINTMENT GRID FIX ---------- */
+
+.appointments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 360px));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+/* ---------- APPOINTMENT CARD ---------- */
+
+.dashboard-card.appointment {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- MEET INPUT ---------- */
+
+.meet-input {
+  margin-top: 14px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.meet-input:focus {
+  outline: none;
+  border-color: #d62828;
+  box-shadow: 0 0 0 3px rgba(214, 40, 40, 0.15);
+}

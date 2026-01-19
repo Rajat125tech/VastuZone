@@ -1,0 +1,252 @@
+/* =========================
+   DASHBOARD CONTAINER
+   ========================= */
+
+.dashboard-container {
+  padding: 3.5rem 5.5rem;
+  background: #f6f4dc;
+  min-height: calc(100vh - 80px);
+}
+
+/* =========================
+   HEADER
+   ========================= */
+
+.dashboard-header {
+  margin-bottom: 3rem;
+}
+
+.dashboard-title {
+  font-family: "Playfair Display", serif;
+  font-size: 2.6rem;
+  font-weight: 600;
+  color: #2f2f2f;
+  margin-bottom: 0.3rem;
+}
+
+.dashboard-subtitle {
+  font-size: 1rem;
+  color: #6b665a;
+}
+
+/* =========================
+   QUICK ACTIONS
+   ========================= */
+
+.dashboard-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+/* ACTION CARD BASE */
+.action-card {
+  position: relative;
+  border-radius: 22px;
+  padding: 2.2rem;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  overflow: hidden;
+  min-height: 200px;
+
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.08),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+/* ICON CIRCLE */
+.action-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+/* CONTENT */
+.action-content h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #2f2f2f;
+}
+
+.action-content p {
+  font-size: 0.95rem;
+  color: #5f5f5f;
+  line-height: 1.5;
+}
+
+/* HOVER */
+.action-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 28px 60px rgba(0, 0, 0, 0.12),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+/* CARD VARIANTS */
+.action-card.plan {
+  background: linear-gradient(135deg, #fde6d4, #fff4ea);
+}
+
+.action-card.plan .action-icon {
+  background: #f7a46a;
+  color: #ffffff;
+}
+
+.action-card.reports {
+  background: linear-gradient(135deg, #e5f4ee, #f1fbf7);
+}
+
+.action-card.reports .action-icon {
+  background: #4fb890;
+  color: #ffffff;
+}
+
+.action-card.expert {
+  background: linear-gradient(135deg, #ece9ff, #f5f3ff);
+}
+
+.action-card.expert .action-icon {
+  background: #7b6df0;
+  color: #ffffff;
+}
+
+/* =========================
+   PROPERTIES SECTION
+   ========================= */
+
+.dashboard-section {
+  margin-top: 1rem;
+}
+
+.section-title {
+  font-family: "Playfair Display", serif;
+  font-size: 1.9rem;
+  margin-bottom: 1.6rem;
+  color: #2f2f2f;
+}
+
+.dashboard-loading {
+  font-size: 0.95rem;
+  color: #777;
+}
+
+.empty-text {
+  font-size: 0.95rem;
+  color: #7a7468;
+}
+
+/* =========================
+   PROPERTY LIST
+   ========================= */
+
+.property-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.8rem;
+}
+
+/* PROPERTY CARD */
+.property-card {
+  background: #fffef3;
+  border-radius: 18px;
+  padding: 1.8rem;
+  transition: all 0.3s ease;
+
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.08),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.property-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 22px 52px rgba(0, 0, 0, 0.12),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+/* TITLE */
+.property-title {
+  font-family: "Playfair Display", serif;
+  font-size: 1.25rem;
+  margin-bottom: 0.6rem;
+}
+
+/* DETAILS */
+.property-card p {
+  font-size: 0.92rem;
+  color: #5f5a4a;
+  margin-bottom: 0.3rem;
+}
+
+/* STATUS ROW */
+.property-status {
+  margin-top: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.property-status .label {
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 500;
+}
+
+/* STATUS BADGES */
+.status {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status.pending {
+  background: #fff4d6;
+  color: #b58900;
+}
+
+.status.reviewed {
+  background: #e6f9f0;
+  color: #047857;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 1100px) {
+  .dashboard-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-container {
+    padding: 3rem 3rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .dashboard-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-container {
+    padding: 2.5rem 1.6rem;
+  }
+
+  .dashboard-title {
+    font-size: 2.2rem;
+  }
+}
