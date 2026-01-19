@@ -137,11 +137,19 @@ RAZORPAY_KEY_SECRET=
 ### Home Page
 ![Home Page](screenshots/homepage.png)
 
-### Login Page
-![Login Page](screenshots/login.png)
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
 
 ### Reports
 ![Reports](screenshots/reports.png)
+
+### Chat-Feature
+![chatbox](screenshots/chatbox.png)
+
+### Expert Dashboard
+![expertdb](screenshots/expertdb.png)
+
+
 
 ## 👨‍💻 Author
 
@@ -149,4 +157,5 @@ Rajat Srivastava
 🎓 AI/ML Student 
 
 📍 VIT Vellore
+
 
