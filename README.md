@@ -132,9 +132,21 @@ RAZORPAY_KEY_SECRET=
 - 📄 Downloadable PDF reports
 - 🌍 Multi-language support
 
+## 🖼️ Application Screenshots
+
+### Home Page
+![Home Page](screenshots/homepage.png)
+
+### Login Page
+![Login Page](screenshots/login.png)
+
+### Reports
+![Reports](screenshots/reports.png)
+
 ## 👨‍💻 Author
 
 Rajat Srivastava
 🎓 AI/ML Student 
 
 📍 VIT Vellore
+
