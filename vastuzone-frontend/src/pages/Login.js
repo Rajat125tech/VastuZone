@@ -30,7 +30,7 @@ function Login() {
       const user = userCredential.user;
 
       const res = await fetch(
-        `http://localhost:5001/api/users/me/${user.uid}`
+        `https://vastuzone-backend.onrender.com/api/users/me/${user.uid}`
       );
 
       if (!res.ok) {
@@ -54,7 +54,7 @@ function Login() {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      await fetch("http://localhost:5001/api/users/create", {
+      await fetch("https://vastuzone-backend.onrender.com/api/users/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +64,7 @@ function Login() {
           email: user.email,
         }),
       });
-      await fetch("http://localhost:5001/api/users/create", {
+      await fetch("https://vastuzone-backend.onrender.com/api/users/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -76,7 +76,7 @@ function Login() {
       });
 
       const res = await fetch(
-        `http://localhost:5001/api/users/me/${user.uid}`
+        `https://vastuzone-backend.onrender.com/api/users/me/${user.uid}`
       );
 
       const userData = await res.json();
