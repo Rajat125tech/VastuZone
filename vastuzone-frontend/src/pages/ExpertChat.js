@@ -21,7 +21,7 @@ function ExpertChat() {
 
   const loadUser = useCallback(async () => {
     const res = await fetch(
-      `http://localhost:5001/api/users/me/${userId}`
+      `https://vastuzone-backend.onrender.com/api/users/me/${userId}`
     );
     const data = await res.json();
     setUserName(data.name || "Unknown User");
@@ -29,7 +29,7 @@ function ExpertChat() {
 
   const loadProperties = useCallback(async () => {
     const res = await fetch(
-      `http://localhost:5001/api/properties/user/${userId}`
+      `https://vastuzone-backend.onrender.com/api/properties/user/${userId}`
     );
     const data = await res.json();
     setProperties(data);
@@ -38,7 +38,7 @@ function ExpertChat() {
   const markPropertiesReviewed = useCallback(async () => {
     try {
       await fetch(
-        `http://localhost:5001/api/properties/mark-reviewed/${userId}`,
+        `https://vastuzone-backend.onrender.com/properties/mark-reviewed/${userId}`,
         { method: "POST" }
       );
     } catch (err) {
@@ -62,7 +62,7 @@ function ExpertChat() {
   const sendMessage = async () => {
     if (!text.trim()) return;
 
-    await fetch(`http://localhost:5001/api/chat/${userId}/message`, {
+    await fetch(`https://vastuzone-backend.onrender.com/api/chat/${userId}/message`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
