@@ -18,26 +18,23 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.post("/", upload.single("file"), async (req, res) => {
-  console.log("🔥 POST /api/properties hit");
-
   try {
     const { userId } = req.body;
 
     if (!userId) {
-      return res.status(400).json({
-        message: "userId is required to create property",
-      });
+      return res.status(400).json({ message: "userId is required" });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: "Property file is required" });
     }
 
     const report = evaluateVastu(req.body);
 
-    const fileUrl = req.file
-      ? `http://localhost:5001/uploads/${req.file.filename}`
-      : null;
+    const fileUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
 
     const property = await Property.create({
-      userId, 
-
+      userId,
       propertyName: req.body.propertyName,
       propertyType: req.body.propertyType,
       purpose: req.body.purpose,
@@ -45,8 +42,6 @@ router.post("/", upload.single("file"), async (req, res) => {
       area: req.body.area,
       facing: req.body.facing,
       entrance: req.body.entrance,
-      floors: req.body.floors,
-      analysisFloor: req.body.analysisFloor,
       notes: req.body.notes,
 
       livingRoomDirection: req.body.livingRoomDirection,
@@ -56,7 +51,7 @@ router.post("/", upload.single("file"), async (req, res) => {
       bathroomDirection: req.body.bathroomDirection,
       poojaRoomDirection: req.body.poojaRoomDirection,
 
-      fileName: req.file ? req.file.filename : null,
+      fileName: req.file.filename,
       fileUrl,
 
       vastuScore: report.vastuScore,
@@ -70,13 +65,13 @@ router.post("/", upload.single("file"), async (req, res) => {
       messages: [],
     });
 
-    console.log("✅ Property saved with userId:", userId);
     res.status(201).json(property);
   } catch (error) {
     console.error("❌ Property save failed:", error);
-    res.status(500).json({ message: "Failed to save property" });
+    res.status(500).json({ message: error.message });
   }
 });
+    
 router.get("/", async (req, res) => {
   try {
     const properties = await Property.find().sort({ createdAt: -1 });
