@@ -24,7 +24,7 @@ function Navbar() {
 
       try {
         const res = await fetch(
-          `http://localhost:5001/api/users/me/${currentUser.uid}`
+          `https://vastuzone-backend.onrender.com/api/users/me/${currentUser.uid}`
         );
         const data = await res.json();
         setRole(data.role); // "user" or "expert"
