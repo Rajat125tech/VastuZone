@@ -24,7 +24,7 @@ function Signup() {
 
       const user = userCredential.user;
 
-      const res = await fetch("http://localhost:5001/api/users/create", {
+      const res = await fetch("https://vastuzone-backend.onrender.com/api/users/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -68,7 +68,7 @@ function Signup() {
             <label>Full Name</label>
             <input
               type="text"
-              placeholder="Rajat Srivastava"
+              placeholder="Rajat"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
