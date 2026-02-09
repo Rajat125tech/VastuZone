@@ -9,18 +9,49 @@ import { useNavigate } from "react-router-dom";
 function BookAppointment() {
   const [user, setUser] = useState(null);
   const [authReady, setAuthReady] = useState(false);
-  const navigate = useNavigate();
   const [date, setDate] = useState("");
   const [slot, setSlot] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  /* ===============================
+     FIREBASE AUTH + USER SYNC
+  =============================== */
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => {
+    const unsub = onAuthStateChanged(auth, async (u) => {
       setUser(u);
       setAuthReady(true);
+
+      // 🔑 Sync Firebase user to MongoDB
+      if (u) {
+        try {
+          await fetch(
+            "https://vastuzone-backend.onrender.com/api/users/sync",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                uid: u.uid,
+                name: u.displayName || "User",
+                email: u.email,
+              }),
+            }
+          );
+        } catch (err) {
+          console.error("User sync failed:", err);
+        }
+      }
     });
+
     return () => unsub();
   }, []);
 
+  /* ===============================
+     CREATE APPOINTMENT
+  =============================== */
   const handleConfirm = async () => {
     if (!authReady || !user) {
       alert("User not authenticated yet. Please wait.");
@@ -57,9 +88,7 @@ function BookAppointment() {
         return;
       }
 
-      alert(
-        "✅ Appointment created successfully"
-      );
+      alert("✅ Appointment created successfully");
       navigate("/my-appointments");
 
       setDate("");
@@ -79,7 +108,7 @@ function BookAppointment() {
       <div className="book-page">
         <div className="book-card">
 
-          {/* LEFT */}
+          {/* LEFT SIDE */}
           <div className="book-left">
             <img src={expertPhoto} alt="Vastu Expert" />
 
@@ -98,6 +127,7 @@ function BookAppointment() {
             </div>
           </div>
 
+          {/* RIGHT SIDE */}
           <div className="book-right">
             <h3>Book Your Appointment</h3>
 
