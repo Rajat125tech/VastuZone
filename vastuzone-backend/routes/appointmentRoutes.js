@@ -22,7 +22,7 @@ router.post("/create", async (req, res) => {
 
     const appointment = await Appointment.create({
       userId: user.firebaseUid,
-      userName: user.name,
+      userName: user.name || user.email || "User",
       email: user.email,
       appointmentDate: date,
       timeSlot: slot,
