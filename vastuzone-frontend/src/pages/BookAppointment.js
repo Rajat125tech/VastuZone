@@ -34,7 +34,7 @@ function BookAppointment() {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                uid: u.uid,
+                firebaseUid: u.uid,
                 name: u.displayName || "User",
                 email: u.email,
               }),
