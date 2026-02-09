@@ -19,7 +19,7 @@ app.use(
       "http://localhost:3000",
       "https://vastuzone-frontend.onrender.com",
     ],
-    credentials: true,
+    credentials: false,
   })
 );
 
