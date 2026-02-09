@@ -2,6 +2,7 @@ const express = require("express");
 const User = require("../models/User");
 
 const router = express.Router();
+
 router.post("/create", async (req, res) => {
   try {
     const { firebaseUid, email, name } = req.body;
@@ -23,7 +24,7 @@ router.post("/create", async (req, res) => {
 
     res.status(200).json(user);
   } catch (err) {
-    console.error(" User creation failed:", err);
+    console.error("User creation failed:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -40,12 +41,12 @@ router.get("/me/:firebaseUid", async (req, res) => {
 
     res.json({
       firebaseUid: user.firebaseUid,
-      name: user.name,        
+      name: user.name,
       email: user.email,
       role: user.role,
     });
   } catch (error) {
-    console.error(" Fetch user failed", error);
+    console.error("Fetch user failed", error);
     res.status(500).json({ message: "Server error" });
   }
 });

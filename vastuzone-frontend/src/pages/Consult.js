@@ -2,17 +2,20 @@ import { useEffect, useState, useRef } from "react";
 import Navbar from "../components/Navbar";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { socket } from "../socket";
 import "../styles/chat.css";
 
 function Consult() {
   const user = auth.currentUser;
   const userId = user?.uid;
+
   const bottomRef = useRef(null);
   const navigate = useNavigate();
 
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (!userId) return;
 
@@ -32,30 +35,45 @@ function Consult() {
 
     fetchChat();
   }, [userId]);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    socket.connect();
+    socket.emit("joinRoom", userId);
+
+    socket.on("newMessage", ({ message }) => {
+      setMessages((prev) => [...prev, message]);
+    });
+
+    return () => {
+      socket.off("newMessage");
+      socket.disconnect();
+    };
+  }, [userId]);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  
   const sendMessage = async () => {
     if (!text.trim()) return;
 
     try {
-      await fetch(`https://vastuzone-backend.onrender.com/api/chat/${userId}/message`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sender: "user",
-          text,
-        }),
-      });
-
-      setText("");
-
-      const res = await fetch(
-        `https://vastuzone-backend.onrender.com/api/chat/${userId}`
+      await fetch(
+        `https://vastuzone-backend.onrender.com/api/chat/${userId}/message`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sender: "user",
+            text,
+          }),
+        }
       );
-      const data = await res.json();
-      setMessages(data.messages || []);
+
+      setText(""); 
     } catch (err) {
       console.error("Message send failed", err);
     }
@@ -64,6 +82,7 @@ function Consult() {
   return (
     <div className="user-chat-page">
       <Navbar />
+
       <div className="user-chat-shell">
         <div className="user-chat-card">
 
@@ -121,6 +140,7 @@ function Consult() {
 
             <div ref={bottomRef} />
           </div>
+
           <div className="user-chat-input">
             <input
               placeholder="Ask about Vastu, energy, directions..."

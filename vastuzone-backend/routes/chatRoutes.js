@@ -50,21 +50,39 @@ router.get("/:userId", async (req, res) => {
 router.post("/:userId/message", async (req, res) => {
   try {
     const { sender, text } = req.body;
+    const { userId } = req.params;
 
     if (!sender || !text) {
       return res.status(400).json({ message: "Invalid message data" });
     }
 
-    const chat = await Chat.findOne({ userId: req.params.userId });
-    if (!chat) return res.status(404).json({ message: "Chat not found" });
+    const chat = await Chat.findOne({ userId });
+    if (!chat) {
+      return res.status(404).json({ message: "Chat not found" });
+    }
 
-    chat.messages.push({ sender, text });
+    const message = {
+      sender,
+      text,
+      createdAt: new Date(),
+    };
+
+    chat.messages.push(message);
     await chat.save();
 
-    res.json(chat);
+    // 🔥 REAL-TIME EMIT
+    const io = req.app.get("io");
+    io.to(userId).emit("newMessage", {
+      userId,
+      message,
+    });
+
+    res.status(200).json(message);
   } catch (err) {
+    console.error("❌ Failed to send message", err);
     res.status(500).json({ message: "Failed to send message" });
   }
 });
+
 
 module.exports = router;

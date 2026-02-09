@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { socket } from "../socket";
 import "../styles/expertChat.css";
 
 function ExpertChat() {
@@ -13,8 +14,11 @@ function ExpertChat() {
   const [text, setText] = useState("");
   const [userName, setUserName] = useState("Loading...");
   const [loading, setLoading] = useState(true);
+
   const loadChat = useCallback(async () => {
-    const res = await fetch(`http://localhost:5001/api/chat/${userId}`);
+    const res = await fetch(
+      `https://vastuzone-backend.onrender.com/api/chat/${userId}`
+    );
     const data = await res.json();
     setChat(data);
   }, [userId]);
@@ -35,16 +39,6 @@ function ExpertChat() {
     setProperties(data);
   }, [userId]);
 
-  const markPropertiesReviewed = useCallback(async () => {
-    try {
-      await fetch(
-        `https://vastuzone-backend.onrender.com/properties/mark-reviewed/${userId}`,
-        { method: "POST" }
-      );
-    } catch (err) {
-      console.error("Failed to mark properties reviewed", err);
-    }
-  }, [userId]);
   useEffect(() => {
     if (!userId) return;
 
@@ -52,27 +46,49 @@ function ExpertChat() {
       loadChat(),
       loadUser(),
       loadProperties(),
-      markPropertiesReviewed(),
     ]).finally(() => setLoading(false));
-  }, [userId, loadChat, loadUser, loadProperties, markPropertiesReviewed]);
+  }, [userId, loadChat, loadUser, loadProperties]);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    socket.connect();
+    socket.emit("joinRoom", userId);
+
+    socket.on("newMessage", ({ message }) => {
+      setChat((prev) =>
+        prev
+          ? { ...prev, messages: [...prev.messages, message] }
+          : prev
+      );
+    });
+
+    return () => {
+      socket.off("newMessage");
+      socket.disconnect();
+    };
+  }, [userId]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat]);
+
   const sendMessage = async () => {
     if (!text.trim()) return;
 
-    await fetch(`https://vastuzone-backend.onrender.com/api/chat/${userId}/message`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        sender: "expert",
-        text,
-      }),
-    });
+    await fetch(
+      `https://vastuzone-backend.onrender.com/api/chat/${userId}/message`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sender: "expert",
+          text,
+        }),
+      }
+    );
 
-    setText("");
-    loadChat();
+    setText(""); 
   };
 
   if (loading) return <p style={{ padding: 20 }}>Loading chat…</p>;
@@ -85,7 +101,6 @@ function ExpertChat() {
       <div className="ecz-scope">
         <div className="ecz-wrapper">
 
-          {/* HEADER */}
           <div className="ecz-header">
             <h2>User Consultation</h2>
             <span>
@@ -93,10 +108,8 @@ function ExpertChat() {
             </span>
           </div>
 
-          {/* MAIN LAYOUT */}
           <div className="ecz-layout">
 
-            {/* CHAT COLUMN */}
             <div className="ecz-chat-box">
               <div className="ecz-messages">
                 {chat.messages.length === 0 && (
@@ -136,6 +149,7 @@ function ExpertChat() {
                 <button onClick={sendMessage}>Send</button>
               </div>
             </div>
+
             <div className="ecz-property-box">
               <h4>User Properties</h4>
 
@@ -161,16 +175,13 @@ function ExpertChat() {
               {activeProperty && (
                 <div className="ecz-pdf">
                   <h5>Floor Plan</h5>
-
                   {activeProperty.fileUrl ? (
                     <iframe
                       src={activeProperty.fileUrl}
                       title="Floor Plan"
                     />
                   ) : (
-                    <p className="ecz-muted">
-                      No floor plan uploaded.
-                    </p>
+                    <p className="ecz-muted">No floor plan uploaded.</p>
                   )}
                 </div>
               )}
