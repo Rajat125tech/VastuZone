@@ -14,25 +14,33 @@ router.post("/create", async (req, res) => {
     if (!userId || !date || !slot) {
       return res.status(400).json({ message: "Missing fields" });
     }
+    const user = await User.findOne({ uid: userId });
 
-    const user = await User.findOne({ firebaseUid: userId });
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     const appointment = await Appointment.create({
-      userId,
+      userId: user.uid,
       userName: user.name,
       email: user.email,
-      appointmentDate: date,
+      appointmentDate: date, 
       timeSlot: slot,
-      status: "pending_payment",
       amount: 299,
+      status: "pending_payment",
     });
 
-    res.status(201).json(appointment);
+    return res.status(201).json(appointment);
+
   } catch (err) {
-    res.status(500).json({ message: "Failed to create appointment" });
+    console.error("Create appointment error:", err);
+    return res.status(500).json({
+      message: "Failed to create appointment",
+      error: err.message,
+    });
   }
 });
+
 
 router.get("/user/:userId", async (req, res) => {
   const appointments = await Appointment.find({
