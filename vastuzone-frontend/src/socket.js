@@ -1,9 +1,11 @@
 import { io } from "socket.io-client";
 
 const SOCKET_URL =
-  "https://vastuzone-backend.onrender.com" || "http://localhost:5001";
+  process.env.REACT_APP_API_URL ??
+  "https://vastuzone-backend.onrender.com";
 
 export const socket = io(SOCKET_URL, {
-  withCredentials: true,
-  autoConnect: false, 
+  autoConnect: false,
+  transports: ["websocket", "polling"],
+  withCredentials: false, 
 });
