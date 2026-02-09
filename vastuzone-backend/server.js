@@ -13,9 +13,6 @@ const appointmentRoutes = require("./routes/appointmentRoutes");
 
 const app = express();
 
-/* ================================
-   CORS
-================================ */
 app.use(
   cors({
     origin: [
@@ -26,47 +23,31 @@ app.use(
   })
 );
 
-/* ================================
-   BODY PARSERS
-================================ */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-/* ================================
-   DATABASE
-================================ */
 connectDB();
 
-/* ================================
-   ROUTES
-================================ */
 app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/expert", expertRoutes);
 app.use("/api/appointments", appointmentRoutes);
 
-/* ================================
-   HEALTH CHECK
-================================ */
 app.get("/", (req, res) => {
   res.send("API running");
 });
 
-/* ================================
-   SOCKET.IO SETUP
-================================ */
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: [
-      "http://localhost:3000",
-      "https://vastuzone-frontend.onrender.com",
-    ],
+    origin: "https://vastuzone-frontend.onrender.com",
     methods: ["GET", "POST"],
+    credentials: false, 
   },
 });
+
 
 io.on("connection", (socket) => {
   console.log("Socket connected:", socket.id);
