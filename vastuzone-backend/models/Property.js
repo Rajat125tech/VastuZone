@@ -34,7 +34,10 @@ const propertySchema = new mongoose.Schema(
     analysisFloor: String,
     notes: String,
     fileName: String,
-    fileUrl: String,
+    fileUrl: {
+      type: String,
+      required: true,
+    },
 
     reviewStatus: {
       type: String,

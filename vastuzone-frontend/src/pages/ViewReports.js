@@ -220,14 +220,18 @@ function ViewReports() {
             </div>
 
             <iframe
-              src={activePdf}
+              src={`https://docs.google.com/gview?url=${encodeURIComponent(
+                activePdf
+              )}&embedded=true`}
               title="Floor Plan PDF"
               width="100%"
               height="100%"
+              style={{ border: "none" }}
             />
           </div>
         </div>
       )}
+
     </div>
   );
 }

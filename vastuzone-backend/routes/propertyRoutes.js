@@ -1,22 +1,34 @@
 const express = require("express");
 const Property = require("../models/Property");
-const multer = require("multer");
 const evaluateVastu = require("../utils/vastuEvaluator");
-const path = require("path");
+
+// Cloudinary + Multer
+const multer = require("multer");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../config/cloudinary");
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
+/* ================================
+   CLOUDINARY + MULTER CONFIG
+================================ */
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "vastuzone_pdfs",
+    resource_type: "raw", // REQUIRED for PDFs
+    allowed_formats: ["pdf"],
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+});
 
+/* ================================
+   CREATE PROPERTY
+================================ */
 router.post("/", upload.single("file"), async (req, res) => {
   try {
     const { userId } = req.body;
@@ -26,12 +38,14 @@ router.post("/", upload.single("file"), async (req, res) => {
     }
 
     if (!req.file) {
-      return res.status(400).json({ message: "Property file is required" });
+      return res.status(400).json({ message: "PDF file is required" });
     }
 
     const report = evaluateVastu(req.body);
 
-    const fileUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+    // ✅ Cloudinary details
+    const fileUrl = req.file.path;
+    const fileName = req.file.originalname;
 
     const property = await Property.create({
       userId,
@@ -51,7 +65,7 @@ router.post("/", upload.single("file"), async (req, res) => {
       bathroomDirection: req.body.bathroomDirection,
       poojaRoomDirection: req.body.poojaRoomDirection,
 
-      fileName: req.file.filename,
+      fileName,
       fileUrl,
 
       vastuScore: report.vastuScore,
@@ -65,34 +79,45 @@ router.post("/", upload.single("file"), async (req, res) => {
       messages: [],
     });
 
+    console.log("✅ Property saved with Cloudinary PDF");
     res.status(201).json(property);
   } catch (error) {
     console.error("❌ Property save failed:", error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Failed to save property",
+      error: error.message,
+    });
   }
 });
-    
+
+/* ================================
+   GET ALL PROPERTIES
+================================ */
 router.get("/", async (req, res) => {
   try {
     const properties = await Property.find().sort({ createdAt: -1 });
     res.json(properties);
   } catch (error) {
-    console.error("❌ Failed to fetch properties");
     res.status(500).json({ message: "Failed to fetch properties" });
   }
 });
+
+/* ================================
+   GET USER PROPERTIES
+================================ */
 router.get("/user/:userId", async (req, res) => {
   try {
-    const properties = await Property.find({
-      userId: req.params.userId,
-    }).sort({ createdAt: -1 });
-
+    const properties = await Property.find({ userId: req.params.userId })
+      .sort({ createdAt: -1 });
     res.json(properties);
   } catch (error) {
-    console.error("❌ Failed to fetch user properties");
     res.status(500).json({ message: "Failed to fetch properties" });
   }
 });
+
+/* ================================
+   GET PROPERTY BY ID
+================================ */
 router.get("/:id", async (req, res) => {
   try {
     const property = await Property.findById(req.params.id);
@@ -100,11 +125,14 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ message: "Property not found" });
     }
     res.json(property);
-  } catch (err) {
+  } catch {
     res.status(404).json({ message: "Property not found" });
   }
 });
 
+/* ================================
+   ADD MESSAGE
+================================ */
 router.post("/:id/message", async (req, res) => {
   try {
     const { sender, text } = req.body;
@@ -118,33 +146,27 @@ router.post("/:id/message", async (req, res) => {
       return res.status(404).json({ message: "Property not found" });
     }
 
-    property.messages.push({
-      sender,
-      text,
-      createdAt: new Date(),
-    });
-
+    property.messages.push({ sender, text });
     await property.save();
+
     res.status(200).json(property.messages);
-  } catch (error) {
-    console.error("❌ Message error:", error);
+  } catch {
     res.status(500).json({ message: "Failed to send message" });
   }
 });
+
+/* ================================
+   MARK AS REVIEWED
+================================ */
 router.post("/mark-reviewed/:userId", async (req, res) => {
   try {
-    const { userId } = req.params;
-
     const result = await Property.updateMany(
-      {
-        userId,
-        reviewStatus: "pending",
-      },
+      { userId: req.params.userId, reviewStatus: "pending" },
       {
         $set: {
           reviewStatus: "reviewed",
           reviewedAt: new Date(),
-          reviewedBy: "expert", // later: expertId
+          reviewedBy: "expert",
         },
       }
     );
@@ -153,8 +175,7 @@ router.post("/mark-reviewed/:userId", async (req, res) => {
       message: "Properties marked as reviewed",
       modifiedCount: result.modifiedCount,
     });
-  } catch (error) {
-    console.error("❌ Mark reviewed error:", error);
+  } catch {
     res.status(500).json({ message: "Failed to mark reviewed" });
   }
 });
