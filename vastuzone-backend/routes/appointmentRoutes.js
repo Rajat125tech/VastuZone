@@ -14,24 +14,23 @@ router.post("/create", async (req, res) => {
     if (!userId || !date || !slot) {
       return res.status(400).json({ message: "Missing fields" });
     }
-    const user = await User.findOne({ uid: userId });
+    const user = await User.findOne({ firebaseUid: userId });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     const appointment = await Appointment.create({
-      userId: user.uid,
+      userId: user.firebaseUid,
       userName: user.name,
       email: user.email,
-      appointmentDate: date, 
+      appointmentDate: date,
       timeSlot: slot,
       amount: 299,
       status: "pending_payment",
     });
 
     return res.status(201).json(appointment);
-
   } catch (err) {
     console.error("Create appointment error:", err);
     return res.status(500).json({
@@ -41,7 +40,6 @@ router.post("/create", async (req, res) => {
   }
 });
 
-
 router.get("/user/:userId", async (req, res) => {
   const appointments = await Appointment.find({
     userId: req.params.userId,
@@ -49,6 +47,7 @@ router.get("/user/:userId", async (req, res) => {
 
   res.json(appointments);
 });
+
 
 router.get("/expert", requireExpert, async (req, res) => {
   const appointments = await Appointment.find({
@@ -69,6 +68,7 @@ router.post("/expert/:id/meet-link", requireExpert, async (req, res) => {
 
   res.json(appointment);
 });
+
 
 router.post("/pay/:id", async (req, res) => {
   const appointment = await Appointment.findById(req.params.id);
