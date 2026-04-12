@@ -120,6 +120,28 @@
   box-shadow: 0 8px 16px rgba(212, 164, 55, 0.35);
 }
 
+.google-signup-btn {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  color: #444;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.google-signup-btn:hover {
+  background: #f9f9f9;
+  border-color: #ccc;
+}
+
 /* ================= FOOTER ================= */
 .signup-footer {
   margin-top: 26px;

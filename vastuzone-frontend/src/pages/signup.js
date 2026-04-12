@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { 
+  createUserWithEmailAndPassword
+} from "firebase/auth";
 import { auth } from "../firebase";
 import logo from "../assets/logo.png";
 import "../styles/new.css";
+
+const API_URL = "https://vastuzone-backend.onrender.com";
 
 function Signup() {
   const navigate = useNavigate();
@@ -24,7 +28,7 @@ function Signup() {
 
       const user = userCredential.user;
 
-      const res = await fetch("https://vastuzone-backend.onrender.com/api/users/create", {
+      const res = await fetch(`${API_URL}/api/users/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
