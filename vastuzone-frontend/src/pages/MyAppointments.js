@@ -15,7 +15,7 @@ function MyAppointments() {
     const fetchAppointments = async () => {
       try {
         const res = await fetch(
-          `https://vastuzone-backend.onrender.com/api/appointments/user/${user.uid}`
+          `http://localhost:5001/api/appointments/user/${user.uid}`
         );
         const data = await res.json();
         setAppointments(Array.isArray(data) ? data : []);
@@ -43,9 +43,10 @@ function MyAppointments() {
 
     try {
       const orderRes = await fetch(
-        `https://vastuzone-backend.onrender.com/api/appointments/pay/${appointmentId}`,
+        `http://localhost:5001/api/appointments/pay/${appointmentId}`,
         { method: "POST" }
       );
+
 
       const orderData = await orderRes.json();
 
@@ -64,7 +65,7 @@ function MyAppointments() {
 
         handler: async function (response) {
           const verifyRes = await fetch(
-            "https://vastuzone-backend.onrender.com/api/appointments/verify-payment",
+            "http://localhost:5001/api/appointments/verify-payment",
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },

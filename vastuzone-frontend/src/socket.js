@@ -1,8 +1,6 @@
 import { io } from "socket.io-client";
 
-const SOCKET_URL =
-  process.env.REACT_APP_API_URL ??
-  "https://vastuzone-backend.onrender.com";
+const SOCKET_URL = "http://localhost:5001"; // Hardcoded to local for testing
 
 export const socket = io(SOCKET_URL, {
   autoConnect: false,

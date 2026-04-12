@@ -27,7 +27,7 @@ function BookAppointment() {
       if (u) {
         try {
           await fetch(
-            "https://vastuzone-backend.onrender.com/api/users/sync",
+            "http://localhost:5001/api/users/sync",
             {
               method: "POST",
               headers: {
@@ -67,7 +67,7 @@ function BookAppointment() {
       setLoading(true);
 
       const res = await fetch(
-        "https://vastuzone-backend.onrender.com/api/appointments/create",
+        "http://localhost:5001/api/appointments/create",
         {
           method: "POST",
           headers: {

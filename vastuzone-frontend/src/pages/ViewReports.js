@@ -104,7 +104,7 @@ function ViewReports() {
         }
 
         const res = await fetch(
-          `https://vastuzone-backend.onrender.com/api/properties/user/${user.uid}`
+          `http://localhost:5001/api/properties/user/${user.uid}`
         );
 
         if (!res.ok) {
@@ -149,12 +149,17 @@ function ViewReports() {
               <div className="report-card" key={property._id}>
                 <div className="report-header">
                   <h3>{property.propertyName}</h3>
-                  <span
-                    className="report-band"
-                    style={{ backgroundColor: report.bandColor }}
-                  >
-                    {report.band}
-                  </span>
+                  <div className="report-tags">
+                    {property.reviewStatus === "reviewed" && (
+                      <span className="expert-tag">✅ Expert Reviewed</span>
+                    )}
+                    <span
+                      className="report-band"
+                      style={{ backgroundColor: report.bandColor }}
+                    >
+                      {report.band}
+                    </span>
+                  </div>
                 </div>
                 <p><strong>Type:</strong> {property.propertyType}</p>
                 <p><strong>City:</strong> {property.city}</p>

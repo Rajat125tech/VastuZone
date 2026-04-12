@@ -58,7 +58,7 @@ function AddProperty() {
         if (value) payload.append(key, value);
       });
 
-      const res = await fetch("https://vastuzone-backend.onrender.com/api/properties", {
+      const res = await fetch("http://localhost:5001/api/properties", {
         method: "POST",
         body: payload,
       });

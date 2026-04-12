@@ -4,6 +4,8 @@ import Navbar from "../components/Navbar";
 import { socket } from "../socket";
 import "../styles/expertChat.css";
 
+const API_BASE_URL = "http://localhost:5001"; // Switched to local for development
+
 function ExpertChat() {
   const { userId } = useParams();
   const bottomRef = useRef(null);
@@ -16,25 +18,19 @@ function ExpertChat() {
   const [loading, setLoading] = useState(true);
 
   const loadChat = useCallback(async () => {
-    const res = await fetch(
-      `https://vastuzone-backend.onrender.com/api/chat/${userId}`
-    );
+    const res = await fetch(`${API_BASE_URL}/api/chat/${userId}`);
     const data = await res.json();
     setChat(data);
   }, [userId]);
 
   const loadUser = useCallback(async () => {
-    const res = await fetch(
-      `https://vastuzone-backend.onrender.com/api/users/me/${userId}`
-    );
+    const res = await fetch(`${API_BASE_URL}/api/users/me/${userId}`);
     const data = await res.json();
     setUserName(data.name || "Unknown User");
   }, [userId]);
 
   const loadProperties = useCallback(async () => {
-    const res = await fetch(
-      `https://vastuzone-backend.onrender.com/api/properties/user/${userId}`
-    );
+    const res = await fetch(`${API_BASE_URL}/api/properties/user/${userId}`);
     const data = await res.json();
     setProperties(data);
   }, [userId]);
@@ -76,19 +72,40 @@ function ExpertChat() {
   const sendMessage = async () => {
     if (!text.trim()) return;
 
-    await fetch(
-      `https://vastuzone-backend.onrender.com/api/chat/${userId}/message`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sender: "expert",
-          text,
-        }),
-      }
-    );
+    await fetch(`${API_BASE_URL}/api/chat/${userId}/message`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sender: "expert",
+        text,
+      }),
+    });
 
     setText(""); 
+  };
+
+  const markAsReviewed = async (e, propertyId) => {
+    e.stopPropagation();
+
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/api/properties/mark-reviewed-single/${propertyId}`,
+        { method: "POST" }
+      );
+
+      if (res.ok) {
+        // Update local state to show it's reviewed
+        setProperties((prev) =>
+          prev.map((p) =>
+            p._id === propertyId ? { ...p, reviewStatus: "reviewed" } : p
+          )
+        );
+        alert("Property marked as reviewed!");
+      }
+    } catch (err) {
+      console.error("Failed to mark reviewed:", err);
+      alert("Failed to mark as reviewed");
+    }
   };
 
   if (loading) return <p style={{ padding: 20 }}>Loading chat…</p>;
@@ -165,7 +182,19 @@ function ExpertChat() {
                   }`}
                   onClick={() => setActiveProperty(property)}
                 >
-                  <strong>{property.propertyName}</strong>
+                  <div className="ecz-prop-header">
+                    <strong>{property.propertyName}</strong>
+                    {property.reviewStatus === "reviewed" ? (
+                      <span className="ecz-tag-reviewed">✅ Reviewed</span>
+                    ) : (
+                      <button
+                        className="ecz-btn-review"
+                        onClick={(e) => markAsReviewed(e, property._id)}
+                      >
+                        Mark as Reviewed
+                      </button>
+                    )}
+                  </div>
                   <span>
                     {property.city} • {property.propertyType}
                   </span>

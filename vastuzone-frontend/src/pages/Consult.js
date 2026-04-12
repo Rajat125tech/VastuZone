@@ -22,7 +22,7 @@ function Consult() {
     const fetchChat = async () => {
       try {
         const res = await fetch(
-          `https://vastuzone-backend.onrender.com/api/chat/${userId}`
+          `http://localhost:5001/api/chat/${userId}`
         );
         const data = await res.json();
         setMessages(data.messages || []);
@@ -62,7 +62,7 @@ function Consult() {
 
     try {
       await fetch(
-        `https://vastuzone-backend.onrender.com/api/chat/${userId}/message`,
+        `http://localhost:5001/api/chat/${userId}/message`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

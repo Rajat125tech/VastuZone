@@ -45,6 +45,11 @@ const propertySchema = new mongoose.Schema(
       default: "pending",
     },
 
+    status: {
+      type: String,
+      default: "Preliminary Report Ready",
+    },
+
     reviewedAt: Date,
     reviewedBy: String,
 

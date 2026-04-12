@@ -156,7 +156,7 @@ router.post("/:id/message", async (req, res) => {
 });
 
 /* ================================
-   MARK AS REVIEWED
+   MARK AS REVIEWED (ALL FOR USER)
 ================================ */
 router.post("/mark-reviewed/:userId", async (req, res) => {
   try {
@@ -176,6 +176,36 @@ router.post("/mark-reviewed/:userId", async (req, res) => {
       modifiedCount: result.modifiedCount,
     });
   } catch {
+    res.status(500).json({ message: "Failed to mark reviewed" });
+  }
+});
+
+/* ================================
+   MARK AS REVIEWED (SINGLE PROPERTY)
+================================ */
+router.post("/mark-reviewed-single/:propertyId", async (req, res) => {
+  try {
+    const property = await Property.findByIdAndUpdate(
+      req.params.propertyId,
+      {
+        $set: {
+          reviewStatus: "reviewed",
+          reviewedAt: new Date(),
+          reviewedBy: "expert",
+        },
+      },
+      { new: true }
+    );
+
+    if (!property) {
+      return res.status(404).json({ message: "Property not found" });
+    }
+
+    res.status(200).json({
+      message: "Property marked as reviewed",
+      property,
+    });
+  } catch (err) {
     res.status(500).json({ message: "Failed to mark reviewed" });
   }
 });

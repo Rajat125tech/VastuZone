@@ -7,7 +7,7 @@ import { auth } from "../firebase";
 import logo from "../assets/logo.png";
 import "../styles/new.css";
 
-const API_URL = "https://vastuzone-backend.onrender.com";
+const API_URL = "http://localhost:5001";
 
 function Signup() {
   const navigate = useNavigate();

@@ -42,7 +42,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://vastuzone-frontend.onrender.com",
+    origin: ["https://vastuzone-frontend.onrender.com", "http://localhost:3000"],
     methods: ["GET", "POST"],
     credentials: false, 
   },

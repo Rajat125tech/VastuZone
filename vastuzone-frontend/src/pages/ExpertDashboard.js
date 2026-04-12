@@ -13,7 +13,7 @@ function ExpertDashboard() {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const res = await fetch("https://vastuzone-backend.onrender.com/api/chat");
+        const res = await fetch("http://localhost:5001/api/chat");
         const data = await res.json();
         setChats(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -30,7 +30,7 @@ function ExpertDashboard() {
     const fetchAppointments = async () => {
       try {
         const res = await authFetch(
-          "https://vastuzone-backend.onrender.com/api/appointments/expert"
+          "http://localhost:5001/api/appointments/expert"
         );
         const data = await res.json();
         setAppointments(Array.isArray(data) ? data : []);
@@ -111,7 +111,7 @@ function ExpertDashboard() {
 
                   try {
                     await authFetch(
-                      `https://vastuzone-backend.onrender.com/api/appointments/expert/${appt._id}/meet-link`,
+                      `http://localhost:5001/api/appointments/expert/${appt._id}/meet-link`,
                       {
                         method: "POST",
                         headers: {
