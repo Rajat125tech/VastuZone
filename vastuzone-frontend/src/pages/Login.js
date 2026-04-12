@@ -14,7 +14,7 @@ import {
 
 import { auth } from "../firebase";
 
-const API_URL = "http://localhost:5001";
+const API_URL = "https://vastuzone-backend.onrender.com";
 
 function Login() {
   const navigate = useNavigate();

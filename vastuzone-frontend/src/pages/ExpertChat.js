@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import { socket } from "../socket";
 import "../styles/expertChat.css";
 
-const API_BASE_URL = "http://localhost:5001"; // Switched to local for development
+const API_BASE_URL = "https://vastuzone-backend.onrender.com";
 
 function ExpertChat() {
   const { userId } = useParams();

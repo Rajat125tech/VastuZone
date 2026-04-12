@@ -20,7 +20,7 @@ function Dashboard() {
         }
 
         const res = await fetch(
-          `http://localhost:5001/api/properties/user/${user.uid}`
+          `https://vastuzone-backend.onrender.com/api/properties/user/${user.uid}`
         );
 
         if (!res.ok) {
