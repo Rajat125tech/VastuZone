@@ -132,24 +132,6 @@ RAZORPAY_KEY_SECRET=
 - 📄 Downloadable PDF reports
 - 🌍 Multi-language support
 
-## 🖼️ Application Screenshots
-
-### Home Page
-![Home Page](screenshots/homepage.png)
-
-### Dashboard
-![Dashboard](screenshots/dashboard.png)
-
-### Reports
-![Reports](screenshots/reports.png)
-
-### Chat-Feature
-![chatbox](screenshots/chatbox.png)
-
-### Expert Dashboard
-![expertdb](screenshots/expertdb.png)
-
-
 
 ## 👨‍💻 Author
 
