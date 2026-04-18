@@ -109,7 +109,7 @@ function Home() {
             </div>
             <div className="report-visual-card">
               <div className="glass-overlay">
-                <span className="serif" style={{ color: 'var(--brass)', fontSize: '4rem' }}>Custom</span>
+                <span className="serif" style={{ color: 'var(--brass)', fontSize: '4rem' }}>CUSTOMIZED REPORTS</span>
                 <p className="eyebrow" style={{ color: '#FFF', marginTop: '20px', textAlign: 'center', lineHeight: '1.4' }}>
                   Comprehensive Analysis <br /> Tailored to Your Space
                 </p>
@@ -126,7 +126,7 @@ function Home() {
             <img src={papaimage} alt="Dr. Rajni Kant Srivastava" className="expert-portrait" />
             <div className="expert-label">
               <p>Dr. Rajni Kant Srivastava</p>
-              <span>Lead Consultant</span>
+              <span>Vastu Expert</span>
             </div>
           </div>
           <div className="expert-info">
@@ -156,7 +156,7 @@ function Home() {
           </div>
           <div className="testimonial-grid-premium">
             <div className="testimonial-card-lux">
-              <p>"I had a great experience consulting this Vastu service. The analysis was very detailed and practical, and the suggestions were easy to implement without major changes. I noticed a positive shift in the overall energy and comfort of my space. Highly recommended for anyone looking for genuine and knowledgeable guidance."</p>
+              <p>"I had a great experience consulting the VastuZone service. The analysis was very detailed and practical, and the suggestions were easy to implement without major changes. I noticed a positive shift in the overall energy and comfort of my space. Highly recommended for anyone looking for genuine and knowledgeable guidance."</p>
               <div className="testi-author">
                 <span className="author-name">Aditya kumar Jha</span>
                 <span className="author-loc">Dhanbad</span>
@@ -226,9 +226,9 @@ function Home() {
         .expert-bio { font-size: 1.25rem; line-height: 1.8; margin-bottom: 30px; color: var(--text-main); }
         .expert-quote-box { margin-top: 60px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 40px; }
         .expert-quote-text { font-family: 'Instrument Serif', serif; font-size: 2.8rem; font-style: italic; color: var(--ink); line-height: 1.2; position: relative; }
-        .expert-quote-text::before { content: '“'; position: absolute; left: -50px; top: -20px; font-size: 5rem; color: var(--brass); opacity: 0.2; }
-        
+
         /* Services Grid - Modern Luxury */
+
         .services-grid-modern { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
         .service-card-premium { background: #111; padding: 60px 40px; border-radius: 2px; transition: var(--transition-smooth); border: 1px solid rgba(176, 141, 87, 0.1); }
         .service-card-premium:hover { transform: translateY(-10px); border-color: var(--brass); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
@@ -275,8 +275,8 @@ function Home() {
           .expert-portrait { height: 500px; }
           .expert-label { position: static; margin-top: -60px; margin-left: 20px; padding: 30px; min-width: auto; width: calc(100% - 40px); }
           .expert-quote-text { font-size: 2rem; }
-          .expert-quote-text::before { left: -20px; top: -10px; font-size: 3rem; }
           .report-visual-card { height: 350px; }
+
           .glass-overlay span { font-size: 5rem; }
         }
 

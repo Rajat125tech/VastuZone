@@ -122,23 +122,27 @@ img {
 
 .auth-container {
   min-height: calc(100vh - 90px);
-  background: var(--paper); /* Pure white/paper background */
+  background: var(--stone); /* Warm stone background */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px;
+  padding: 80px 20px;
 }
 
 .auth-card {
   width: 100%;
-  max-width: 440px;
-  padding: 60px 0; /* Remove side padding on card to merge with bg */
+  max-width: 480px;
+  background: #FDFDFB; /* Paper white for the box */
+  padding: 60px 45px;
   text-align: center;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 4px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.02);
 }
 
 @media (max-width: 480px) {
   .auth-card {
-    padding: 30px 0;
+    padding: 40px 25px;
   }
 }
 

@@ -1,4 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase";
 
 import Home from "./pages/homepage";
 import Login from "./pages/Login";
@@ -17,90 +20,101 @@ import SupportChatbot from "./components/SupportChatbot";
 
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => {
+      setUser(u);
+    });
+    return () => unsub();
+  }, []);
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/add-property"
-          element={
-            <ProtectedRoute>
-              <AddProperty />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/add-property"
+            element={
+              <ProtectedRoute>
+                <AddProperty />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/reports"
-          element={
-            <ProtectedRoute>
-              <ViewReports />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/chat" element={<Consult />} />
+          <Route
+            path="/reports"
+            element={
+              <ProtectedRoute>
+                <ViewReports />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/chat" element={<Consult />} />
 
-        <Route
-          path="/expert/dashboard"
-          element={
-            <ProtectedRoute>
-              <ExpertDashboard />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/expert/dashboard"
+            element={
+              <ProtectedRoute>
+                <ExpertDashboard />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/expert/consult/:propertyId"
-          element={
-            <ProtectedRoute>
-              <ExpertConsult />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/expert/consult/:propertyId"
+            element={
+              <ProtectedRoute>
+                <ExpertConsult />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/my-appointments"
-          element={
-            <ProtectedRoute>
-              <MyAppointments />
-            </ProtectedRoute>
-          }
-        />
-
-
-        <Route
-          path="/expert/chat/:userId"
-          element={
-            <ProtectedRoute>
-              <ExpertChat />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/book-appointment"
-          element={
-            <ProtectedRoute>
-              <BookAppointment />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/my-appointments"
+            element={
+              <ProtectedRoute>
+                <MyAppointments />
+              </ProtectedRoute>
+            }
+          />
 
 
-      </Routes>
-      <SupportChatbot />
-    </BrowserRouter>
+          <Route
+            path="/expert/chat/:userId"
+            element={
+              <ProtectedRoute>
+                <ExpertChat />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/book-appointment"
+            element={
+              <ProtectedRoute>
+                <BookAppointment />
+              </ProtectedRoute>
+            }
+          />
+
+
+        </Routes>
+      </BrowserRouter>
+      {user && <SupportChatbot />}
+    </>
   );
 
 }

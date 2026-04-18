@@ -1,161 +1,358 @@
-/* --- Professional Product Dashboard --- */
+/* 
+   VASTUZONE - GOAT LEVEL DASHBOARD 
+   Hyper-Premium Luxury Design 
+*/
 
-.dashboard-container {
-  padding: 60px 0;
-  background: var(--paper);
-  min-height: calc(100vh - 90px);
-}
-
-.dashboard-header {
-  margin-bottom: 60px;
-}
-
-.dashboard-title {
-  font-family: 'Instrument Serif', serif;
-  font-size: 3.5rem;
+.dashboard-wrapper {
+  background: radial-gradient(circle at 0% 0%, #FDFDFB 0%, #F7F7F5 100%);
+  min-height: 100vh;
   color: var(--ink);
-  margin-bottom: 10px;
+  position: relative;
+  overflow-x: hidden;
 }
 
-.dashboard-subtitle {
-  font-size: 1rem;
-  color: var(--text-muted);
-  letter-spacing: 0.02em;
+/* Subtle background noise texture */
+.dashboard-wrapper::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0.02;
+  pointer-events: none;
+  background-image: url("https://www.transparenttextures.com/patterns/p6.png");
+  z-index: 0;
 }
 
-/* Action Cards */
-.dashboard-actions {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-bottom: 80px;
+.dashboard-main {
+  position: relative;
+  z-index: 1;
+  padding: 100px 0;
 }
 
-.action-card {
-  background: var(--stone);
-  border: var(--border-subtle);
-  padding: 40px;
+/* --- THE COMMAND HEADER (GLASS) --- */
+.dashboard-hero-header {
+  background: rgba(253, 253, 251, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 100px 60px;
   border-radius: 4px;
-  cursor: pointer;
-  transition: var(--transition-smooth);
+  margin-bottom: 100px;
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  border: var(--border-subtle);
+  box-shadow: var(--shadow-soft);
+  animation: slideDownIn 1s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.action-card:hover {
-  background: var(--ink);
-  transform: translateY(-5px);
+@keyframes slideDownIn {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.action-card:hover .action-icon {
-  filter: invert(1);
-}
-
-.action-card:hover h3 {
-  color: var(--paper);
-}
-
-.action-card:hover p {
-  color: rgba(253, 253, 251, 0.6);
-}
-
-.action-icon {
-  font-size: 1.5rem;
-  transition: var(--transition-smooth);
-}
-
-.action-content h3 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 600;
+.dashboard-title-lux {
+  font-family: 'Instrument Serif', serif;
+  font-size: 5.5rem;
+  line-height: 0.9;
+  margin-bottom: 20px;
   color: var(--ink);
-  margin-bottom: 8px;
+  letter-spacing: -0.03em;
 }
 
-.action-content p {
-  font-size: 0.9rem;
+.dashboard-subtitle-lux {
+  font-size: 1.2rem;
   color: var(--text-muted);
+  max-width: 500px;
   line-height: 1.6;
 }
 
-/* Property Section */
-.section-title {
-  font-family: 'Instrument Serif', serif;
-  font-size: 2.5rem;
-  margin-bottom: 30px;
-  color: var(--ink);
+.hero-right-stats {
+  display: flex;
+  gap: 40px;
 }
 
-.property-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 30px;
-}
-
-.property-card {
+.stat-pill {
   background: var(--paper);
-  border: var(--border-subtle);
-  padding: 30px;
-  border-radius: 4px;
+  color: var(--ink);
+  padding: 35px;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 220px;
   transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
 }
 
-.property-card:hover {
-  box-shadow: var(--shadow-soft);
+.stat-pill:hover {
+  transform: translateY(-10px);
   border-color: var(--brass);
 }
 
-.property-title {
-  font-family: 'Instrument Serif', serif;
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-  color: var(--ink);
-}
-
-.property-card p {
-  font-size: 0.85rem;
+.stat-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
   color: var(--text-muted);
-  margin-bottom: 12px;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--stone);
-  padding-bottom: 8px;
+  font-weight: 700;
 }
 
-.property-card p strong {
+.stat-value-lux {
+  font-family: 'Instrument Serif', serif;
+  font-size: 3.5rem;
+  line-height: 1;
   color: var(--ink);
-  font-weight: 500;
 }
 
-.property-status {
-  margin-top: 25px;
+.dossier-status-wrap {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
 }
 
-.status {
-  font-size: 0.75rem;
-  font-weight: 700;
+.status-label-text {
+  font-size: 0.7rem;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  padding: 6px 12px;
-  border-radius: 2px;
-}
-
-.status.pending {
-  background: var(--stone);
   color: var(--text-muted);
+  white-space: nowrap;
 }
 
-.status.reviewed {
-  background: #E8F5E9;
+.status-label-text.reviewed {
   color: #2E7D32;
 }
 
-@media (max-width: 900px) {
-  .dashboard-actions {
-    grid-template-columns: 1fr;
-  }
+.status-label-text.pending {
+  color: var(--brass);
+}
+
+.dossier-footer {
+  margin-top: auto;
+}
+
+/* --- LAYOUT GRID (GOAT SPACING) --- */
+.dashboard-grid-refined {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 100px;
+  align-items: flex-start;
+}
+
+/* --- THE SIDEBAR COMMAND --- */
+.sidebar-card {
+  background: transparent;
+  padding: 0;
+  border: none;
+}
+
+.sidebar-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  color: var(--brass);
+  font-weight: 800;
+  margin-bottom: 40px;
+}
+
+.nav-item-lux {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 25px 0;
+  border: none;
+  background: none;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: left;
+  transition: all 0.5s var(--transition-smooth);
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0,0,0,0.03);
+  position: relative;
+}
+
+.nav-item-lux::before {
+  content: "";
+  position: absolute;
+  left: -20px;
+  height: 0%;
+  width: 3px;
+  background: var(--brass);
+  transition: 0.4s;
+}
+
+.nav-item-lux:hover {
+  color: var(--brass);
+  padding-left: 20px;
+}
+
+.nav-item-lux:hover::before {
+  height: 60%;
+}
+
+.nav-item-lux.active {
+  color: var(--brass);
+}
+
+.nav-icon {
+  font-size: 1.4rem;
+  opacity: 0.5;
+}
+
+.sidebar-support-box {
+  margin-top: 60px;
+  padding: 50px;
+  background: var(--stone);
+  border: var(--border-subtle);
+  border-radius: 2px;
+  position: relative;
+}
+
+.sidebar-support-box::after {
+  content: "PRIORITY";
+  position: absolute;
+  top: 20px; right: 20px;
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  font-weight: 900;
+  color: var(--brass);
+}
+
+/* --- ASSET DOSSIERS (THE CARDS) --- */
+.section-meta-header h2 {
+  font-size: 3.5rem;
+  font-family: 'Instrument Serif', serif;
+  letter-spacing: -0.02em;
+  margin-bottom: 50px;
+}
+
+.dossier-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 60px;
+}
+
+.dossier-card {
+  background: var(--paper);
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 60px;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Magnetic Shimmer Effect */
+.dossier-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(176, 141, 87, 0.03), transparent);
+  transition: 0.8s;
+}
+
+.dossier-card:hover {
+  transform: translateY(-15px);
+  border-color: var(--brass);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.04);
+}
+
+.dossier-card:hover::after {
+  left: 100%;
+}
+
+.dossier-tag {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--brass);
+}
+
+.property-name-lux {
+  font-family: 'Instrument Serif', serif;
+  font-size: 3.2rem;
+  line-height: 1;
+  margin-bottom: 15px;
+}
+
+/* Premium Progress Bar */
+.progress-bar-wrap {
+  width: 100%;
+  height: 4px;
+  background: var(--stone);
+  margin-top: 20px;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--ink);
+  transition: width 2s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+}
+
+.progress-bar-fill::after {
+  content: "";
+  position: absolute;
+  top: 0; right: 0;
+  width: 20px; height: 100%;
+  background: var(--brass);
+}
+
+.btn-dossier {
+  width: 100%;
+  padding: 25px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn-dossier:hover {
+  background: var(--brass);
+  letter-spacing: 0.3em;
+}
+
+/* --- GOAT LOADING STATE --- */
+.shimmer-card {
+  height: 400px;
+  background: linear-gradient(90deg, var(--stone) 25%, #E2E2E0 50%, var(--stone) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 2px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (max-width: 1400px) {
+  .dashboard-grid-refined { grid-template-columns: 1fr; gap: 80px; }
+  .sidebar-refined { position: relative; top: 0; }
+}
+
+@media (max-width: 768px) {
+  .dashboard-hero-header { padding: 60px 30px; }
+  .dashboard-title-lux { font-size: 3.5rem; }
+  .stat-pill { min-width: 100%; }
+  .dossier-grid { grid-template-columns: 1fr; }
 }

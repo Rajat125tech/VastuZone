@@ -128,7 +128,12 @@ function Dashboard() {
                     <div className="dossier-card" key={property._id}>
                       <div className="dossier-header">
                         <span className="dossier-tag">{property.propertyType}</span>
-                        <span className={`dossier-status-dot ${property.reviewStatus === "reviewed" ? "complete" : "active"}`}></span>
+                        <div className="dossier-status-wrap">
+                          <span className={`dossier-status-dot ${property.reviewStatus === "reviewed" ? "complete" : "active"}`}></span>
+                          <span className={`status-label-text ${property.reviewStatus === "reviewed" ? "reviewed" : "pending"}`}>
+                            {property.reviewStatus === "reviewed" ? "Completed" : "Pending Review"}
+                          </span>
+                        </div>
                       </div>
                       
                       <div className="dossier-body">
@@ -164,7 +169,8 @@ function Dashboard() {
 
                       <div className="dossier-footer">
                         <button className="btn-dossier" onClick={() => navigate("/reports")}>
-                          {property.reviewStatus === "reviewed" ? "Access Vastu Report" : "Track Audit Status"}
+                          {property.reviewStatus === "reviewed" ? "Access Report" : "Track Audit"}
+                          <span className="btn-arrow">→</span>
                         </button>
                       </div>
                     </div>
