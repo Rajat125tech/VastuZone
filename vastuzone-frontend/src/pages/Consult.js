@@ -83,45 +83,55 @@ function Consult() {
     <div className="user-chat-page">
       <Navbar />
 
+      <div className="user-chat-nav">
+        <button className="chat-back-btn" onClick={() => navigate("/dashboard")}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          Go Back
+        </button>
+      </div>
+
       <div className="user-chat-shell">
         <div className="user-chat-card">
 
           <div className="user-chat-header">
             <div>
-              <h2>Consult Vastu Shastri</h2>
+              <h2>Concierge Chat</h2>
               <p className="user-chat-subtitle">
-                Ask questions freely. Book a live session when ready.
+                Direct access to VastuZone's Lead Geometric Consultants.
               </p>
             </div>
 
             <div className="expert-meta">
-              <span className="expert-status online">🟢 Online</span>
+              <div className="status-badge">
+                <div className="status-dot"></div>
+                <span className="status-text">Live Now</span>
+              </div>
               <span className="expert-reply-time">
-                Replies within 24 hours
+                Typical response: 2-4 hours
               </span>
             </div>
           </div>
 
           <div className="appointment-cta">
             <p>
-              Want a detailed one-to-one video consultation with the expert?
+              Require a deeper spatial audit? <strong>Schedule a 1:1 Video Consultation.</strong>
             </p>
             <button
               className="book-btn"
               onClick={() => navigate("/book-appointment")}
             >
-              Book Paid Appointment (₹299)
+              Book Premium Session
             </button>
           </div>
 
           <div className="user-chat-messages">
             {loading && (
-              <div className="chat-empty">Loading chat...</div>
+              <div className="chat-empty">Connecting to secure server...</div>
             )}
 
             {!loading && messages.length === 0 && (
               <div className="chat-empty">
-                Start your consultation by asking a question ✨
+                Your consultation history will appear here. Ask your first question above.
               </div>
             )}
 
@@ -143,7 +153,7 @@ function Consult() {
 
           <div className="user-chat-input">
             <input
-              placeholder="Ask about Vastu, energy, directions..."
+              placeholder="Type your message here..."
               value={text}
               onChange={(e) => setText(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}

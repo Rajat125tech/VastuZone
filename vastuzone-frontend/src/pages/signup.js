@@ -5,7 +5,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase";
 import logo from "../assets/logo.png";
-import "../styles/new.css";
+import Navbar from "../components/Navbar";
 
 const API_URL = "https://vastuzone-backend.onrender.com";
 
@@ -57,18 +57,19 @@ function Signup() {
   };
 
   return (
-    <div className="signup-page">
-      <div className="signup-card">
-        <div className="signup-brand">
-          <img src={logo} alt="VastuZone Logo" />
-          <span>VastuZone</span>
-        </div>
-        <h2>Create an Account</h2>
-        <p className="signup-subtitle">
-          Enter your details to get started
-        </p>
-        <form className="signup-form" onSubmit={handleSignup}>
-          <div className="form-group">
+    <div>
+      <Navbar />
+      <div className="auth-container">
+        <div className="auth-card">
+          <div className="brand">
+            <img src={logo} alt="VastuZone Logo" />
+            <span>VastuZone</span>
+          </div>
+          <h2>Create an Account</h2>
+          <p className="subtitle">
+            Join VastuZone to harmonize your living space
+          </p>
+          <form className="auth-form" onSubmit={handleSignup}>
             <label>Full Name</label>
             <input
               type="text"
@@ -77,9 +78,7 @@ function Signup() {
               onChange={(e) => setName(e.target.value)}
               required
             />
-          </div>
 
-          <div className="form-group">
             <label>Email</label>
             <input
               type="email"
@@ -88,9 +87,7 @@ function Signup() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-          </div>
 
-          <div className="form-group">
             <label>Password</label>
             <input
               type="password"
@@ -99,17 +96,17 @@ function Signup() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-          </div>
 
-          <button type="submit" className="signup-btn">
-            Create Account
-          </button>
-        </form>
-        <div className="signup-footer">
-          Already have an account?{" "}
-          <span onClick={() => navigate("/login")}>
-            Login
-          </span>
+            <button type="submit" className="primarly-btn">
+              Create Account
+            </button>
+          </form>
+          <p className="auth-footer">
+            Already have an account?{" "}
+            <span onClick={() => navigate("/login")}>
+              Login
+            </span>
+          </p>
         </div>
       </div>
     </div>

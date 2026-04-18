@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { auth } from "../firebase";
 import "../styles/myAppointments.css";
 import loadRazorpay from "../utils/loadRazorpay";
 
 function MyAppointments() {
+  const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [paying, setPaying] = useState(false);
+
   useEffect(() => {
     const user = auth.currentUser;
     if (!user) return;
@@ -29,6 +32,7 @@ function MyAppointments() {
 
     fetchAppointments();
   }, []);
+
   const handlePayment = async (appointmentId, amount) => {
     if (paying) return;
 
@@ -46,7 +50,6 @@ function MyAppointments() {
         `https://vastuzone-backend.onrender.com/api/appointments/pay/${appointmentId}`,
         { method: "POST" }
       );
-
 
       const orderData = await orderRes.json();
 
@@ -103,68 +106,84 @@ function MyAppointments() {
   };
 
   return (
-    <>
+    <div className="my-appointments-page">
       <Navbar />
 
-      <div className="my-appointments-page">
-        <h1>My Appointments</h1>
-        <p className="subtitle">Your scheduled and past consultations</p>
+      <div className="ma-nav-header">
+        <button className="ma-back-btn" onClick={() => navigate("/dashboard")}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          Go Back
+        </button>
+      </div>
 
-        {loading && <p>Loading appointments...</p>}
+      <header className="ma-hero">
+        <span className="ma-eyebrow">Consultation Portal</span>
+        <h1 className="ma-title">My Appointments</h1>
+        <p className="ma-subtitle">Review your scheduled consultations and secure access to your expert sessions.</p>
+      </header>
 
-        {!loading && appointments.length === 0 && (
-          <p className="no-appointments">No appointments booked yet.</p>
-        )}
-
+      {loading ? (
+        <div className="no-appointments">
+          <p>Retrieving your consultation data...</p>
+        </div>
+      ) : appointments.length === 0 ? (
+        <div className="no-appointments">
+          <p>You have no scheduled consultations at this time.</p>
+          <button className="ma-back-btn" style={{margin: '0 auto'}} onClick={() => navigate("/book-appointment")}>Book a Session</button>
+        </div>
+      ) : (
         <div className="appointments-grid">
           {appointments.map((appt) => (
             <div key={appt._id} className="appointment-card">
-              <h3>{appt.userName || "You"}</h3>
-
-              <div className="appointment-info">
-                📅 {appt.appointmentDate} <br />
-                ⏰ {appt.timeSlot}
+              <div className="appt-header">
+                <span className="appt-id">REF #{appt._id.slice(-6).toUpperCase()}</span>
+                <span className={`status-tag ${appt.status}`}>
+                  {appt.status.replace("_", " ")}
+                </span>
               </div>
 
-              <span
-                className={`status ${
-                  appt.status === "paid"
-                    ? "paid"
-                    : appt.status === "completed"
-                    ? "completed"
-                    : "pending"
-                }`}
-              >
-                {appt.status.replace("_", " ")}
-              </span>
+              <h3>{appt.userName || "Expert Consultation"}</h3>
 
-              {appt.status === "paid" ? (
-                appt.meetLink ? (
-                  <button
-                    className="join-btn"
-                    onClick={() => window.open(appt.meetLink, "_blank")}
-                  >
-                    Join Google Meet
-                  </button>
+              <div className="appointment-info">
+                <div className="info-item">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  <span>{appt.appointmentDate}</span>
+                </div>
+                <div className="info-item">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  <span>{appt.timeSlot}</span>
+                </div>
+              </div>
+
+              <div className="appt-actions">
+                {appt.status === "paid" ? (
+                  appt.meetLink ? (
+                    <button
+                      className="join-btn"
+                      onClick={() => window.open(appt.meetLink, "_blank")}
+                    >
+                      Join Secure Meet
+                    </button>
+                  ) : (
+                    <div className="payment-note">
+                      Secured • Awaiting meeting link from expert.
+                    </div>
+                  )
                 ) : (
-                  <p className="payment-note">
-                    ⏳ Payment confirmed — waiting for expert to add meeting link.
-                  </p>
-                )
-              ) : (
-                <button
-                  className="pay-btn"
-                  disabled={paying}
-                  onClick={() => handlePayment(appt._id, appt.amount)}
-                >
-                  {paying ? "Processing..." : `Pay ₹${appt.amount}`}
-                </button>
-              )}
+                  <button
+                    className="pay-btn"
+                    disabled={paying}
+                    onClick={() => handlePayment(appt._id, appt.amount)}
+                  >
+                    {paying ? "Processing..." : `Complete Payment (₹${appt.amount})`}
+                  </button>
+                )}
+              </div>
             </div>
           ))}
         </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 }
 

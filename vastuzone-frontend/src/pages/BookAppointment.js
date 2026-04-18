@@ -15,15 +15,11 @@ function BookAppointment() {
 
   const navigate = useNavigate();
 
-  /* ===============================
-     FIREBASE AUTH + USER SYNC
-  =============================== */
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (u) => {
       setUser(u);
       setAuthReady(true);
 
-      // 🔑 Sync Firebase user to MongoDB
       if (u) {
         try {
           await fetch(
@@ -49,9 +45,6 @@ function BookAppointment() {
     return () => unsub();
   }, []);
 
-  /* ===============================
-     CREATE APPOINTMENT
-  =============================== */
   const handleConfirm = async () => {
     if (!authReady || !user) {
       alert("User not authenticated yet. Please wait.");
@@ -102,66 +95,82 @@ function BookAppointment() {
   };
 
   return (
-    <>
+    <div className="book-page">
       <Navbar />
 
-      <div className="book-page">
-        <div className="book-card">
+      <div className="book-nav-header">
+        <button className="book-back-btn" onClick={() => navigate("/dashboard")}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          Go Back
+        </button>
+      </div>
 
-          {/* LEFT SIDE */}
-          <div className="book-left">
-            <img src={expertPhoto} alt="Vastu Expert" />
-
-            <h2>Dr. Rajni Kant Srivastava</h2>
-            <p className="designation">Certified Vastu Consultant</p>
-
-            <p className="bio">
-              With decades of experience in Vastu Shastra, personalized guidance
-              is provided to ensure harmony, prosperity, and positive energy.
-            </p>
-
-            <div className="session-info">
-              <p><strong>Session:</strong> Video Consultation</p>
-              <p><strong>Duration:</strong> Up to 60 minutes</p>
-              <p className="price">₹299</p>
-            </div>
+      <div className="book-card">
+        {/* LEFT SIDE: EXPERT PROFILE */}
+        <div className="book-left">
+          <div className="expert-portrait-container">
+            <img src={expertPhoto} alt="Dr. Rajni Kant Srivastava" />
           </div>
 
-          {/* RIGHT SIDE */}
-          <div className="book-right">
-            <h3>Book Your Appointment</h3>
+          <h2>Dr. Rajni Kant Srivastava</h2>
+          <p className="designation">Certified Vastu Consultant</p>
 
-            <label>Select Date</label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
+          <p className="bio">
+            Expert guidance in scientific spatial audits. We bridge ancient geometric laws with contemporary architectural logic.
+          </p>
 
-            <label>Select Time Slot</label>
-            <select
-              value={slot}
-              onChange={(e) => setSlot(e.target.value)}
-            >
-              <option value="">Select</option>
-              <option>10:00 – 11:00 AM</option>
-              <option>12:00 – 1:00 PM</option>
-              <option>4:00 – 5:00 PM</option>
-              <option>7:00 – 8:00 PM</option>
-            </select>
+          <div className="session-info">
+            <p><strong>Session:</strong> Private Video Consultation</p>
+            <p><strong>Duration:</strong> 60 Minutes Duration</p>
+          </div>
 
-            <button onClick={handleConfirm} disabled={loading}>
-              {loading ? "Saving..." : "Confirm Appointment"}
+          <div className="price-tag">
+            <span className="price-label">Reservation Fee</span>
+            <span className="price-value">₹299</span>
+          </div>
+        </div>
+
+        {/* RIGHT SIDE: BOOKING FORM */}
+        <div className="book-right">
+          <h3>Reserve Session</h3>
+          <p className="book-right-subtitle">Select your preferred date and time for the 1:1 consultation.</p>
+
+          <div className="reservation-form">
+            <div className="field-group">
+              <label>Select Date</label>
+              <input
+                type="date"
+                value={date}
+                min={new Date().toISOString().split("T")[0]}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </div>
+
+            <div className="field-group">
+              <label>Time Slot</label>
+              <select
+                value={slot}
+                onChange={(e) => setSlot(e.target.value)}
+              >
+                <option value="">Select a slot</option>
+                <option>10:00 – 11:00 AM</option>
+                <option>12:00 – 1:00 PM</option>
+                <option>4:00 – 5:00 PM</option>
+                <option>7:00 – 8:00 PM</option>
+              </select>
+            </div>
+
+            <button className="confirm-btn" onClick={handleConfirm} disabled={loading}>
+              {loading ? "Processing..." : "Confirm Reservation"}
             </button>
 
             <p className="note">
-              Google Meet link will be shared after payment confirmation.
+              Payment confirmation and secure Google Meet credentials will be issued upon successful registration.
             </p>
           </div>
-
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

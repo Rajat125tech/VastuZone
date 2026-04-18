@@ -16,7 +16,6 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:3000",
       "https://vastuzone-frontend.onrender.com",
     ],
     credentials: false,
@@ -42,7 +41,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: ["https://vastuzone-frontend.onrender.com", "http://localhost:3000"],
+    origin: ["https://vastuzone-frontend.onrender.com"],
     methods: ["GET", "POST"],
     credentials: false, 
   },

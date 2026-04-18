@@ -1,196 +1,272 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
-import homeIcon from "../assets/home.png";
-import chartIcon from "../assets/chart.png";
-import expertIcon from "../assets/expert.png";
-import planImage from "../assets/plan.png";
-import vastuScoreImage from "../assets/scoring.png";
-import expertRemarksImage from "../assets/remarks.png";
 import papaimage from "../assets/papa.png";
 
 function Home() {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div className="landing-wrapper">
       <Navbar />
-      <div className="hero">
-        <div className="hero-text">
-          <h1>
-            Harmonize Your Home <br />
-            with VastuZone
-          </h1>
-
-          <p>
-            Unlock the ancient science of Vastu Shastra for modern living.
-            Get professional guidance to bring balance, prosperity,
-            and well-being to your space.
-          </p>
-
-          <div className="hero-buttons">
-            <button className="primary-btn" onClick={() => navigate("/login")}>
-              Get Started
-            </button>
-            <a href="#process-section">
-              <button className="secondary-btn">Learn More</button>
-            </a>
-          </div>
-        </div>
-
-        <div className="hero-image">
-          <img
-            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
-            alt="Modern Home"
-          />
-        </div>
-      </div>
-      <div id="process-section" className="how-it-works">
-        <h2>A Simple Path to a Balanced Home</h2>
-        <p className="how-subtitle">
-          Our streamlined process makes getting a professional Vastu
-          analysis easier than ever.
-        </p>
-
-        <div className="steps">
-          <div className="step">
-            <div className="step-icon">
-              <img src={homeIcon} alt="Submit Plan" />
+      
+      {/* --- HERO SECTION --- */}
+      <section className="hero-modern-wrap" style={{ background: '#F8F8F7', borderBottom: '1px solid rgba(0,0,0,0.03)' }}>
+        <div className="hero-modern container section-padding">
+          <div className="hero-content">
+            <span className="eyebrow">Scientific Spatial Audits</span>
+            <h1 className="hero-title">
+              Architecture of <i>Prosperity</i>.
+            </h1>
+            <p className="hero-description">
+              VastuZone provides empirical spatial analysis for the modern discerning property owner. 
+              Our methodology bridges the gap between ancient geometric laws and contemporary architectural logic to foster environments of peak potential.
+            </p>
+            <div className="hero-actions">
+              <button className="btn-primary" onClick={() => navigate("/login")}>
+                Start Analysis
+              </button>
+              <button className="btn-secondary" onClick={() => document.getElementById('report-details').scrollIntoView({behavior: 'smooth'})}>
+                The Report Methodology
+              </button>
             </div>
-            <h3>1. Submit Your Plan</h3>
-            <p>
-              Use our intuitive form to provide details about your property,
-              including room layouts and facing direction.
-            </p>
           </div>
-
-          <div className="step">
-            <div className="step-icon">
-              <img src={chartIcon} alt="Instant Analysis" />
-            </div>
-            <h3>2. Instant Analysis</h3>
-            <p>
-              Receive an immediate, AI-powered preliminary Vastu report
-              highlighting key issues and an overall compliance score.
-            </p>
-          </div>
-
-          <div className="step">
-            <div className="step-icon">
-              <img src={expertIcon} alt="Expert Review" />
-            </div>
-            <h3>3. Expert Review</h3>
-            <p>
-              Our certified Vastu Shastris review your plan, validate the
-              analysis, and provide personalized, actionable remedies.
-            </p>
-          </div>
-        </div>
-      </div>
-      <section className="about-expert">
-        <div className="about-expert-content">
-          <h2>Meet Our Vastu Expert</h2>
-
-          <h3>Dr. Rajni Kant Srivastava</h3>
-          <p className="expert-title">
-            Certified Vastu Shastri & Spiritual Guide
-          </p>
-
-          <p>
-            With decades of experience in the ancient science of Vastu Shastra,
-            Dr. Rajni Kant Srivastava (+91 80900 00080) has guided hundreds of families towards harmony,
-            prosperity, and peace. His approach blends traditional wisdom with
-            practical solutions suited for modern lifestyles.
-          </p>
-
-          <p>
-            Every consultation at VastuZone is personally reviewed by him,
-            ensuring authenticity, accuracy, and deeply personalized guidance.
-            His philosophy is simple — a balanced space creates a balanced life.
-          </p>
-
-          <p className="expert-quote">
-            “True Vastu is not about fear — it is about flow, balance, and positive
-            energy.”
-          </p>
-        </div>
-
-        <div className="about-expert-image">
-          <img
-            src={papaimage}   
-            alt="Vastu Shastri Expert"
-          />
-        </div>
-      </section>
-      <section className="features">
-        <div className="features-header">
-          <h2>Features Designed for You</h2>
-          <p>Everything you need for a comprehensive Vastu consultation.</p>
-        </div>
-        <div className="feature-row">
-          <div className="feature-text">
-            <h3>Client Dashboard</h3>
-            <p>
-              Keep all your submitted properties organized in one central dashboard. Easily track their progress at every stage, from the initial AI-based analysis to the final expert-reviewed Vastu report, all at a single glance.
-            </p>
-          </div>
-
-          <div className="feature-image">
-            <img src={planImage} alt="Client Dashboard" />
-          </div>
-        </div>
-        <div className="feature-row ">
-          <div className="feature-image">
-            <img src={vastuScoreImage} alt="Automated Vastu Scoring" />
-          </div>
-
-          <div className="feature-text">
-            <h3>Automated Vastu Scoring</h3>
-            <p>
-              Powered by advanced AI, our system evaluates your inputs in real time to deliver an instant Vastu score, helping you understand your property’s energetic alignment with precision and clarity.
-            </p>
-          </div>
-        </div>
-        <div className="feature-row reverse">
-          <div className="feature-image">
+          <div className="hero-visual">
             <img
-              src={expertRemarksImage}
-              alt="Personalized Expert Remarks"
+              src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200"
+              alt="Minimalist Luxury Interior"
+              className="hero-main-img"
             />
           </div>
+        </div>
+      </section>
 
-          <div className="feature-text">
-            <h3>Personalized Expert Remarks</h3>
-            <p>
-              Go beyond automated reports with expert human insight. Our certified Vastu Shastri carefully reviews your property analysis and provides personalized suggestions and detailed remarks, ensuring that every recommendation is tailored specifically to your space and lifestyle.
-            </p>
+      {/* --- SERVICES GRID --- */}
+      <section className="services-section section-padding">
+        <div className="container">
+          <div className="section-header center-text">
+            <span className="eyebrow">Strategic Consultancy</span>
+            <h2 className="serif">Specialized Domains</h2>
+          </div>
+          
+          <div className="services-grid-modern">
+            <div className="service-card-premium">
+              <span className="card-cat">Residential</span>
+              <h3>Vastu for Estates</h3>
+              <p>A comprehensive 30-page spatial audit. We utilize satellite telemetry and birth-chart alignment to ensure your private residence acts as a catalyst for well-being.</p>
+            </div>
+            <div className="service-card-premium">
+              <span className="card-cat">Commercial</span>
+              <h3>Vastu for Office & Workspace</h3>
+              <p>Maximize administrative synergy and operational growth. Our audits focus on executive positioning and financial zone activation for commercial entities.</p>
+            </div>
+            <div className="service-card-premium">
+              <span className="card-cat">Industrial</span>
+              <h3>Vastu for Factory</h3>
+              <p>Industrial audits for maximum efficiency. We optimize machinery ergonomics and raw material logistics according to the 16 Vastu Zones.</p>
+            </div>
+            <div className="service-card-premium">
+              <span className="card-cat">Geometric</span>
+              <h3>Vastu for Plot & Land Selection</h3>
+              <p>Pre-construction soil analysis and energy field mapping. Ensure the foundation of your legacy is built on mathematically sound Vastu principles.</p>
+            </div>
+            <div className="service-card-premium">
+              <span className="card-cat">Urban</span>
+              <h3>Vastu for Flats</h3>
+              <p>Navigation of complex multi-unit energies. We provide selection guidance and non-structural rectification for contemporary apartment living.</p>
+            </div>
+            <div className="service-card-premium">
+              <span className="card-cat">Design</span>
+              <h3>Vastu for Architectural Planning</h3>
+              <p>Collaborative design services. Work with our team to draft floor plans that are intrinsically aligned with the Vastu Purusha Mandala from inception.</p>
+            </div>
           </div>
         </div>
       </section>
-      <section className="cta">
-        <h2>Ready to Create Your Harmonious Space?</h2>
 
-        <p>
-          Join VastuZone today and take the first step towards a home
-          filled with positive energy and prosperity.
-        </p>
-
-        <button className="cta-btn" onClick={() => navigate("/login")}>
-          Start Your Vastu Journey
-        </button>
+      {/* --- REPORT CONTENTS --- */}
+      <section id="report-details" className="report-contents-section section-padding" style={{ background: '#0A0A0A', color: 'var(--paper)' }}>
+        <div className="container">
+          <div className="report-split">
+            <div className="report-info">
+              <span className="eyebrow" style={{ color: 'var(--brass)' }}>The Deliverable</span>
+              <h2 className="serif" style={{ fontSize: '3.5rem' }}>Detailed Vastu Audit Report</h2>
+              <p style={{ opacity: 0.8, marginBottom: '40px', fontSize: '1.1rem', lineHeight: '1.6' }}>
+                A comprehensive and personalized analysis based on your property layout, direction, and usage — 
+                designed to provide clear, practical, and effective Vastu recommendations.
+              </p>
+              
+              <ul className="report-list-premium">
+                <li>Direction & Layout Analysis (using floor plans and map reference)</li>
+                <li>Vastu Purusha Mandala-based zone evaluation</li>
+                <li>Identification of imbalances and their effects</li>
+                <li>Practical rectification without major structural changes</li>
+                <li>Room-wise guidance (entrance, kitchen, bedroom, etc.)</li>
+                <li>Interior placement recommendations</li>
+                <li>Colour and energy balancing suggestions</li>
+                <li>Simple remedies for immediate improvement</li>
+              </ul>
+            </div>
+            <div className="report-visual-card">
+              <div className="glass-overlay">
+                <span className="serif" style={{ color: 'var(--brass)', fontSize: '4rem' }}>Custom</span>
+                <p className="eyebrow" style={{ color: '#FFF', marginTop: '20px', textAlign: 'center', lineHeight: '1.4' }}>
+                  Comprehensive Analysis <br /> Tailored to Your Space
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <footer className="footer">
-        <p className="footer-left">
-          © 2025 VastuZone. Coded by Rajat.
-        </p>
+      {/* --- EXPERT SECTION --- */}
+      <section className="expert-editorial section-padding container">
+        <div className="expert-split">
+          <div className="expert-img-container">
+            <img src={papaimage} alt="Dr. Rajni Kant Srivastava" className="expert-portrait" />
+            <div className="expert-label">
+              <p>Dr. Rajni Kant Srivastava</p>
+              <span>Lead Consultant</span>
+            </div>
+          </div>
+          <div className="expert-info">
+            <span className="eyebrow">The Authority</span>
+            <h2 className="serif" style={{ fontSize: '4rem', marginBottom: '30px' }}>Guiding Spaces <br /> Towards Balance</h2>
+            <p className="expert-bio">
+              With years of dedicated practice in Vastu Shastra, Dr. Rajni Kant Srivastava (+91 80900 00080) has transformed many living and commercial environments across India. 
+            </p>
+            <p className="expert-bio">
+              His methodology is rooted in the belief that architectural logic and energy flow are the primary drivers of prosperity. He specializes in "Vastu without Breakage," providing non-structural remedies that align with modern lifestyles while respecting ancient traditions.
+            </p>
+            <div className="expert-quote-box">
+              <p className="expert-quote-text">
+                "True Vastu is not a ritual of fear; it is the science of aligning your physical environment with your highest intentions."
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <div className="footer-right">
-          <a href="/privacy-policy">Privacy Policy</a>
-          <a href="/terms">Terms of Service</a>
+      {/* --- TESTIMONIALS --- */}
+      <section className="testimonials section-padding" style={{ background: 'var(--paper)' }}>
+        <div className="container">
+          <div className="section-header center-text">
+            <span className="eyebrow">The Record</span>
+            <h2 className="serif">Client Testimonials</h2>
+          </div>
+          <div className="testimonial-grid-premium">
+            <div className="testimonial-card-lux">
+              <p>"I had a great experience consulting this Vastu service. The analysis was very detailed and practical, and the suggestions were easy to implement without major changes. I noticed a positive shift in the overall energy and comfort of my space. Highly recommended for anyone looking for genuine and knowledgeable guidance."</p>
+              <div className="testi-author">
+                <span className="author-name">Aditya kumar Jha</span>
+                <span className="author-loc">Dhanbad</span>
+              </div>
+            </div>
+            <div className="testimonial-card-lux">
+              <p>"The advice was simple and actually made sense. Made a few small changes at home and things already feel better. Definitely worth trying if you are curious about Vastu."</p>
+              <div className="testi-author">
+                <span className="author-name">Samarth Dixit</span>
+                <span className="author-loc">Lucknow</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="footer-expanded section-padding">
+        <div className="container">
+          <div className="footer-grid">
+            <div className="footer-col">
+              <h3 className="serif" style={{ fontSize: '2rem' }}>VastuZone</h3>
+              <p style={{ marginTop: '15px' }}>The global authority in scientific Vastu consultancy and architectural harmony.</p>
+            </div>
+            <div className="footer-col">
+              <h4>Consultancy</h4>
+              <a href="/">Residential Audit</a>
+              <a href="/">Commercial Strategy</a>
+              <a href="/">Industrial Logistics</a>
+              <a href="/">Land Acquisition</a>
+            </div>
+            <div className="footer-col">
+              <h4>Contact</h4>
+              <p>kant.online@gmail.com</p>
+              <p>+91 80900 00080</p>
+              <p>Lucknow HQ, India</p>
+            </div>
+          </div>
+          <div className="footer-bottom">
+            <p>© 2026 VastuZone Precision Systems. All rights reserved.</p>
+          </div>
         </div>
       </footer>
 
+      <style>{`
+        .landing-wrapper { overflow-x: hidden; }
+        .eyebrow { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.3em; color: var(--brass); font-weight: 700; margin-bottom: 20px; display: block; }
+        
+        .hero-modern { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 80px; align-items: center; }
+        .hero-title { font-size: 5.5rem; line-height: 0.95; margin-bottom: 30px; color: #111; }
+        .hero-title i { font-family: 'Instrument Serif', serif; font-style: italic; color: var(--brass); }
+        .hero-description { font-size: 1.2rem; color: var(--text-muted); max-width: 540px; margin-bottom: 40px; line-height: 1.7; }
+        .hero-actions { display: flex; gap: 20px; }
+        .hero-main-img { border-radius: 0; box-shadow: 40px 40px 0 var(--stone); width: 100%; height: auto; scale: 1.15; transition: var(--transition-smooth); }
+        .hero-main-img:hover { scale: 1.18; }
+
+        .section-header { margin-bottom: 80px; }
+        .section-header h2 { font-size: 4rem; color: #111; }
+
+        .expert-split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 100px; align-items: center; margin-top: 60px; }
+        .expert-img-container { position: relative; width: 100%; }
+        .expert-portrait { width: 100%; height: 750px; object-fit: cover; border-radius: 0; filter: contrast(1.05); box-shadow: 40px 40px 0px var(--stone); }
+        .expert-label { position: absolute; bottom: 40px; right: -40px; background: var(--ink); color: var(--paper); padding: 40px; min-width: 320px; box-shadow: var(--shadow-soft); z-index: 2; }
+        .expert-label p { font-family: 'Instrument Serif', serif; font-size: 2.2rem; line-height: 1; margin-bottom: 8px; }
+        .expert-label span { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.3em; color: var(--brass); font-weight: 700; }
+
+        .expert-info { padding: 40px 0; }
+        .expert-bio { font-size: 1.25rem; line-height: 1.8; margin-bottom: 30px; color: var(--text-main); }
+        .expert-quote-box { margin-top: 60px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 40px; }
+        .expert-quote-text { font-family: 'Instrument Serif', serif; font-size: 2.8rem; font-style: italic; color: var(--ink); line-height: 1.2; position: relative; }
+        .expert-quote-text::before { content: '“'; position: absolute; left: -50px; top: -20px; font-size: 5rem; color: var(--brass); opacity: 0.2; }
+        
+        /* Services Grid - Modern Luxury */
+        .services-grid-modern { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .service-card-premium { background: #111; padding: 60px 40px; border-radius: 2px; transition: var(--transition-smooth); border: 1px solid rgba(176, 141, 87, 0.1); }
+        .service-card-premium:hover { transform: translateY(-10px); border-color: var(--brass); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .card-cat { font-size: 0.65rem; text-transform: uppercase; color: var(--brass); letter-spacing: 0.2em; margin-bottom: 20px; display: block; font-weight: 700; }
+        .service-card-premium h3 { color: #FFF; font-size: 1.6rem; margin-bottom: 20px; font-family: 'Instrument Serif', serif; }
+        .service-card-premium p { color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.8; }
+
+        /* Report Section */
+        .report-split { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 100px; align-items: center; }
+        .report-list-premium { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .report-list-premium li { font-size: 0.95rem; opacity: 0.8; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .report-list-premium li:hover { border-color: var(--brass); color: var(--brass); }
+
+        .report-visual-card { background: #151515; height: 500px; border: 1px solid rgba(176, 141, 87, 0.3); display: flex; align-items: center; justify-content: center; position: relative; }
+        .glass-overlay { text-align: center; }
+        .glass-overlay span { font-size: 8rem; display: block; line-height: 1; font-weight: 300; }
+
+        /* Testimonials LUX - Fixed Bottom Author */
+        .testimonial-grid-premium { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .testimonial-card-lux { padding: 60px; background: var(--stone); border-radius: 2px; transition: 0.3s; display: flex; flex-direction: column; justify-content: space-between; min-height: 320px; }
+        .testimonial-card-lux:hover { background: #FFF; box-shadow: var(--shadow-soft); }
+        .testimonial-card-lux p { font-size: 1.2rem; line-height: 1.8; color: var(--text-main); font-family: 'Instrument Serif', serif; font-style: italic; margin-bottom: 30px; }
+        .testi-author { border-top: 1px solid rgba(0,0,0,0.05); padding-top: 20px; margin-top: auto; }
+        .author-name { display: block; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink); }
+        .author-loc { font-size: 0.8rem; color: var(--brass); }
+
+        .footer-expanded { background: var(--paper); border-top: var(--border-subtle); color: var(--ink); }
+        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 80px; }
+        .footer-col h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 30px; color: var(--brass); font-weight: 700; }
+        .footer-col a, .footer-col p { display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px; text-decoration: none; transition: 0.3s; }
+        .footer-col a:hover { color: var(--ink); padding-left: 5px; }
+
+        @media (max-width: 1000px) {
+          .hero-modern, .report-split, .services-grid-modern, .testimonial-grid-premium, .footer-grid { grid-template-columns: 1fr; gap: 50px; }
+          .hero-title { font-size: 3.5rem; }
+          .report-list-premium { grid-template-columns: 1fr; }
+        }
+      `}</style>
     </div>
   );
 }

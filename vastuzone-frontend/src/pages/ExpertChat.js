@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { socket } from "../socket";
 import "../styles/expertChat.css";
@@ -8,6 +8,7 @@ const API_BASE_URL = "https://vastuzone-backend.onrender.com";
 
 function ExpertChat() {
   const { userId } = useParams();
+  const navigate = useNavigate();
   const bottomRef = useRef(null);
 
   const [chat, setChat] = useState(null);
@@ -94,7 +95,6 @@ function ExpertChat() {
       );
 
       if (res.ok) {
-        // Update local state to show it's reviewed
         setProperties((prev) =>
           prev.map((p) =>
             p._id === propertyId ? { ...p, reviewStatus: "reviewed" } : p
@@ -118,11 +118,15 @@ function ExpertChat() {
       <div className="ecz-scope">
         <div className="ecz-wrapper">
 
-          <div className="ecz-header">
-            <h2>User Consultation</h2>
-            <span>
-              User: <strong>{userName}</strong>
-            </span>
+          <div className="ecz-top-bar">
+            <button className="ecz-back-btn" onClick={() => navigate("/expert/dashboard")}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+              Expert Dashboard
+            </button>
+            <div className="ecz-header">
+              <h2>User Consultation</h2>
+              <span>Active User: <strong>{userName}</strong></span>
+            </div>
           </div>
 
           <div className="ecz-layout">
@@ -145,12 +149,12 @@ function ExpertChat() {
                     }`}
                   >
                     <div className="ecz-text">{msg.text}</div>
-                    <div className="ecz-time">
+                    <span className="ecz-time">
                       {new Date(msg.createdAt).toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
-                    </div>
+                    </span>
                   </div>
                 ))}
 
@@ -159,19 +163,25 @@ function ExpertChat() {
 
               <div className="ecz-input-bar">
                 <textarea
-                  placeholder="Reply to user…"
+                  placeholder="Type your response here..."
                   value={text}
                   onChange={(e) => setText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      sendMessage();
+                    }
+                  }}
                 />
                 <button onClick={sendMessage}>Send</button>
               </div>
             </div>
 
             <div className="ecz-property-box">
-              <h4>User Properties</h4>
+              <h4>Associated Properties</h4>
 
               {properties.length === 0 && (
-                <p className="ecz-muted">No properties uploaded.</p>
+                <p className="ecz-muted">No properties uploaded by this user.</p>
               )}
 
               {properties.map((property) => (
@@ -203,14 +213,14 @@ function ExpertChat() {
 
               {activeProperty && (
                 <div className="ecz-pdf">
-                  <h5>Floor Plan</h5>
+                  <h5>Architectural Floor Plan</h5>
                   {activeProperty.fileUrl ? (
                     <iframe
                       src={activeProperty.fileUrl}
                       title="Floor Plan"
                     />
                   ) : (
-                    <p className="ecz-muted">No floor plan uploaded.</p>
+                    <p className="ecz-muted">No floor plan provided.</p>
                   )}
                 </div>
               )}

@@ -1,111 +1,253 @@
-/* ================= PAGE ================= */
+/* =========================================
+   MY APPOINTMENTS - LUXURY PRODUCTION UI
+========================================= */
 
 .my-appointments-page {
-  background: #f9f6df;
-  min-height: calc(100vh - 80px);
-  padding: 50px 80px;
+  background: #F8F8F7;
+  min-height: 100vh;
+  padding: 60px 24px 120px;
 }
 
-.my-appointments-page h1 {
-  font-size: 36px;
-  margin-bottom: 6px;
+/* --- BACK NAV --- */
+.ma-nav-header {
+  max-width: 1200px;
+  margin: 0 auto 40px;
 }
 
-.my-appointments-page .subtitle {
-  color: #666;
-  margin-bottom: 40px;
-  font-size: 16px;
+.ma-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--paper);
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 12px 20px;
+  border-radius: 4px;
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: var(--transition-smooth);
 }
 
-/* ================= GRID ================= */
+.ma-back-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+  transform: translateX(-5px);
+}
 
+/* --- HERO SECTION --- */
+.ma-hero {
+  max-width: 1200px;
+  margin: 0 auto 60px;
+  text-align: left;
+}
+
+.ma-eyebrow {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--brass);
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.ma-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 4rem;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.ma-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 500px;
+}
+
+/* --- APPOINTMENTS GRID --- */
 .appointments-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 28px;
-  max-width: 1100px;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* ================= CARD ================= */
-
+/* --- APPOINTMENT CARD --- */
 .appointment-card {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 22px 24px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: var(--paper);
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 40px;
+  border-radius: 4px; /* Sharp architectural look */
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
 }
 
 .appointment-card:hover {
+  border-color: var(--brass);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.04);
   transform: translateY(-4px);
-  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.12);
 }
 
-/* ================= HEADER ================= */
+.appointment-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 4px;
+  background: var(--stone);
+  transition: var(--transition-smooth);
+}
+
+.appointment-card:hover::before {
+  background: var(--brass);
+}
+
+.appt-header {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.appt-id {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
 
 .appointment-card h3 {
-  font-size: 20px;
-  margin-bottom: 14px;
+  font-family: 'Instrument Serif', serif;
+  font-size: 2rem;
+  color: var(--ink);
+  margin-bottom: 16px;
 }
-
-/* ================= DETAILS ================= */
 
 .appointment-info {
-  font-size: 15px;
-  color: #444;
-  line-height: 1.6;
-  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+  padding: 24px 0;
+  border-top: 1px solid var(--stone);
+  border-bottom: 1px solid var(--stone);
 }
 
-/* ================= STATUS ================= */
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
 
-.status {
+.info-item svg {
+  color: var(--brass);
+}
+
+/* --- STATUS TAGS --- */
+.status-tag {
   display: inline-block;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 16px;
+  padding: 6px 14px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 2px;
+  margin-bottom: 24px;
+  align-self: flex-start;
 }
 
-.status.pending {
-  background: #fff3cd;
-  color: #856404;
+.status-tag.pending {
+  background: #FEF3C7;
+  color: #92400E;
 }
 
-.status.paid {
-  background: #e6f4ea;
-  color: #137333;
+.status-tag.paid {
+  background: #D1FAE5;
+  color: #065F46;
 }
 
-.status.completed {
-  background: #e8f1ff;
-  color: #1e3a8a;
+.status-tag.completed {
+  background: #DBEAFE;
+  color: #1E40AF;
 }
 
-/* ================= ACTION ================= */
+/* --- ACTIONS --- */
+.appt-actions {
+  margin-top: auto;
+}
+
+.pay-btn, .join-btn {
+  width: 100%;
+  padding: 18px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.pay-btn {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.pay-btn:hover {
+  background: var(--brass);
+  transform: translateY(-2px);
+}
 
 .join-btn {
-  width: 100%;
-  background: #d62828;
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 0;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease;
+  background: #166534;
+  color: #FFF;
 }
 
 .join-btn:hover {
-  background: #b81f1f;
+  background: #14532D;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(22, 101, 52, 0.2);
 }
 
-/* ================= EMPTY STATE ================= */
+.payment-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  text-align: center;
+  padding: 12px;
+  background: var(--stone);
+  border-radius: 4px;
+}
 
+/* --- EMPTY STATE --- */
 .no-appointments {
-  font-size: 16px;
-  color: #777;
-  margin-top: 40px;
+  text-align: center;
+  padding: 120px 24px;
+  background: var(--paper);
+  border: 1px dashed var(--stone);
+}
+
+.no-appointments p {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+  .ma-title {
+    font-size: 3rem;
+  }
+  .appointments-grid {
+    grid-template-columns: 1fr;
+  }
 }
