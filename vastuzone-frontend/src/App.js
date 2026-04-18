@@ -13,6 +13,7 @@ import ExpertChat from "./pages/ExpertChat";
 import Consult from "./pages/Consult";
 import BookAppointment from "./pages/BookAppointment";
 import MyAppointments from "./pages/MyAppointments";
+import SupportChatbot from "./components/SupportChatbot";
 
 
 function App() {
@@ -98,6 +99,7 @@ function App() {
 
 
       </Routes>
+      <SupportChatbot />
     </BrowserRouter>
   );
 

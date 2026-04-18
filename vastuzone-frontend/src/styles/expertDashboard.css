@@ -1,146 +1,243 @@
-.expert-dashboard {
-  padding: 40px 60px;
-  background: #f9f6df;
-  min-height: calc(100vh - 80px);
+/* Expert Dashboard - Professional UI Refinement */
+
+.expert-dashboard-wrapper {
+  background: var(--paper); /* #FDFDFB */
+  min-height: 100vh;
+  color: var(--ink);
+  padding: 60px 0;
 }
 
-.expert-dashboard h1 {
-  font-size: 32px;
-  margin-bottom: 6px;
+.expert-hero-header {
+  margin-bottom: 60px;
 }
 
-.subtitle {
-  color: #666;
-  margin-bottom: 24px;
+.eyebrow-lux {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: block;
 }
 
-.section-title {
-  margin-top: 50px;
-  font-size: 26px;
+.expert-title-lux {
+  font-size: 3.5rem;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  font-family: 'Instrument Serif', serif;
+  color: var(--ink);
 }
 
-/* ================= GRID ================= */
+.expert-subtitle-lux {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 550px;
+  line-height: 1.5;
+}
 
-.card-grid {
+/* Section Styling */
+.expert-section {
+  margin-bottom: 80px;
+}
+
+.section-meta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  padding-bottom: 16px;
+}
+
+.section-meta-header h2 {
+  font-size: 2.2rem;
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+}
+
+.count-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: #F1F1EF;
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Grid Layouts */
+.chats-grid, .appointments-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 22px;
-  margin-top: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 24px;
 }
 
-/* ================= CARDS ================= */
-
-.dashboard-card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 18px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+/* Card Styling - Professional Refinement */
+.expert-card-lux {
+  background: #F8F8F7; /* Subtle grey-tinted background */
+  border: 1px solid rgba(0,0,0,0.08);
+  padding: 0; /* Control padding via inner elements */
+  transition: var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+  position: relative;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border-radius: 2px;
 }
 
-.dashboard-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.1);
+.expert-card-lux:hover {
+  transform: translateY(-4px);
+  background: #F1F1EF; /* Slightly darker grey on hover */
+  border-color: rgba(0,0,0,0.15);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
 }
 
-.dashboard-card strong {
-  font-size: 16px;
+.card-header-lux {
+  padding: 24px 24px 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
 }
 
-.last-message {
-  margin: 10px 0;
-  color: #555;
+.user-name-lux {
+  font-family: 'Plus Jakarta Sans', sans-serif; /* Cleaner font for names */
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
 }
 
-.updated {
-  font-size: 12px;
-  color: #888;
+.status-tag-lux {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  background: rgba(0,0,0,0.04);
+  padding: 2px 8px;
+  border-radius: 2px;
 }
 
-/* ================= APPOINTMENTS ================= */
+.card-body-lux {
+  padding: 20px 24px;
+}
 
-.dashboard-card.appointment {
+.last-msg-lux {
+  font-size: 0.9rem;
+  color: var(--text-main);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  opacity: 0.8;
+}
+
+.card-footer-lux {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  margin-top: auto;
+  background: rgba(0,0,0,0.02);
+  border-top: 1px solid rgba(0,0,0,0.04);
+}
+
+.time-stamp-lux {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.action-link-lux {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--brass);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Appointment Specifics */
+.appointment-card-lux {
   cursor: default;
 }
 
-.join-btn {
-  margin-top: 12px;
-  background: #d62828;
-  color: #fff;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 8px;
-  cursor: pointer;
+.appt-details-lux {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
-.join-btn:hover {
-  background: #b81f1f;
-}
-
-.meet-input {
-  width: 100%;
-  margin-top: 10px;
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  font-size: 13px;
-}
-
-.meet-input {
-  margin-top: 12px;
-  width: 100%;
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  font-size: 14px;
-}
-
-/* ---------- SECTION SPACING ---------- */
-
-.section-title {
-  margin-top: 60px;
-  font-size: 26px;
+.detail-item-lux {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
   font-weight: 600;
+  color: var(--text-main);
 }
 
-.subtitle {
-  color: #777;
-  margin-bottom: 18px;
+.meet-input-wrapper {
+  margin-top: 8px;
 }
 
-/* ---------- APPOINTMENT GRID FIX ---------- */
-
-.appointments-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 360px));
-  gap: 24px;
-  margin-top: 24px;
+.meet-input-wrapper label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: block;
+  color: var(--text-muted);
 }
 
-/* ---------- APPOINTMENT CARD ---------- */
-
-.dashboard-card.appointment {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.08);
-}
-
-/* ---------- MEET INPUT ---------- */
-
-.meet-input {
-  margin-top: 14px;
+.meet-link-input {
   width: 100%;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  font-size: 14px;
-  transition: border 0.2s ease, box-shadow 0.2s ease;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: var(--transition-smooth);
+  color: var(--ink);
 }
 
-.meet-input:focus {
+.meet-link-input:focus {
   outline: none;
-  border-color: #d62828;
-  box-shadow: 0 0 0 3px rgba(214, 40, 40, 0.15);
+  border-bottom-color: var(--ink);
+}
+
+/* Empty/Loading States */
+.empty-state-lux {
+  padding: 60px 40px;
+  background: #F8F8F7;
+  text-align: center;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.empty-state-lux p {
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .expert-dashboard-wrapper {
+    padding: 40px 0;
+  }
+  
+  .expert-title-lux {
+    font-size: 2.5rem;
+  }
+  
+  .section-meta-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .chats-grid, .appointments-grid {
+    grid-template-columns: 1fr;
+  }
 }
