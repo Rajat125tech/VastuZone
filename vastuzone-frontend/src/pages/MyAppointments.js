@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 import Navbar from "../components/Navbar";
 import { auth } from "../firebase";
 import "../styles/myAppointments.css";
@@ -12,13 +13,18 @@ function MyAppointments() {
   const [paying, setPaying] = useState(false);
 
   useEffect(() => {
-    const user = auth.currentUser;
-    if (!user) return;
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        fetchAppointments(user.uid);
+      } else {
+        setLoading(false);
+      }
+    });
 
-    const fetchAppointments = async () => {
+    const fetchAppointments = async (uid) => {
       try {
         const res = await fetch(
-          `https://vastuzone-backend.onrender.com/api/appointments/user/${user.uid}`
+          `https://vastuzone-backend.onrender.com/api/appointments/user/${uid}`
         );
         const data = await res.json();
         setAppointments(Array.isArray(data) ? data : []);
@@ -30,7 +36,7 @@ function MyAppointments() {
       }
     };
 
-    fetchAppointments();
+    return () => unsubscribe();
   }, []);
 
   const handlePayment = async (appointmentId, amount) => {

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
 import Navbar from "../components/Navbar";
 import { auth } from "../firebase";
 import "../styles/dashboard.css";
@@ -11,17 +12,20 @@ function Dashboard() {
   const [userName, setUserName] = useState("Member");
 
   useEffect(() => {
-    const user = auth.currentUser;
-    if (user) {
-      const emailPrefix = user.email ? user.email.split("@")[0] : "Member";
-      setUserName(user.displayName || emailPrefix);
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const emailPrefix = user.email ? user.email.split("@")[0] : "Member";
+        setUserName(user.displayName || emailPrefix);
+        fetchProperties(user.uid);
+      } else {
+        setLoading(false);
+      }
+    });
 
-    const fetchProperties = async () => {
+    const fetchProperties = async (uid) => {
       try {
-        if (!user) return;
         const res = await fetch(
-          `https://vastuzone-backend.onrender.com/api/properties/user/${user.uid}`
+          `https://vastuzone-backend.onrender.com/api/properties/user/${uid}`
         );
         if (!res.ok) throw new Error("Failed to fetch properties");
         const data = await res.json();
@@ -33,7 +37,7 @@ function Dashboard() {
       }
     };
 
-    fetchProperties();
+    return () => unsubscribe();
   }, []);
 
   return (

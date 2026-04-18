@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 import Navbar from "../components/Navbar";
 import { auth } from "../firebase";
 
@@ -93,11 +94,17 @@ function ViewReports() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProperties = async () => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        fetchProperties(user.uid);
+      } else {
+        setLoading(false);
+      }
+    });
+
+    const fetchProperties = async (uid) => {
       try {
-        const user = auth.currentUser;
-        if (!user) return;
-        const res = await fetch(`https://vastuzone-backend.onrender.com/api/properties/user/${user.uid}`);
+        const res = await fetch(`https://vastuzone-backend.onrender.com/api/properties/user/${uid}`);
         if (!res.ok) throw new Error("Failed to fetch reports");
         const data = await res.json();
         setProperties(data);
@@ -107,7 +114,8 @@ function ViewReports() {
         setLoading(false);
       }
     };
-    fetchProperties();
+
+    return () => unsubscribe();
   }, []);
 
   return (
