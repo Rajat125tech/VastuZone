@@ -266,6 +266,33 @@ function Home() {
           .hero-title { font-size: 3.5rem; }
           .report-list-premium { grid-template-columns: 1fr; }
         }
+
+        @media (max-width: 768px) {
+          .hero-modern { gap: 40px; }
+          .hero-title { font-size: 3rem; }
+          .section-header h2 { font-size: 2.8rem; }
+          .expert-split { grid-template-columns: 1fr; gap: 60px; }
+          .expert-portrait { height: 500px; }
+          .expert-label { position: static; margin-top: -60px; margin-left: 20px; padding: 30px; min-width: auto; width: calc(100% - 40px); }
+          .expert-quote-text { font-size: 2rem; }
+          .expert-quote-text::before { left: -20px; top: -10px; font-size: 3rem; }
+          .report-visual-card { height: 350px; }
+          .glass-overlay span { font-size: 5rem; }
+        }
+
+        @media (max-width: 480px) {
+          .hero-title { font-size: 2.5rem; }
+          .hero-description { font-size: 1rem; }
+          .hero-actions { flex-direction: column; width: 100%; }
+          .hero-actions button { width: 100%; }
+          .section-header h2 { font-size: 2.2rem; }
+          .service-card-premium { padding: 40px 25px; }
+          .testimonial-card-lux { padding: 40px 25px; min-height: auto; }
+          .expert-portrait { height: 400px; }
+          .expert-label { padding: 25px; }
+          .expert-label p { font-size: 1.8rem; }
+          .expert-quote-text { font-size: 1.6rem; }
+        }
       `}</style>
     </div>
   );

@@ -10,7 +10,8 @@
 
 /* ================= CARD ================= */
 .signup-card {
-  width: 420px;
+  width: 90%;
+  max-width: 420px;
   background: #ffffff;
   padding: 44px 40px;
   border-radius: 18px;
@@ -18,6 +19,12 @@
     0 30px 60px rgba(0, 0, 0, 0.12),
     0 4px 10px rgba(0, 0, 0, 0.06);
   text-align: center;
+}
+
+@media (max-width: 480px) {
+  .signup-card {
+    padding: 30px 20px;
+  }
 }
 
 /* ================= BRAND ================= */

@@ -292,6 +292,25 @@ function ViewReports() {
           .reports-title-lux { font-size: 3.5rem; }
           .dossier-actions { grid-template-columns: 1fr; }
         }
+
+        @media (max-width: 768px) {
+          .reports-hero-header { margin-bottom: 40px; }
+          .reports-title-lux { font-size: 2.8rem; }
+          .dossier-report-card { grid-template-columns: 1fr; padding: 30px; gap: 40px; }
+          .dossier-right-meta { border-left: none; border-top: 1px solid var(--stone); padding-left: 0; padding-top: 40px; gap: 30px; }
+          .dossier-horizontal-stats { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+          .score-circle-lux { margin: 0 auto; }
+          .finding-group ul { grid-template-columns: 1fr; }
+          .dossier-title-text { font-size: 2.2rem; }
+          .modal-overlay-lux { padding: 20px; }
+        }
+
+        @media (max-width: 480px) {
+          .reports-title-lux { font-size: 2.2rem; }
+          .dossier-title-text { font-size: 1.8rem; }
+          .reports-nav-header { padding: 20px 20px 0 20px; }
+          .reports-back-btn { padding: 10px 15px; font-size: 0.7rem; }
+        }
       `}</style>
     </div>
   );

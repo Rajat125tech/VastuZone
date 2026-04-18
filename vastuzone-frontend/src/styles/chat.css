@@ -335,3 +335,38 @@
   }
 }
 
+@media (max-width: 480px) {
+  .user-chat-nav {
+    padding: 20px 20px 0 20px;
+  }
+  .user-chat-shell {
+    padding: 20px;
+  }
+  .user-chat-card {
+    height: calc(100vh - 180px);
+  }
+  .user-chat-header {
+    padding: 25px;
+  }
+  .user-chat-header h2 {
+    font-size: 2rem;
+  }
+  .user-chat-messages {
+    padding: 40px 20px;
+    gap: 35px;
+  }
+  .user-chat-input {
+    padding: 20px;
+    gap: 10px;
+  }
+  .user-chat-input input {
+    padding: 15px 20px;
+  }
+  .user-chat-input button {
+    padding: 15px 25px;
+  }
+  .appointment-cta {
+    padding: 20px;
+  }
+}
+

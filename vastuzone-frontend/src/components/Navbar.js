@@ -11,6 +11,7 @@ function Navbar() {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null); 
   const [loading, setLoading] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -41,6 +42,7 @@ function Navbar() {
 
   const handleLogout = async () => {
     await signOut(auth);
+    setIsMenuOpen(false);
     navigate("/");
   };
 
@@ -53,18 +55,28 @@ function Navbar() {
         <span className="logo-text">VastuZone</span>
       </div>
 
-      <div className="nav-buttons">
+      <button className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+        {isMenuOpen ? "✕" : "☰"}
+      </button>
+
+      <div className={`nav-buttons ${isMenuOpen ? "open" : ""}`}>
         {!user ? (
           <>
             <button
               className="login-btn"
-              onClick={() => navigate("/login")}
+              onClick={() => {
+                setIsMenuOpen(false);
+                navigate("/login");
+              }}
             >
               Login
             </button>
             <button
               className="nav-signup-btn"
-              onClick={() => navigate("/signup")}
+              onClick={() => {
+                setIsMenuOpen(false);
+                navigate("/signup");
+              }}
             >
               Signup
             </button>
@@ -74,13 +86,16 @@ function Navbar() {
             {role === "user" && (
               <button
                 className="login-btn"
-                onClick={() => navigate("/my-appointments")}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  navigate("/my-appointments");
+                }}
               >
                 My Appointments
               </button>
             )}
 
-            <span style={{ marginRight: "16px", fontSize: "14px" }}>
+            <span className="nav-user-email">
               {user.email}
             </span>
 

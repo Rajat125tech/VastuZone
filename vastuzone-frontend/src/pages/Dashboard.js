@@ -249,6 +249,23 @@ function Dashboard() {
           .dashboard-grid-refined { grid-template-columns: 1fr; gap: 60px; }
           .dashboard-hero-header { flex-direction: column; align-items: flex-start; gap: 40px; }
         }
+
+        @media (max-width: 768px) {
+          .dashboard-main { padding: 40px 0; }
+          .dashboard-title-lux { font-size: 2.8rem; }
+          .section-meta-header h2 { font-size: 2rem; }
+          .hero-right-stats { width: 100%; flex-direction: column; gap: 15px; }
+          .stat-pill { min-width: auto; }
+          .dossier-grid { grid-template-columns: 1fr; gap: 20px; }
+          .dossier-card { padding: 30px; }
+          .property-name-lux { font-size: 1.8rem; }
+        }
+
+        @media (max-width: 480px) {
+          .dashboard-title-lux { font-size: 2.2rem; }
+          .section-meta-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+          .sidebar-card { padding: 25px; }
+        }
       `}</style>
     </div>
   );
