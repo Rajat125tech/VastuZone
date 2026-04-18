@@ -50,7 +50,14 @@ function App() {
         />
         <Route path="/chat" element={<Consult />} />
 
-        <Route path="/expert/dashboard" element={<ExpertDashboard />} />
+        <Route
+          path="/expert/dashboard"
+          element={
+            <ProtectedRoute>
+              <ExpertDashboard />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/expert/consult/:propertyId"
@@ -73,7 +80,11 @@ function App() {
 
         <Route
           path="/expert/chat/:userId"
-          element={<ExpertChat />}
+          element={
+            <ProtectedRoute>
+              <ExpertChat />
+            </ProtectedRoute>
+          }
         />
 
         <Route

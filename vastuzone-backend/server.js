@@ -13,12 +13,18 @@ const appointmentRoutes = require("./routes/appointmentRoutes");
 
 const app = express();
 
+const allowedOrigins = [
+  "https://vastuzone-frontend.onrender.com",
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://127.0.0.1:3000",
+  "http://127.0.0.1:3001",
+];
+
 app.use(
   cors({
-    origin: [
-      "https://vastuzone-frontend.onrender.com",
-    ],
-    credentials: false,
+    origin: allowedOrigins,
+    credentials: true,
   })
 );
 
@@ -41,9 +47,9 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: ["https://vastuzone-frontend.onrender.com"],
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
-    credentials: false, 
+    credentials: true, 
   },
 });
 
@@ -65,6 +71,6 @@ app.set("io", io);
 
 const PORT = process.env.PORT || 5001;
 
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });

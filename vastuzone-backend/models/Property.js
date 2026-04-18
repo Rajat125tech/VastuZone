@@ -58,5 +58,7 @@ const propertySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Compound index for optimized property retrieval for users, sorted by most recent
+propertySchema.index({ userId: 1, createdAt: -1 });
 
 module.exports = mongoose.model("Property", propertySchema);

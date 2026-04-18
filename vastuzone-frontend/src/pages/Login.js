@@ -112,6 +112,7 @@ function Login() {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -137,6 +138,7 @@ function Login() {
       }
 
     } catch (error) {
+      setLoading(false);
       console.error("Login Error:", error.code, error.message);
       
       // Smart detection for Google-only accounts

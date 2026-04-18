@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import "../styles/expertConsult.css";
 
+const API_URL = "https://vastuzone-backend.onrender.com";
+
 function ExpertConsult() {
   const { userId } = useParams();
 
@@ -15,12 +17,12 @@ function ExpertConsult() {
     const fetchData = async () => {
       try {
         const chatRes = await fetch(
-          `https://vastuzone-backend.onrender.com/api/chat/${userId}`
+          `${API_URL}/api/chat/${userId}`
         );
         const chatData = await chatRes.json();
         setChat(chatData);
         const userRes = await fetch(
-          `https://vastuzone-backend.onrender.com/api/users/me/${userId}`
+          `${API_URL}/api/users/me/${userId}`
         );
         const userData = await userRes.json();
         setUserName(userData.name || "Unknown User");
@@ -37,7 +39,7 @@ function ExpertConsult() {
   const sendMessage = async () => {
     if (!message.trim()) return;
 
-    await fetch(`https://vastuzone-backend.onrender.com/api/chat/${userId}/message`, {
+    await fetch(`${API_URL}/api/chat/${userId}/message`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -48,7 +50,7 @@ function ExpertConsult() {
 
     setMessage("");
 
-    const res = await fetch(`https://vastuzone-backend.onrender.com/api/chat/${userId}`);
+    const res = await fetch(`${API_URL}/api/chat/${userId}`);
     const data = await res.json();
     setChat(data);
   };

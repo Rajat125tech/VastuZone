@@ -13,6 +13,8 @@ const propertyTypes = ["Flat", "Independent House", "Villa", "Plot", "Office", "
 const purposes = ["Residential", "Commercial", "Industrial"];
 const shapes = ["Square", "Rectangle", "Irregular", "L-Shape", "U-Shape"];
 
+const API_URL = "https://vastuzone-backend.onrender.com";
+
 function AddProperty() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -62,7 +64,7 @@ function AddProperty() {
         if (value) payload.append(key, value);
       });
 
-      const res = await fetch("https://vastuzone-backend.onrender.com/api/properties", {
+      const res = await fetch(`${API_URL}/api/properties`, {
         method: "POST",
         body: payload,
       });

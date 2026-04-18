@@ -6,6 +6,8 @@ import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = "https://vastuzone-backend.onrender.com";
+
 function BookAppointment() {
   const [user, setUser] = useState(null);
   const [authReady, setAuthReady] = useState(false);
@@ -23,7 +25,7 @@ function BookAppointment() {
       if (u) {
         try {
           await fetch(
-            "https://vastuzone-backend.onrender.com/api/users/sync",
+            `${API_URL}/api/users/sync`,
             {
               method: "POST",
               headers: {
@@ -60,7 +62,7 @@ function BookAppointment() {
       setLoading(true);
 
       const res = await fetch(
-        "https://vastuzone-backend.onrender.com/api/appointments/create",
+        `${API_URL}/api/appointments/create`,
         {
           method: "POST",
           headers: {

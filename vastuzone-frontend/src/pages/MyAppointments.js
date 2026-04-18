@@ -6,6 +6,8 @@ import { auth } from "../firebase";
 import "../styles/myAppointments.css";
 import loadRazorpay from "../utils/loadRazorpay";
 
+const API_URL = "https://vastuzone-backend.onrender.com";
+
 function MyAppointments() {
   const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
@@ -24,7 +26,7 @@ function MyAppointments() {
     const fetchAppointments = async (uid) => {
       try {
         const res = await fetch(
-          `https://vastuzone-backend.onrender.com/api/appointments/user/${uid}`
+          `${API_URL}/api/appointments/user/${uid}`
         );
         const data = await res.json();
         setAppointments(Array.isArray(data) ? data : []);
@@ -53,7 +55,7 @@ function MyAppointments() {
 
     try {
       const orderRes = await fetch(
-        `https://vastuzone-backend.onrender.com/api/appointments/pay/${appointmentId}`,
+        `${API_URL}/api/appointments/pay/${appointmentId}`,
         { method: "POST" }
       );
 
@@ -74,7 +76,7 @@ function MyAppointments() {
 
         handler: async function (response) {
           const verifyRes = await fetch(
-            "https://vastuzone-backend.onrender.com/api/appointments/verify-payment",
+            `${API_URL}/api/appointments/verify-payment`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },

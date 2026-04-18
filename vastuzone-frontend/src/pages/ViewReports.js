@@ -87,6 +87,8 @@ function calculateVastuReport(property) {
 }
 
 
+const API_URL = "https://vastuzone-backend.onrender.com";
+
 function ViewReports() {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -104,7 +106,7 @@ function ViewReports() {
 
     const fetchProperties = async (uid) => {
       try {
-        const res = await fetch(`https://vastuzone-backend.onrender.com/api/properties/user/${uid}`);
+        const res = await fetch(`${API_URL}/api/properties/user/${uid}`);
         if (!res.ok) throw new Error("Failed to fetch reports");
         const data = await res.json();
         setProperties(data);

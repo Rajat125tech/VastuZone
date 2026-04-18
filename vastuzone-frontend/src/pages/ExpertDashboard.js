@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import authFetch from "../utils/authFetch";
+import { auth } from "../firebase";
 import "../styles/expertDashboard.css";
+
+const API_URL = "https://vastuzone-backend.onrender.com";
 
 function ExpertDashboard() {
   const navigate = useNavigate();
@@ -10,10 +13,36 @@ function ExpertDashboard() {
   const [loadingChats, setLoadingChats] = useState(true);
   const [appointments, setAppointments] = useState([]);
   const [loadingAppointments, setLoadingAppointments] = useState(true);
+  const [isExpert, setIsExpert] = useState(null);
+
   useEffect(() => {
+    const checkRole = async () => {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      try {
+        const res = await fetch(`${API_URL}/api/users/me/${user.uid}`);
+        const data = await res.json();
+        if (data.role !== "expert") {
+          navigate("/dashboard");
+        } else {
+          setIsExpert(true);
+        }
+      } catch (err) {
+        console.error("Role check failed", err);
+        navigate("/dashboard");
+      }
+    };
+
+    checkRole();
+  }, [navigate]);
+
+  useEffect(() => {
+    if (isExpert === null) return;
+    
     const fetchChats = async () => {
       try {
-        const res = await fetch("https://vastuzone-backend.onrender.com/api/chat");
+        const res = await authFetch(`${API_URL}/api/chat`);
         const data = await res.json();
         setChats(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -25,13 +54,14 @@ function ExpertDashboard() {
     };
 
     fetchChats();
-  }, []);
+  }, [isExpert]);
+
   useEffect(() => {
+    if (isExpert === null) return;
+
     const fetchAppointments = async () => {
       try {
-        const res = await authFetch(
-          "https://vastuzone-backend.onrender.com/api/appointments/expert"
-        );
+        const res = await authFetch(`${API_URL}/api/appointments/expert`);
         const data = await res.json();
         setAppointments(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -43,7 +73,9 @@ function ExpertDashboard() {
     };
 
     fetchAppointments();
-  }, []);
+  }, [isExpert]);
+
+  if (isExpert === null) return <div style={{ padding: 40 }}>Verifying expert access...</div>;
 
   return (
     <>
@@ -111,7 +143,7 @@ function ExpertDashboard() {
 
                   try {
                     await authFetch(
-                      `https://vastuzone-backend.onrender.com/api/appointments/expert/${appt._id}/meet-link`,
+                      `${API_URL}/api/appointments/expert/${appt._id}/meet-link`,
                       {
                         method: "POST",
                         headers: {

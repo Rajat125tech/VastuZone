@@ -64,4 +64,7 @@ const AppointmentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Compound index for filtering user appointments by status and date
+AppointmentSchema.index({ userId: 1, status: 1, appointmentDate: -1 });
+
 module.exports = mongoose.model("Appointment", AppointmentSchema);

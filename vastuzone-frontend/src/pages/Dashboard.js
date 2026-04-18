@@ -5,6 +5,8 @@ import Navbar from "../components/Navbar";
 import { auth } from "../firebase";
 import "../styles/dashboard.css";
 
+const API_URL = "https://vastuzone-backend.onrender.com";
+
 function Dashboard() {
   const navigate = useNavigate();
   const [properties, setProperties] = useState([]);
@@ -25,7 +27,7 @@ function Dashboard() {
     const fetchProperties = async (uid) => {
       try {
         const res = await fetch(
-          `https://vastuzone-backend.onrender.com/api/properties/user/${uid}`
+          `${API_URL}/api/properties/user/${uid}`
         );
         if (!res.ok) throw new Error("Failed to fetch properties");
         const data = await res.json();

@@ -5,6 +5,8 @@ import { auth } from "../firebase";
 import logo from "../assets/logo.png";
 import "../styles/navbar.css";
 
+const API_URL = "https://vastuzone-backend.onrender.com";
+
 function Navbar() {
   const navigate = useNavigate();
 
@@ -25,7 +27,7 @@ function Navbar() {
 
       try {
         const res = await fetch(
-          `https://vastuzone-backend.onrender.com/api/users/me/${currentUser.uid}`
+          `${API_URL}/api/users/me/${currentUser.uid}`
         );
         const data = await res.json();
         setRole(data.role); // "user" or "expert"
@@ -92,6 +94,18 @@ function Navbar() {
                 }}
               >
                 My Appointments
+              </button>
+            )}
+
+            {role === "expert" && (
+              <button
+                className="login-btn"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  navigate("/expert/dashboard");
+                }}
+              >
+                Expert Dashboard
               </button>
             )}
 

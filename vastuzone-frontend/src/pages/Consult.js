@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { socket } from "../socket";
 import "../styles/chat.css";
 
+const API_URL = "https://vastuzone-backend.onrender.com";
+
 function Consult() {
   const user = auth.currentUser;
   const userId = user?.uid;
@@ -22,7 +24,7 @@ function Consult() {
     const fetchChat = async () => {
       try {
         const res = await fetch(
-          `https://vastuzone-backend.onrender.com/api/chat/${userId}`
+          `${API_URL}/api/chat/${userId}`
         );
         const data = await res.json();
         setMessages(data.messages || []);
@@ -62,7 +64,7 @@ function Consult() {
 
     try {
       await fetch(
-        `https://vastuzone-backend.onrender.com/api/chat/${userId}/message`,
+        `${API_URL}/api/chat/${userId}/message`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
