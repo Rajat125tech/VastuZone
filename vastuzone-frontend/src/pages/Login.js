@@ -85,7 +85,7 @@ function Login() {
     } catch (error) {
       console.error("❌ Sync Error:", error);
       if (error.name === 'AbortError') {
-        alert("Backend is taking too long to respond. Please try again as the server might be waking up.");
+        alert("Initializing Secure Connection... The system is waking up to prepare your environment. Please remain on this page.");
       } else {
         alert("Error syncing account: " + error.message);
       }
@@ -121,9 +121,15 @@ function Login() {
 
       const user = userCredential.user;
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+
       const res = await fetch(
-        `${API_URL}/api/users/me/${user.uid}`
+        `${API_URL}/api/users/me/${user.uid}`,
+        { signal: controller.signal }
       );
+
+      clearTimeout(timeoutId);
 
       if (!res.ok) {
         throw new Error("Failed to fetch user role");
@@ -155,7 +161,11 @@ function Login() {
         }
       }
 
-      alert(error.message || "Login failed");
+      if (error.name === 'AbortError') {
+        alert("Initializing Secure Connection... The system is waking up to prepare your environment. Please remain on this page.");
+      } else {
+        alert(error.message || "Login failed");
+      }
     }
   };
 

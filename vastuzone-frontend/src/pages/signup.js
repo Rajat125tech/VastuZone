@@ -28,6 +28,9 @@ function Signup() {
 
       const user = userCredential.user;
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+
       const res = await fetch(`${API_URL}/api/users/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -36,7 +39,10 @@ function Signup() {
           email: user.email,
           name,
         }),
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
 
       if (!res.ok) {
         throw new Error("Failed to create user in database");
@@ -50,6 +56,8 @@ function Signup() {
         alert("Email already in use");
       } else if (error.code === "auth/weak-password") {
         alert("Password must be at least 6 characters");
+      } else if (error.name === 'AbortError') {
+        alert("Initializing Secure Connection... The system is waking up to prepare your environment. Please remain on this page.");
       } else {
         alert(error.message);
       }
