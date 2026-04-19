@@ -1,6 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
+import { 
+  LayoutDashboard, 
+  PlusCircle, 
+  FileText, 
+  MessageSquare, 
+  Video, 
+  ChevronRight,
+  MapPin,
+  Clock
+} from "lucide-react";
 import Navbar from "../components/Navbar";
 import { auth } from "../firebase";
 import "../styles/dashboard.css";
@@ -79,16 +89,19 @@ function Dashboard() {
                 <h4 className="sidebar-title">Management</h4>
                 <nav className="sidebar-nav">
                   <button className="nav-item-lux active" onClick={() => navigate("/dashboard")}>
-                    <span className="nav-icon">⎔</span> Portfolio Overview
+                    <LayoutDashboard size={18} className="nav-icon-svg" /> My Properties
                   </button>
                   <button className="nav-item-lux" onClick={() => navigate("/add-property")}>
-                    <span className="nav-icon">⊕</span> Initiate New Audit
+                    <PlusCircle size={18} className="nav-icon-svg" /> Check New Vastu
                   </button>
                   <button className="nav-item-lux" onClick={() => navigate("/reports")}>
-                    <span className="nav-icon">▤</span> View All Reports
+                    <FileText size={18} className="nav-icon-svg" /> My Reports
                   </button>
                   <button className="nav-item-lux" onClick={() => navigate("/chat")}>
-                    <span className="nav-icon">◎</span> Expert Consultation
+                    <MessageSquare size={18} className="nav-icon-svg" /> Chat with Expert
+                  </button>
+                  <button className="nav-item-lux" onClick={() => navigate("/book-appointment")}>
+                    <Video size={18} className="nav-icon-svg" /> Book Video Call
                   </button>
                 </nav>
               </div>
@@ -102,6 +115,47 @@ function Dashboard() {
 
             {/* --- MAIN CONTENT AREA --- */}
             <section className="content-refined">
+              
+              {/* Quick Actions Section */}
+              <div className="quick-actions-grid">
+                <div className="action-card highlight" onClick={() => navigate("/add-property")}>
+                  <div className="action-icon">
+                    <PlusCircle size={28} strokeWidth={1.5} color="var(--brass)" />
+                  </div>
+                  <div className="action-info">
+                    <h3>Check New Vastu</h3>
+                    <p>Start a new audit for your property</p>
+                  </div>
+                </div>
+                <div className="action-card" onClick={() => navigate("/reports")}>
+                  <div className="action-icon">
+                    <FileText size={28} strokeWidth={1.5} color="var(--brass)" />
+                  </div>
+                  <div className="action-info">
+                    <h3>My Reports</h3>
+                    <p>View your completed Vastu analysis</p>
+                  </div>
+                </div>
+                <div className="action-card" onClick={() => navigate("/chat")}>
+                  <div className="action-icon">
+                    <MessageSquare size={28} strokeWidth={1.5} color="var(--brass)" />
+                  </div>
+                  <div className="action-info">
+                    <h3>Chat with Expert</h3>
+                    <p>Get instant advice via chat</p>
+                  </div>
+                </div>
+                <div className="action-card" onClick={() => navigate("/book-appointment")}>
+                  <div className="action-icon">
+                    <Video size={28} strokeWidth={1.5} color="var(--brass)" />
+                  </div>
+                  <div className="action-info">
+                    <h3>Book Video Call</h3>
+                    <p>Schedule a 1-on-1 video session</p>
+                  </div>
+                </div>
+              </div>
+
               <div className="section-meta-header">
                 <h2 className="serif">Property Asset Portfolio</h2>
                 <div className="filter-tools">
@@ -146,7 +200,7 @@ function Dashboard() {
                       <div className="dossier-body">
                         <h3 className="property-name-lux">{property.propertyName}</h3>
                         <div className="location-row">
-                          <span className="loc-indicator"></span> {property.city}
+                          <MapPin size={14} className="loc-icon" /> {property.city}
                         </div>
                         
                         <div className="progress-visual">
@@ -177,7 +231,7 @@ function Dashboard() {
                       <div className="dossier-footer">
                         <button className="btn-dossier" onClick={() => navigate("/reports")}>
                           {property.reviewStatus === "reviewed" ? "Access Report" : "Track Audit"}
-                          <span className="btn-arrow">→</span>
+                          <ChevronRight size={16} className="btn-arrow-svg" />
                         </button>
                       </div>
                     </div>
@@ -220,12 +274,61 @@ function Dashboard() {
         .nav-item-lux { display: flex; align-items: center; gap: 15px; width: 100%; padding: 15px 0; border: none; background: none; font-size: 0.95rem; font-weight: 500; color: var(--text-main); text-align: left; transition: var(--transition-smooth); cursor: pointer; border-bottom: 1px solid transparent; }
         .nav-item-lux:hover { color: var(--brass); padding-left: 5px; }
         .nav-item-lux.active { color: var(--brass); font-weight: 700; border-bottom-color: var(--brass); }
-        .nav-icon { font-size: 1.2rem; opacity: 0.7; width: 25px; }
+        .nav-icon-svg { opacity: 0.7; }
+        .nav-item-lux:hover .nav-icon-svg { color: var(--brass); opacity: 1; }
 
         .sidebar-support-box { margin-top: 40px; padding: 30px; background: var(--ink); color: var(--paper); border-radius: 2px; }
         .sidebar-support-box .brass-text { color: var(--brass); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 10px; }
         .sidebar-support-box p { font-size: 0.85rem; opacity: 0.7; line-height: 1.6; margin-bottom: 20px; }
         .btn-text-link { background: none; border: none; color: var(--paper); font-weight: 600; font-size: 0.85rem; cursor: pointer; padding: 0; }
+
+        /* Quick Actions Grid */
+        .quick-actions-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 20px;
+          margin-bottom: 60px;
+        }
+        .action-card {
+          background: var(--paper);
+          border: 1px solid var(--stone);
+          padding: 25px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .action-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+          border-color: var(--brass);
+        }
+        .action-card.highlight {
+          background: var(--stone);
+          border-color: var(--brass);
+        }
+        .action-icon {
+          min-width: 50px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--paper);
+          border-radius: 50%;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .action-info h3 {
+          font-size: 1.1rem;
+          margin: 0;
+          color: var(--ink);
+        }
+        .action-info p {
+          font-size: 0.8rem;
+          margin: 5px 0 0;
+          color: var(--text-muted);
+        }
 
         /* Content Refined */
         .section-meta-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
@@ -245,8 +348,8 @@ function Dashboard() {
         .dossier-status-dot.complete { background: #2E7D32; }
 
         .property-name-lux { font-family: 'Instrument Serif', serif; font-size: 2.4rem; line-height: 1.1; margin-bottom: 5px; }
-        .property-loc-lux { font-size: 0.9rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
-        .loc-indicator { width: 6px; height: 6px; background: var(--brass); border-radius: 50%; }
+        .location-row { font-size: 0.9rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+        .loc-icon { color: var(--brass); }
 
         .progress-visual { margin: 25px 0; }
         .progress-labels { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
@@ -257,7 +360,27 @@ function Dashboard() {
         .spec-item label { font-size: 0.6rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 5px; }
         .spec-item p { font-weight: 600; font-size: 0.9rem; color: var(--ink); }
 
-        .btn-dossier { width: 100%; padding: 18px; background: var(--ink); color: var(--paper); border: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: 0.3s; }
+        .btn-dossier { 
+          width: 100%; 
+          padding: 18px; 
+          background: var(--ink); 
+          color: var(--paper); 
+          border: none; 
+          font-size: 0.8rem; 
+          font-weight: 700; 
+          text-transform: uppercase; 
+          letter-spacing: 0.1em; 
+          cursor: pointer; 
+          transition: 0.3s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+        }
+        .btn-dossier:hover { background: #000; }
+        .btn-arrow-svg { transition: transform 0.3s; }
+        .btn-dossier:hover .btn-arrow-svg { transform: translateX(5px); }
+
         /* Skeleton Loading */
         .skeleton { background: var(--paper); border: 1px solid var(--stone); pointer-events: none; }
         .skeleton-line { background: linear-gradient(90deg, var(--stone) 25%, #f5f5f5 50%, var(--stone) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 2px; }
