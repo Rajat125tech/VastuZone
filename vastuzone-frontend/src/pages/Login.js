@@ -14,7 +14,7 @@ import {
 
 import { auth } from "../firebase";
 
-const API_URL = "https://vastuzone-backend.onrender.com";
+const API_URL = process.env.REACT_APP_API_URL || "https://vastuzone-backend.onrender.com";
 
 function Login() {
   const navigate = useNavigate();

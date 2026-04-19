@@ -6,7 +6,7 @@ import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "https://vastuzone-backend.onrender.com";
+const API_URL = process.env.REACT_APP_API_URL || "https://vastuzone-backend.onrender.com";
 
 function BookAppointment() {
   const [user, setUser] = useState(null);

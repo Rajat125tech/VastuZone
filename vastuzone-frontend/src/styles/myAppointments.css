@@ -219,7 +219,7 @@
   box-shadow: 0 10px 20px rgba(22, 101, 52, 0.2);
 }
 
-.payment-note {
+.payment-note, .completed-note {
   font-size: 0.8rem;
   color: var(--text-muted);
   line-height: 1.6;
@@ -227,6 +227,15 @@
   padding: 12px;
   background: var(--stone);
   border-radius: 4px;
+}
+
+.completed-note {
+  background: #f0f4f8;
+  color: #475569;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(0,0,0,0.05);
 }
 
 /* --- EMPTY STATE --- */

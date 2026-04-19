@@ -13,7 +13,7 @@ const propertyTypes = ["Flat", "Independent House", "Villa", "Plot", "Office", "
 const purposes = ["Residential", "Commercial", "Industrial"];
 const shapes = ["Square", "Rectangle", "Irregular", "L-Shape", "U-Shape"];
 
-const API_URL = "https://vastuzone-backend.onrender.com";
+const API_URL = process.env.REACT_APP_API_URL || "https://vastuzone-backend.onrender.com";
 
 function AddProperty() {
   const navigate = useNavigate();

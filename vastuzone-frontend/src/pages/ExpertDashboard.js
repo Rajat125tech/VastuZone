@@ -5,7 +5,7 @@ import authFetch from "../utils/authFetch";
 import { auth } from "../firebase";
 import "../styles/expertDashboard.css";
 
-const API_URL = "https://vastuzone-backend.onrender.com";
+const API_URL = process.env.REACT_APP_API_URL || "https://vastuzone-backend.onrender.com";
 
 function ExpertDashboard() {
   const navigate = useNavigate();
@@ -14,6 +14,7 @@ function ExpertDashboard() {
   const [appointments, setAppointments] = useState([]);
   const [loadingAppointments, setLoadingAppointments] = useState(true);
   const [isExpert, setIsExpert] = useState(null);
+  const [viewMode, setViewMode] = useState("active"); // "active" or "history"
 
   useEffect(() => {
     const checkRole = async () => {
@@ -37,43 +38,77 @@ function ExpertDashboard() {
     checkRole();
   }, [navigate]);
 
+  const fetchChats = async () => {
+    setLoadingChats(true);
+    try {
+      const status = viewMode === "active" ? "active" : "resolved";
+      const res = await authFetch(`${API_URL}/api/chat?status=${status}`);
+      const data = await res.json();
+      setChats(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("❌ Failed to load chats", err);
+      setChats([]);
+    } finally {
+      setLoadingChats(false);
+    }
+  };
+
+  const fetchAppointments = async () => {
+    setLoadingAppointments(true);
+    try {
+      const res = await authFetch(`${API_URL}/api/appointments/expert`);
+      const data = await res.json();
+      
+      const filtered = Array.isArray(data) ? data.filter(a => {
+        if (viewMode === "active") return a.status !== "completed";
+        return a.status === "completed";
+      }) : [];
+      
+      setAppointments(filtered);
+    } catch (err) {
+      console.warn("⚠️ Appointments unavailable", err);
+      setAppointments([]);
+    } finally {
+      setLoadingAppointments(false);
+    }
+  };
+
   useEffect(() => {
     if (isExpert === null) return;
-    
-    const fetchChats = async () => {
-      try {
-        const res = await authFetch(`${API_URL}/api/chat`);
-        const data = await res.json();
-        setChats(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("❌ Failed to load chats", err);
-        setChats([]);
-      } finally {
-        setLoadingChats(false);
-      }
-    };
-
     fetchChats();
-  }, [isExpert]);
-
-  useEffect(() => {
-    if (isExpert === null) return;
-
-    const fetchAppointments = async () => {
-      try {
-        const res = await authFetch(`${API_URL}/api/appointments/expert`);
-        const data = await res.json();
-        setAppointments(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.warn("⚠️ Appointments unavailable", err);
-        setAppointments([]);
-      } finally {
-        setLoadingAppointments(false);
-      }
-    };
-
     fetchAppointments();
-  }, [isExpert]);
+  }, [isExpert, viewMode]);
+
+  const handleResolveChat = async (e, userId) => {
+    e.stopPropagation();
+    if (!window.confirm("Are you sure you want to archive this inquiry?")) return;
+
+    // Optimistic Update
+    setChats(prev => prev.filter(c => c.userId !== userId));
+
+    try {
+      await authFetch(`${API_URL}/api/chat/${userId}/resolve`, { method: "POST" });
+      // fetchChats(); // No need to re-fetch if we update locally
+    } catch (err) {
+      console.error("Failed to resolve chat");
+      fetchChats(); // Revert on error
+    }
+  };
+
+  const handleCompleteAppointment = async (apptId) => {
+    if (!window.confirm("Mark this consultation as completed?")) return;
+
+    // Optimistic Update
+    setAppointments(prev => prev.filter(a => a._id !== apptId));
+
+    try {
+      await authFetch(`${API_URL}/api/appointments/expert/${apptId}/complete`, { method: "POST" });
+      // fetchAppointments(); // No need to re-fetch if we update locally
+    } catch (err) {
+      console.error("Failed to complete appointment");
+      fetchAppointments(); // Revert on error
+    }
+  };
 
   if (isExpert === null) {
     return (
@@ -92,23 +127,39 @@ function ExpertDashboard() {
         <header className="expert-hero-header">
           <span className="eyebrow-lux">Expert Administration</span>
           <h1 className="expert-title-lux">Expert Dashboard</h1>
-          <p className="expert-subtitle-lux">
-            Manage client inquiries, oversee spatial audit requests, and coordinate scheduled video consultations.
-          </p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '20px' }}>
+            <p className="expert-subtitle-lux">
+              Manage client inquiries, oversee spatial audit requests, and coordinate scheduled video consultations.
+            </p>
+            <div className="view-toggle-lux">
+              <button 
+                className={viewMode === 'active' ? 'active' : ''} 
+                onClick={() => setViewMode('active')}
+              >
+                Active
+              </button>
+              <button 
+                className={viewMode === 'history' ? 'active' : ''} 
+                onClick={() => setViewMode('history')}
+              >
+                History
+              </button>
+            </div>
+          </div>
         </header>
 
         {/* --- USER INQUIRIES --- */}
         <section className="expert-section">
           <div className="section-meta-header">
-            <h2>Recent User Inquiries</h2>
-            <span className="count-badge">{chats.length} active threads</span>
+            <h2>{viewMode === 'active' ? 'Recent User Inquiries' : 'Resolved Inquiries'}</h2>
+            <span className="count-badge">{chats.length} threads</span>
           </div>
 
           {loadingChats ? (
             <p className="eyebrow-lux">Synchronizing thread history...</p>
           ) : chats.length === 0 ? (
             <div className="empty-state-lux">
-              <p>No active user inquiries found.</p>
+              <p>No {viewMode} inquiries found.</p>
             </div>
           ) : (
             <div className="chats-grid">
@@ -126,7 +177,14 @@ function ExpertDashboard() {
                   >
                     <div className="card-header-lux">
                       <h3 className="user-name-lux">{chat.userName || "Client"}</h3>
-                      <span className="status-tag-lux">Message</span>
+                      {viewMode === 'active' && (
+                        <button 
+                          className="resolve-btn-lux"
+                          onClick={(e) => handleResolveChat(e, chat.userId)}
+                        >
+                          Archive
+                        </button>
+                      )}
                     </div>
                     <div className="card-body-lux">
                       <p className="last-msg-lux">{lastMessage}</p>
@@ -147,7 +205,7 @@ function ExpertDashboard() {
         {/* --- SCHEDULED CONSULTATIONS --- */}
         <section className="expert-section">
           <div className="section-meta-header">
-            <h2>Scheduled Consultations</h2>
+            <h2>{viewMode === 'active' ? 'Scheduled Consultations' : 'Past Consultations'}</h2>
             <span className="count-badge">{appointments.length} sessions</span>
           </div>
 
@@ -155,7 +213,7 @@ function ExpertDashboard() {
             <p className="eyebrow-lux">Loading appointment data...</p>
           ) : appointments.length === 0 ? (
             <div className="empty-state-lux">
-              <p>No upcoming consultations scheduled.</p>
+              <p>No {viewMode} consultations found.</p>
             </div>
           ) : (
             <div className="appointments-grid">
@@ -163,9 +221,19 @@ function ExpertDashboard() {
                 <div key={appt._id} className="expert-card-lux appointment-card-lux">
                   <div className="card-header-lux">
                     <h3 className="user-name-lux">{appt.userName || "Client"}</h3>
-                    <span className="status-tag-lux">
-                      {appt.status === 'paid' ? 'Confirmed' : 'Pending'}
-                    </span>
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      <span className="status-tag-lux">
+                        {appt.status}
+                      </span>
+                      {viewMode === 'active' && appt.status === 'paid' && (
+                        <button 
+                          className="complete-btn-lux"
+                          onClick={() => handleCompleteAppointment(appt._id)}
+                        >
+                          Done
+                        </button>
+                      )}
+                    </div>
                   </div>
 
                   <div className="card-body-lux">
@@ -187,9 +255,10 @@ function ExpertDashboard() {
                         placeholder="Assign video link"
                         defaultValue={appt.meetLink}
                         className="meet-link-input"
+                        disabled={viewMode === 'history'}
                         onBlur={async (e) => {
                           const link = e.target.value.trim();
-                          if (!link) return;
+                          if (!link || viewMode === 'history') return;
 
                           try {
                             await authFetch(

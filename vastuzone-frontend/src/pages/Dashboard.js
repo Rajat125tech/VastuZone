@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import { auth } from "../firebase";
 import "../styles/dashboard.css";
 
-const API_URL = "https://vastuzone-backend.onrender.com";
+const API_URL = process.env.REACT_APP_API_URL || "https://vastuzone-backend.onrender.com";
 
 function Dashboard() {
   const navigate = useNavigate();

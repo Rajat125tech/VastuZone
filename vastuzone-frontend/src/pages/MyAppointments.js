@@ -6,7 +6,7 @@ import { auth } from "../firebase";
 import "../styles/myAppointments.css";
 import loadRazorpay from "../utils/loadRazorpay";
 
-const API_URL = "https://vastuzone-backend.onrender.com";
+const API_URL = process.env.REACT_APP_API_URL || "https://vastuzone-backend.onrender.com";
 
 function MyAppointments() {
   const navigate = useNavigate();
@@ -164,7 +164,11 @@ function MyAppointments() {
               </div>
 
               <div className="appt-actions">
-                {appt.status === "paid" ? (
+                {appt.status === "completed" ? (
+                  <div className="completed-note">
+                    ✅ Consultation Finished
+                  </div>
+                ) : appt.status === "paid" ? (
                   appt.meetLink ? (
                     <button
                       className="join-btn"

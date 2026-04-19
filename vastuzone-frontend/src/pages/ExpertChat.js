@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import { socket } from "../socket";
 import "../styles/expertChat.css";
 
-const API_BASE_URL = "https://vastuzone-backend.onrender.com";
+const API_BASE_URL = process.env.REACT_APP_API_URL || "https://vastuzone-backend.onrender.com";
 
 function ExpertChat() {
   const { userId } = useParams();

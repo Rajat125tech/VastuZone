@@ -26,6 +26,12 @@ const chatSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    status: {
+      type: String,
+      enum: ["active", "resolved"],
+      default: "active",
+      index: true,
+    },
     messages: [messageSchema],
   },
   { timestamps: true }

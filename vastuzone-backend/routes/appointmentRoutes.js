@@ -69,6 +69,20 @@ router.post("/expert/:id/meet-link", requireExpert, async (req, res) => {
   res.json(appointment);
 });
 
+// ✅ ADDED: Mark appointment as completed
+router.post("/expert/:id/complete", requireExpert, async (req, res) => {
+  try {
+    const appointment = await Appointment.findByIdAndUpdate(
+      req.params.id,
+      { status: "completed" },
+      { new: true }
+    );
+    res.json(appointment);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to complete appointment" });
+  }
+});
+
 
 router.post("/pay/:id", async (req, res) => {
   const appointment = await Appointment.findById(req.params.id);

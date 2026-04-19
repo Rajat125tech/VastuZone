@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { socket } from "../socket";
 import "../styles/chat.css";
 
-const API_URL = "https://vastuzone-backend.onrender.com";
+const API_URL = process.env.REACT_APP_API_URL || "https://vastuzone-backend.onrender.com";
 
 function Consult() {
   const user = auth.currentUser;

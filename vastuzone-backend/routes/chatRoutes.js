@@ -6,7 +6,14 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const chats = await Chat.find().sort({ updatedAt: -1 });
+    const { status = "active" } = req.query;
+
+    // ✅ BACKWARD COMPATIBILITY: If status is 'active', also find chats with no status field
+    const query = status === "active" 
+      ? { $or: [{ status: "active" }, { status: { $exists: false } }] }
+      : { status };
+
+    const chats = await Chat.find(query).sort({ updatedAt: -1 });
 
     const enrichedChats = await Promise.all(
       chats.map(async (chat) => {
@@ -15,9 +22,10 @@ router.get("/", async (req, res) => {
         return {
           _id: chat._id,
           userId: chat.userId,
-          userName: user?.name || "Unknown User", // ✅ FIXED
+          userName: user?.name || "Unknown User",
           email: user?.email || "",
           messages: chat.messages,
+          status: chat.status,
           updatedAt: chat.updatedAt,
         };
       })
@@ -27,6 +35,27 @@ router.get("/", async (req, res) => {
   } catch (err) {
     console.error("❌ Failed to fetch chats", err);
     res.status(500).json({ message: "Failed to fetch chats" });
+  }
+});
+
+// ✅ ADDED: Resolve Chat (Mark as Done)
+router.post("/:userId/resolve", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const chat = await Chat.findOneAndUpdate(
+      { userId },
+      { status: "resolved" },
+      { new: true }
+    );
+
+    if (!chat) {
+      return res.status(404).json({ message: "Chat not found" });
+    }
+
+    res.json({ message: "Chat resolved successfully", chat });
+  } catch (err) {
+    console.error("❌ Failed to resolve chat", err);
+    res.status(500).json({ message: "Failed to resolve chat" });
   }
 });
 

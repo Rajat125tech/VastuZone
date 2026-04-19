@@ -87,7 +87,7 @@ function calculateVastuReport(property) {
 }
 
 
-const API_URL = "https://vastuzone-backend.onrender.com";
+const API_URL = process.env.REACT_APP_API_URL || "https://vastuzone-backend.onrender.com";
 
 function ViewReports() {
   const [properties, setProperties] = useState([]);

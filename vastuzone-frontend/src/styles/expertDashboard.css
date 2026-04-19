@@ -224,6 +224,66 @@
   font-weight: 500;
 }
 
+/* View Toggle Styling */
+.view-toggle-lux {
+  display: flex;
+  background: #F1F1EF;
+  padding: 4px;
+  border-radius: 4px;
+  gap: 4px;
+}
+
+.view-toggle-lux button {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  border-radius: 2px;
+}
+
+.view-toggle-lux button.active {
+  background: white;
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Action Buttons */
+.resolve-btn-lux, .complete-btn-lux {
+  background: var(--ink);
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: var(--transition-smooth);
+}
+
+.resolve-btn-lux:hover, .complete-btn-lux:hover {
+  background: var(--brass);
+}
+
+.resolve-btn-lux {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.resolve-btn-lux:hover {
+  background: rgba(0,0,0,0.05);
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
 @media (max-width: 768px) {
   .expert-dashboard-wrapper {
     padding: 40px 0;
