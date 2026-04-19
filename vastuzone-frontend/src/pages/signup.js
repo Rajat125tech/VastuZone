@@ -15,11 +15,13 @@ function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = async (e) => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -29,7 +31,7 @@ function Signup() {
       const user = userCredential.user;
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
 
       const res = await fetch(`${API_URL}/api/users/create`, {
         method: "POST",
@@ -48,9 +50,11 @@ function Signup() {
         throw new Error("Failed to create user in database");
       }
 
+      alert("Account created successfully! Please login.");
       navigate("/login");
     } catch (error) {
       console.error("Signup failed:", error);
+      setLoading(false);
 
       if (error.code === "auth/email-already-in-use") {
         alert("Email already in use");
@@ -63,6 +67,33 @@ function Signup() {
       }
     }
   };
+
+  if (loading) {
+    return (
+      <div style={{ 
+        height: "100vh", 
+        display: "flex", 
+        flexDirection: "column",
+        alignItems: "center", 
+        justifyContent: "center",
+        background: "#f7f6dc",
+        fontFamily: "Inter, sans-serif"
+      }}>
+        <div className="loading-spinner" style={{
+          border: "4px solid #f3f3f3",
+          borderTop: "4px solid #bdb488",
+          borderRadius: "50%",
+          width: "40px",
+          height: "40px",
+          animation: "spin 1s linear infinite",
+          marginBottom: "20px"
+        }}></div>
+        <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+        <h2 style={{ color: "#2e2c25" }}>Creating your account...</h2>
+        <p style={{ color: "#7a7468" }}>Setting up your VastuZone profile</p>
+      </div>
+    );
+  }
 
   return (
     <div>

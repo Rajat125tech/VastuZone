@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import logo from "../assets/logo.png";
@@ -25,6 +25,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+  const syncInProgress = useRef(false);
 
   const handleForgotPassword = async () => {
     if (!email) {
@@ -41,14 +42,15 @@ function Login() {
   };
 
   const syncUserAndNavigate = useCallback(async (user) => {
-    if (isSyncing) return;
+    if (syncInProgress.current) return;
+    syncInProgress.current = true;
     setIsSyncing(true);
     setLoading(true);
 
     console.log("🔄 Syncing user with backend:", user.uid, user.email);
     
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // Increased to 30s for Render cold starts
 
     try {
       const emailPrefix = user.email ? user.email.split("@")[0] : "User";
@@ -92,8 +94,9 @@ function Login() {
     } finally {
       setIsSyncing(false);
       setLoading(false);
+      syncInProgress.current = false;
     }
-  }, [isSyncing, navigate]);
+  }, [navigate]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -113,36 +116,12 @@ function Login() {
 
     try {
       setLoading(true);
-      const userCredential = await signInWithEmailAndPassword(
+      await signInWithEmailAndPassword(
         auth,
         email,
         password
       );
-
-      const user = userCredential.user;
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
-
-      const res = await fetch(
-        `${API_URL}/api/users/me/${user.uid}`,
-        { signal: controller.signal }
-      );
-
-      clearTimeout(timeoutId);
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch user role");
-      }
-
-      const userData = await res.json();
-
-      if (userData.role === "expert") {
-        navigate("/expert/dashboard");
-      } else {
-        navigate("/dashboard");
-      }
-
+      // Success will trigger onAuthStateChanged above
     } catch (error) {
       setLoading(false);
       console.error("Login Error:", error.code, error.message);
@@ -161,11 +140,7 @@ function Login() {
         }
       }
 
-      if (error.name === 'AbortError') {
-        alert("Initializing Secure Connection... The system is waking up to prepare your environment. Please remain on this page.");
-      } else {
-        alert(error.message || "Login failed");
-      }
+      alert(error.message || "Login failed");
     }
   };
 
