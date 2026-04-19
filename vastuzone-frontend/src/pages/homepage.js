@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { ShieldCheck, Zap, Globe, Users } from 'lucide-react';
 
 import papaimage from "../assets/papa.png";
 
@@ -37,6 +38,30 @@ function Home() {
               alt="Minimalist Luxury Interior"
               className="hero-main-img"
             />
+          </div>
+        </div>
+      </section>
+
+      {/* --- TRUST BAR --- */}
+      <section className="trust-bar-lux">
+        <div className="container">
+          <div className="trust-grid">
+            <div className="trust-item">
+              <ShieldCheck size={20} color="var(--brass)" />
+              <span>Certified Expert Audits</span>
+            </div>
+            <div className="trust-item">
+              <Zap size={20} color="var(--brass)" />
+              <span>Real-time Energy Analysis</span>
+            </div>
+            <div className="trust-item">
+              <Globe size={20} color="var(--brass)" />
+              <span>Global Vastu Standards</span>
+            </div>
+            <div className="trust-item">
+              <Users size={20} color="var(--brass)" />
+              <span>Multiple Properties Harmonized</span>
+            </div>
           </div>
         </div>
       </section>
@@ -191,11 +216,11 @@ function Home() {
               <h4>Contact</h4>
               <p>kant.online@gmail.com</p>
               <p>+91 80900 00080</p>
-              <p>Lucknow HQ, India</p>
+              <p>Lucknow, India</p>
             </div>
           </div>
           <div className="footer-bottom">
-            <p>© 2026 VastuZone Precision Systems. All rights reserved.</p>
+            <p>© 2026 VastuZone. All rights reserved. Coded by Rajat </p>
           </div>
         </div>
       </footer>
@@ -211,6 +236,15 @@ function Home() {
         .hero-actions { display: flex; gap: 20px; }
         .hero-main-img { border-radius: 0; box-shadow: 40px 40px 0 var(--stone); width: 100%; height: auto; scale: 1.15; transition: var(--transition-smooth); }
         .hero-main-img:hover { scale: 1.18; }
+
+        /* Trust Bar */
+        .trust-bar-lux { background: #FFF; border-bottom: 1px solid var(--stone); padding: 40px 0; }
+        .trust-grid { display: flex; justify-content: space-between; align-items: center; gap: 30px; }
+        .trust-item { display: flex; align-items: center; gap: 12px; }
+        .trust-item span { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+        @media (max-width: 768px) {
+          .trust-grid { flex-direction: column; align-items: flex-start; gap: 20px; }
+        }
 
         .section-header { margin-bottom: 80px; }
         .section-header h2 { font-size: 4rem; color: #111; }

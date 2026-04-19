@@ -3,67 +3,124 @@ import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import Navbar from "../components/Navbar";
 import { auth } from "../firebase";
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Radar } from 'react-chartjs-2';
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 function calculateVastuReport(property) {
   let score = 0;
   const warnings = [];
   const tips = [];
+  
+  // Granular scores for Chart
+  const breakdown = {
+    structure: 0,
+    entrance: 0,
+    kitchen: 0,
+    bedrooms: 0,
+    pooja: 0,
+    living: 0
+  };
+
   if (["Square", "Rectangle"].includes(property.propertyShape)) {
     score += 10;
+    breakdown.structure = 10;
   } else {
     score += 4;
+    breakdown.structure = 4;
     tips.push("Irregular property shapes may disturb energy flow.");
   }
+
   if (["North", "East", "North-East"].includes(property.facing)) {
     score += 20;
+    // Entrance/Facing combined logic for simplicity in breakdown
   } else {
     score += 8;
     warnings.push("Property facing is not ideal (North/East/NE preferred).");
   }
+
   if (["North", "East"].includes(property.entrance)) {
     score += 20;
+    breakdown.entrance = 20;
   } else if (property.entrance === "South") {
     score -= 10;
+    breakdown.entrance = 0;
     warnings.push("Main entrance facing South may affect prosperity.");
+  } else {
+    breakdown.entrance = 8;
   }
+
   if (["North", "East", "North-East"].includes(property.livingRoomDirection)) {
     score += 10;
+    breakdown.living = 10;
   } else {
     score += 5;
+    breakdown.living = 5;
     warnings.push("Living room should ideally be in North/East/NE.");
   }
+
   if (property.kitchenDirection === "South-East") {
     score += 10;
+    breakdown.kitchen = 10;
   } else {
     score += 4;
+    breakdown.kitchen = 4;
     warnings.push("Kitchen is best placed in the South-East direction.");
   }
+
   if (["North", "North-West"].includes(property.bathroomDirection)) {
     score += 8;
   } else {
     score += 3;
     warnings.push("Bathrooms should ideally be in North or North-West.");
   }
+
   if (property.masterBedroomDirection === "South-West") {
     score += 10;
+    breakdown.bedrooms += 10;
   } else {
     score += 5;
+    breakdown.bedrooms += 5;
     warnings.push("Master bedroom is best located in South-West.");
   }
+
   if (["West", "North-West"].includes(property.kidsBedroomDirection)) {
     score += 6;
+    breakdown.bedrooms += 6;
   } else {
     score += 3;
+    breakdown.bedrooms += 3;
     warnings.push("Kids bedroom should ideally be in West or North-West.");
   }
+
   if (property.poojaRoomDirection === "North-East") {
     score += 10;
+    breakdown.pooja = 10;
   } else if (["North", "East"].includes(property.poojaRoomDirection)) {
     score += 7;
+    breakdown.pooja = 7;
   } else {
     score += 3;
+    breakdown.pooja = 3;
     warnings.push("Pooja room should ideally be in the North-East.");
   }
+
   score = Math.max(0, Math.min(100, score));
 
   let band = "Needs Vastu Remedies";
@@ -83,6 +140,7 @@ function calculateVastuReport(property) {
     bandColor,
     warnings,
     tips,
+    breakdown
   };
 }
 
@@ -141,8 +199,15 @@ function ViewReports() {
         </header>
 
         {loading ? (
-          <div className="reports-loading-lux">
-            <p>Retrieving technical data...</p>
+          <div className="reports-grid-lux">
+            {[1, 2].map((i) => (
+              <div className="dossier-report-card skeleton" key={i}>
+                <div className="skeleton-line header"></div>
+                <div className="skeleton-line title"></div>
+                <div className="skeleton-line text"></div>
+                <div className="skeleton-line chart"></div>
+              </div>
+            ))}
           </div>
         ) : properties.length === 0 ? (
           <div className="reports-empty-lux">
@@ -169,16 +234,66 @@ function ViewReports() {
                     </div>
 
                     <div className="dossier-horizontal-stats">
-                      <div className="score-circle-lux">
-                        <svg viewBox="0 0 36 36" className="circular-chart-lux">
-                          <path className="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                          <path className="circle" 
-                            strokeDasharray={`${report.score}, 100`}
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" 
-                          />
-                          <text x="18" y="20.35" className="percentage">{report.score}</text>
-                        </svg>
-                        <span className="score-label-lux">Alignment Score</span>
+                      <div className="chart-container-lux">
+                        <Radar 
+                          data={{
+                            labels: ['Structure', 'Entrance', 'Kitchen', 'Bedrooms', 'Pooja', 'Living'],
+                            datasets: [
+                              {
+                                label: 'Vastu Alignment',
+                                data: [
+                                  report.breakdown.structure,
+                                  report.breakdown.entrance,
+                                  report.breakdown.kitchen,
+                                  report.breakdown.bedrooms,
+                                  report.breakdown.pooja,
+                                  report.breakdown.living
+                                ],
+                                backgroundColor: 'rgba(176, 141, 87, 0.2)',
+                                borderColor: 'rgba(176, 141, 87, 1)',
+                                borderWidth: 2,
+                                pointBackgroundColor: 'rgba(176, 141, 87, 1)',
+                                pointBorderColor: '#fff',
+                                pointHoverBackgroundColor: '#fff',
+                                pointHoverBorderColor: 'rgba(176, 141, 87, 1)',
+                              },
+                            ],
+                          }}
+                          options={{
+                            scales: {
+                              r: {
+                                angleLines: {
+                                  display: true,
+                                  color: 'rgba(0, 0, 0, 0.05)'
+                                },
+                                grid: {
+                                  color: 'rgba(0, 0, 0, 0.05)'
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 20,
+                                ticks: {
+                                  display: false
+                                },
+                                pointLabels: {
+                                  font: {
+                                    size: 10,
+                                    family: "'Instrument Serif', serif",
+                                  },
+                                  color: '#1a1c19'
+                                }
+                              }
+                            },
+                            plugins: {
+                              legend: {
+                                display: false
+                              }
+                            }
+                          }}
+                        />
+                        <div className="total-score-overlay">
+                          <span className="score-num">{report.score}</span>
+                          <span className="score-label">OVERALL</span>
+                        </div>
                       </div>
                       <div className="dossier-findings">
                         {report.warnings.length > 0 ? (
@@ -269,14 +384,12 @@ function ViewReports() {
         .dossier-title-text { font-size: 3.2rem; line-height: 1; margin-bottom: 8px; }
         .dossier-subtitle-text { font-size: 0.95rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
 
-        .dossier-horizontal-stats { display: grid; grid-template-columns: 180px 1fr; gap: 60px; align-items: center; padding: 40px 0; border-top: 1px solid var(--stone); border-bottom: 1px solid var(--stone); }
+        .dossier-horizontal-stats { display: grid; grid-template-columns: 280px 1fr; gap: 60px; align-items: center; padding: 40px 0; border-top: 1px solid var(--stone); border-bottom: 1px solid var(--stone); }
         
-        .score-circle-lux { width: 120px; text-align: center; }
-        .circular-chart-lux { display: block; margin: 10px auto; max-width: 100%; }
-        .circle-bg { fill: none; stroke: var(--stone); stroke-width: 2.8; }
-        .circle { fill: none; stroke: var(--brass); stroke-width: 2.8; stroke-linecap: butt; transition: stroke-dasharray 0.3s ease; }
-        .percentage { font-family: 'Instrument Serif', serif; font-size: 0.6rem; text-anchor: middle; fill: var(--ink); font-weight: 400; }
-        .score-label-lux { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.1em; color: var(--text-muted); }
+        .chart-container-lux { width: 280px; height: 280px; position: relative; display: flex; align-items: center; justify-content: center; }
+        .total-score-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
+        .score-num { display: block; font-family: 'Instrument Serif', serif; font-size: 2.2rem; line-height: 1; color: var(--ink); }
+        .score-label { display: block; font-size: 0.5rem; letter-spacing: 0.2em; color: var(--brass); font-weight: 700; margin-top: 5px; }
 
         .finding-group label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; color: var(--brass); display: block; margin-bottom: 15px; }
         .finding-group ul { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: x 40px; }
@@ -296,6 +409,19 @@ function ViewReports() {
         .modal-header-lux { padding: 30px 40px; border-bottom: var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
         .modal-body-lux { flex: 1; padding: 20px; background: var(--stone); }
         .close-btn-lux { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--ink); }
+
+        /* Skeleton Loading */
+        .skeleton { background: var(--paper); border: 1px solid var(--stone); pointer-events: none; }
+        .skeleton-line { background: linear-gradient(90deg, var(--stone) 25%, #f5f5f5 50%, var(--stone) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 2px; }
+        .skeleton-line.header { width: 100px; height: 15px; margin-bottom: 20px; }
+        .skeleton-line.title { width: 60%; height: 40px; margin-bottom: 15px; }
+        .skeleton-line.text { width: 40%; height: 20px; margin-bottom: 40px; }
+        .skeleton-line.chart { width: 280px; height: 280px; border-radius: 50%; }
+
+        @keyframes shimmer {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
 
         @media (max-width: 1000px) {
           .reports-grid-lux { grid-template-columns: 1fr; }

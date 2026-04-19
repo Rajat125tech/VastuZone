@@ -110,9 +110,16 @@ function Dashboard() {
               </div>
 
               {loading ? (
-                <div className="loading-shimmer-container">
-                  <div className="shimmer-card"></div>
-                  <div className="shimmer-card"></div>
+                <div className="dossier-grid">
+                  {[1, 2].map((i) => (
+                    <div className="dossier-card skeleton" key={i}>
+                      <div className="skeleton-line header"></div>
+                      <div className="skeleton-line title"></div>
+                      <div className="skeleton-line text"></div>
+                      <div className="skeleton-line progress"></div>
+                      <div className="skeleton-line footer"></div>
+                    </div>
+                  ))}
                 </div>
               ) : properties.length === 0 ? (
                 <div className="empty-state-lux">
@@ -251,9 +258,19 @@ function Dashboard() {
         .spec-item p { font-weight: 600; font-size: 0.9rem; color: var(--ink); }
 
         .btn-dossier { width: 100%; padding: 18px; background: var(--ink); color: var(--paper); border: none; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: 0.3s; }
-        .btn-dossier:hover { background: var(--brass); color: var(--ink); }
+        /* Skeleton Loading */
+        .skeleton { background: var(--paper); border: 1px solid var(--stone); pointer-events: none; }
+        .skeleton-line { background: linear-gradient(90deg, var(--stone) 25%, #f5f5f5 50%, var(--stone) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 2px; }
+        .skeleton-line.header { width: 40px; height: 10px; margin-bottom: 20px; }
+        .skeleton-line.title { width: 80%; height: 30px; margin-bottom: 10px; }
+        .skeleton-line.text { width: 60%; height: 15px; margin-bottom: 30px; }
+        .skeleton-line.progress { width: 100%; height: 4px; margin-bottom: 20px; }
+        .skeleton-line.footer { width: 100%; height: 50px; }
 
-        .empty-state-lux { background: var(--stone); padding: 100px 40px; text-align: center; border: 1px dashed var(--brass); }
+        @keyframes shimmer {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
         .empty-content span { font-size: 2.5rem; display: block; margin-bottom: 20px; }
         .empty-content p { margin-bottom: 30px; opacity: 0.7; }
 
