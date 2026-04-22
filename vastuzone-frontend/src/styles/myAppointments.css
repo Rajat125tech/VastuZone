@@ -196,6 +196,10 @@
   letter-spacing: 0.15em;
   cursor: pointer;
   transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .pay-btn {
@@ -227,6 +231,10 @@
   padding: 12px;
   background: var(--stone);
   border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .completed-note {

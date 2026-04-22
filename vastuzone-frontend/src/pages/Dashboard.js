@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { 
   LayoutDashboard, 
   PlusCircle, 
@@ -9,48 +11,50 @@ import {
   Video, 
   ChevronRight,
   MapPin,
-  Clock
+  Clock,
+  Home as HomeIcon
 } from "lucide-react";
 import Navbar from "../components/Navbar";
+import Skeleton from "../components/UI/Skeleton";
+import EmptyState from "../components/UI/EmptyState";
 import { auth } from "../firebase";
+import authFetch from "../utils/authFetch";
 import "../styles/dashboard.css";
 
 const API_URL = process.env.REACT_APP_API_URL || "https://vastuzone-backend.onrender.com";
 
 function Dashboard() {
   const navigate = useNavigate();
-  const [properties, setProperties] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
   const [userName, setUserName] = useState("Member");
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const emailPrefix = user.email ? user.email.split("@")[0] : "Member";
-        setUserName(user.displayName || emailPrefix);
-        fetchProperties(user.uid);
-      } else {
-        setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, (u) => {
+      setUser(u);
+      if (u) {
+        const emailPrefix = u.email ? u.email.split("@")[0] : "Member";
+        setUserName(u.displayName || emailPrefix);
       }
     });
-
-    const fetchProperties = async (uid) => {
-      try {
-        const res = await fetch(
-          `${API_URL}/api/properties/user/${uid}`
-        );
-        if (!res.ok) throw new Error("Failed to fetch properties");
-        const data = await res.json();
-        setProperties(data);
-      } catch (error) {
-        console.error("❌ Error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     return () => unsubscribe();
   }, []);
+
+  const { data: properties = [], isLoading, error } = useQuery({
+    queryKey: ['properties', user?.uid],
+    queryFn: async () => {
+      const res = await authFetch(`${API_URL}/api/properties/user/${user.uid}`);
+      if (!res.ok) throw new Error("Failed to fetch properties");
+      return res.json();
+    },
+    enabled: !!user,
+    onError: (err) => {
+      toast.error("Could not load properties. Please try again.");
+      console.error(err);
+    }
+  });
+
+  const activeAnalysisCount = properties.filter(p => p.reviewStatus !== "reviewed").length;
+  const finalizedDossiersCount = properties.filter(p => p.reviewStatus === "reviewed").length;
 
   return (
     <div className="dashboard-wrapper">
@@ -72,11 +76,15 @@ function Dashboard() {
               <div className="stat-pill">
                 <span className="stat-dot pulse"></span>
                 <span className="stat-label">Active Analysis</span>
-                <span className="stat-value-lux">{properties.filter(p => p.reviewStatus !== "reviewed").length}</span>
+                <span className="stat-value-lux">
+                  {isLoading ? <Skeleton className="w-8 h-8" /> : activeAnalysisCount}
+                </span>
               </div>
               <div className="stat-pill">
                 <span className="stat-label">Finalized Dossiers</span>
-                <span className="stat-value-lux">{properties.filter(p => p.reviewStatus === "reviewed").length}</span>
+                <span className="stat-value-lux">
+                  {isLoading ? <Skeleton className="w-8 h-8" /> : finalizedDossiersCount}
+                </span>
               </div>
             </div>
           </header>
@@ -163,26 +171,28 @@ function Dashboard() {
                 </div>
               </div>
 
-              {loading ? (
+              {isLoading ? (
                 <div className="dossier-grid">
-                  {[1, 2].map((i) => (
-                    <div className="dossier-card skeleton" key={i}>
-                      <div className="skeleton-line header"></div>
-                      <div className="skeleton-line title"></div>
-                      <div className="skeleton-line text"></div>
-                      <div className="skeleton-line progress"></div>
-                      <div className="skeleton-line footer"></div>
+                  {[1, 2, 3].map((i) => (
+                    <div className="dossier-card" key={i}>
+                      <Skeleton className="h-4 w-12 mb-4" />
+                      <Skeleton className="h-10 w-3/4 mb-4" />
+                      <Skeleton className="h-4 w-1/2 mb-6" />
+                      <Skeleton className="h-1 w-full mb-4" />
+                      <div className="flex gap-4 mt-auto">
+                        <Skeleton className="h-12 w-full" />
+                      </div>
                     </div>
                   ))}
                 </div>
               ) : properties.length === 0 ? (
-                <div className="empty-state-lux">
-                  <div className="empty-content">
-                    <span className="serif">Start Your Legacy</span>
-                    <p>No properties currently under analysis. Elevate your first space today.</p>
-                    <button className="btn-primary" onClick={() => navigate("/add-property")}>Begin Submission</button>
-                  </div>
-                </div>
+                <EmptyState
+                  icon={HomeIcon}
+                  title="No Properties Found"
+                  description="You haven't added any properties for analysis yet. Start your first Vastu audit today."
+                  actionLabel="Add First Property"
+                  onAction={() => navigate("/add-property")}
+                />
               ) : (
                 <div className="dossier-grid">
                   {properties.map((property) => (
@@ -256,7 +266,7 @@ function Dashboard() {
         .hero-right-stats { display: flex; gap: 30px; }
         .stat-pill { background: var(--stone); padding: 20px 30px; border-radius: 4px; display: flex; flex-direction: column; gap: 5px; position: relative; min-width: 180px; }
         .stat-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-weight: 600; }
-        .stat-value-lux { font-family: 'Instrument Serif', serif; font-size: 2.2rem; line-height: 1; }
+        .stat-value-lux { font-family: 'Instrument Serif', serif; font-size: 2.2rem; line-height: 1; min-height: 2.2rem; display: flex; align-items: center; }
         .stat-dot { position: absolute; top: 15px; right: 15px; width: 8px; height: 8px; background: var(--brass); border-radius: 50%; }
         .stat-dot.pulse { animation: pulse-brass 2s infinite; }
         
@@ -336,7 +346,7 @@ function Dashboard() {
         .filter-tools { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--stone); padding: 8px 16px; border-radius: 2px; }
 
         .dossier-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 40px; }
-        .dossier-card { background: var(--paper); border: var(--border-subtle); padding: 45px; transition: var(--transition-smooth); display: flex; flex-direction: column; gap: 30px; position: relative; overflow: hidden; }
+        .dossier-card { background: var(--paper); border: var(--border-subtle); padding: 45px; transition: var(--transition-smooth); display: flex; flex-direction: column; gap: 30px; position: relative; overflow: hidden; min-height: 400px; }
         .dossier-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--stone); }
         .dossier-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(0,0,0,0.05); border-color: var(--brass); }
         .dossier-card:hover::before { background: var(--brass); }
@@ -376,26 +386,11 @@ function Dashboard() {
           align-items: center;
           justify-content: center;
           gap: 10px;
+          margin-top: auto;
         }
         .btn-dossier:hover { background: #000; }
         .btn-arrow-svg { transition: transform 0.3s; }
         .btn-dossier:hover .btn-arrow-svg { transform: translateX(5px); }
-
-        /* Skeleton Loading */
-        .skeleton { background: var(--paper); border: 1px solid var(--stone); pointer-events: none; }
-        .skeleton-line { background: linear-gradient(90deg, var(--stone) 25%, #f5f5f5 50%, var(--stone) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 2px; }
-        .skeleton-line.header { width: 40px; height: 10px; margin-bottom: 20px; }
-        .skeleton-line.title { width: 80%; height: 30px; margin-bottom: 10px; }
-        .skeleton-line.text { width: 60%; height: 15px; margin-bottom: 30px; }
-        .skeleton-line.progress { width: 100%; height: 4px; margin-bottom: 20px; }
-        .skeleton-line.footer { width: 100%; height: 50px; }
-
-        @keyframes shimmer {
-          0% { background-position: 200% 0; }
-          100% { background-position: -200% 0; }
-        }
-        .empty-content span { font-size: 2.5rem; display: block; margin-bottom: 20px; }
-        .empty-content p { margin-bottom: 30px; opacity: 0.7; }
 
         @media (max-width: 1200px) {
           .dashboard-grid-refined { grid-template-columns: 1fr; gap: 60px; }

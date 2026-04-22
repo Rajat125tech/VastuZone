@@ -4,6 +4,7 @@ const User = require("../models/User");
 const requireExpert = require("../middleware/requireExpert");
 const razorpay = require("../utils/razorpay");
 const crypto = require("crypto");
+const { sendAppointmentConfirmation, sendPaymentSuccess } = require("../utils/email");
 
 const router = express.Router();
 
@@ -29,6 +30,9 @@ router.post("/create", async (req, res) => {
       amount: 299,
       status: "pending_payment",
     });
+
+    // Send confirmation email
+    await sendAppointmentConfirmation(user, appointment);
 
     return res.status(201).json(appointment);
   } catch (err) {
@@ -124,7 +128,13 @@ router.post("/verify-payment", async (req, res) => {
     return res.status(400).json({ message: "Invalid signature" });
   }
 
-  await Appointment.findByIdAndUpdate(appointmentId, { status: "paid" });
+  const appointment = await Appointment.findByIdAndUpdate(appointmentId, { status: "paid" }, { new: true });
+  
+  // Send payment success email
+  const user = await User.findOne({ firebaseUid: appointment.userId });
+  if (user) {
+    await sendPaymentSuccess(user, appointment);
+  }
 
   res.json({ message: "Payment successful" });
 });

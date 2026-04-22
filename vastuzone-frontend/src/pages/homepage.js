@@ -207,10 +207,15 @@ function Home() {
             </div>
             <div className="footer-col">
               <h4>Consultancy</h4>
-              <a href="/">Residential Audit</a>
-              <a href="/">Commercial Strategy</a>
-              <a href="/">Industrial Logistics</a>
-              <a href="/">Land Acquisition</a>
+              <button className="footer-link" onClick={() => { navigate("/add-property"); window.scrollTo(0,0); }}>Residential Audit</button>
+              <button className="footer-link" onClick={() => { navigate("/book-appointment"); window.scrollTo(0,0); }}>Expert Strategy</button>
+              <button className="footer-link" onClick={() => { navigate("/chat"); window.scrollTo(0,0); }}>Live Consultation</button>
+            </div>
+            <div className="footer-col">
+              <h4>Legal</h4>
+              <button className="footer-link" onClick={() => { navigate("/terms"); window.scrollTo(0,0); }}>Terms of Service</button>
+              <button className="footer-link" onClick={() => { navigate("/privacy"); window.scrollTo(0,0); }}>Privacy Policy</button>
+              <button className="footer-link" onClick={() => { navigate("/refund-policy"); window.scrollTo(0,0); }}>Refund Policy</button>
             </div>
             <div className="footer-col">
               <h4>Contact</h4>
@@ -227,6 +232,19 @@ function Home() {
 
       <style>{`
         .landing-wrapper { overflow-x: hidden; }
+        .footer-link { 
+          display: block; 
+          background: none; 
+          border: none; 
+          padding: 0; 
+          color: var(--text-muted); 
+          font-size: 0.9rem; 
+          margin-bottom: 15px; 
+          cursor: pointer; 
+          text-align: left;
+          transition: 0.3s;
+        }
+        .footer-link:hover { color: var(--ink); padding-left: 5px; }
         .eyebrow { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.3em; color: var(--brass); font-weight: 700; margin-bottom: 20px; display: block; }
         
         .hero-modern { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 80px; align-items: center; }
@@ -290,7 +308,7 @@ function Home() {
         .author-loc { font-size: 0.8rem; color: var(--brass); }
 
         .footer-expanded { background: var(--paper); border-top: var(--border-subtle); color: var(--ink); }
-        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 80px; }
+        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; }
         .footer-col h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 30px; color: var(--brass); font-weight: 700; }
         .footer-col a, .footer-col p { display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px; text-decoration: none; transition: 0.3s; }
         .footer-col a:hover { color: var(--ink); padding-left: 5px; }

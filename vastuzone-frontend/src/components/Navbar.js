@@ -109,6 +109,18 @@ function Navbar() {
               </button>
             )}
 
+            {role === "admin" && (
+              <button
+                className="login-btn"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  navigate("/admin");
+                }}
+              >
+                System Admin
+              </button>
+            )}
+
             <span className="nav-user-email">
               {user.email}
             </span>

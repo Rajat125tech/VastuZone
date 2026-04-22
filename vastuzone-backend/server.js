@@ -10,6 +10,7 @@ const chatRoutes = require("./routes/chatRoutes");
 const propertyRoutes = require("./routes/propertyRoutes");
 const expertRoutes = require("./routes/expertRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/expert", expertRoutes);
 app.use("/api/appointments", appointmentRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.get("/", (req, res) => {
   res.send("API running");

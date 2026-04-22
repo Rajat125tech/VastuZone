@@ -19,6 +19,11 @@ import MyAppointments from "./pages/MyAppointments";
 import SupportChatbot from "./components/SupportChatbot";
 
 
+import Terms from "./pages/Legal/Terms";
+import Privacy from "./pages/Legal/Privacy";
+import RefundPolicy from "./pages/Legal/RefundPolicy";
+import AdminDashboard from "./pages/AdminDashboard";
+
 function App() {
   const [user, setUser] = useState(null);
 
@@ -36,6 +41,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route
             path="/dashboard"
             element={
@@ -106,6 +114,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <BookAppointment />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
               </ProtectedRoute>
             }
           />
