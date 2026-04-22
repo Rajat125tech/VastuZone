@@ -1,174 +1,104 @@
-# 🏠 VastuZone – Smart Vastu Consultation Platform
+# 🏠 VastuZone: A High-Performance Full-Stack Vastu Consultation Ecosystem
 
-[![Full Stack](https://img.shields.io/badge/Stack-Full--Stack-blue.svg)](#-tech-stack)
-[![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg)](https://opensource.org/licenses/ISC)
-[![React](https://img.shields.io/badge/Frontend-React.js-61DAFB.svg?logo=react)](https://reactjs.org/)
-[![Node.js](https://img.shields.io/badge/Backend-Node.js-339933.svg?logo=node.js)](https://nodejs.org/)
+[![System Architecture](https://img.shields.io/badge/Architecture-Event--Driven-orange.svg)](#-technical-architecture)
+[![Tech Stack](https://img.shields.io/badge/Stack-MERN--Firebase-blue.svg)](#-core-technologies)
+[![Auth](https://img.shields.io/badge/Auth-Firebase--Hybrid-yellow.svg)](#-security--authentication)
 
-**VastuZone** is a comprehensive, full-stack digital platform designed to bring traditional Vastu Shastra consultation into the modern age. It enables users to analyze their property's Vastu compliance through an automated scoring system, book expert consultations, chat in real-time with experts, and manage secure payments.
-
----
-
-## 🚀 Features
-
-### 👤 For Users
-- **🔐 Secure Authentication:** Integrated with Firebase Auth for robust and secure user management.
-- **🏘️ Property Management:** Easily add property details and upload floor plans for analysis.
-- **📊 Automated Vastu Scoring:** Instant evaluation based on rule-based logic (directions, shapes, room placements).
-- **📁 Detailed Reports:** View and manage comprehensive Vastu compliance reports for multiple properties.
-- **💬 Real-time Expert Chat:** Seamless interaction with Vastu experts via Socket.io.
-- **📅 Appointment Booking:** Schedule consultations at your convenience.
-- **💳 Secure Payments:** Integrated with Razorpay for safe and easy transaction processing.
-- **🎥 Virtual Consultations:** Access Google Meet links for expert sessions directly from the dashboard.
-
-### 🧑‍💼 For Experts
-- **🧾 Appointment Management:** View and manage a streamlined list of upcoming consultations.
-- **🔗 Meeting Integration:** Easily add and share Google Meet links for booked sessions.
-- **💬 Direct Chat:** Maintain communication with users regarding their Vastu concerns.
-- **✅ Status Tracking:** Mark appointments as paid or completed with a single click.
+VastuZone is a production-grade digital platform that synchronizes traditional Vastu Shastra principles with modern full-stack engineering. It features a deterministic evaluation engine, real-time bi-directional communication, and a secure, transaction-safe consultation workflow.
 
 ---
 
-## 🧠 Vastu Evaluation Logic
+## 🏗️ Technical Architecture
 
-The core of VastuZone is its **Rule-Based Scoring Engine**, which calculates compliance based on:
+### 1. Hybrid Authentication & Identity Management
+VastuZone employs a sophisticated hybrid auth strategy:
+- **Identity Provider:** Firebase Authentication manages secure sign-in, session persistence, and token issuance.
+- **State Synchronization:** A custom React `ProtectedRoute` utilizes the `onAuthStateChanged` observer pattern to synchronize client-side auth state with backend expectations, preventing UI flickering and unauthorized access.
+- **Data Enrichment:** A specialized MongoDB `User` model extends Firebase identities with application-specific metadata, roles (User/Expert), and consultation history.
 
-| Factor | Weightage | Ideal Placements |
-| :--- | :--- | :--- |
-| **Facing** | High | North, East, North-East |
-| **Entrance** | High | North, East |
-| **Kitchen** | Medium | South-East |
-| **Master Bedroom** | Medium | South-West |
-| **Pooja Room** | Medium | North-East |
-| **Shape** | Medium | Square, Rectangle |
+### 2. Real-time Event-Driven Communication
+Leveraging **Socket.io**, the platform implements a low-latency communication layer:
+- **Room-based Isolation:** Consultations are partitioned into isolated socket rooms, ensuring message privacy and efficient broadcast narrowcasting.
+- **Stateful Connections:** The backend dynamically maps Socket IDs to authenticated Firebase UIDs, enabling precise targeted event delivery.
 
-### Final Score Classification
-- 🟢 **80 - 100:** Excellent
-- 🟡 **60 - 79:** Good (Minor Corrections Needed)
-- 🔴 **Below 60:** Needs Vastu Remedies
-
----
-
-## 🛠️ Tech Stack
-
-### Frontend
-- **Framework:** React.js (v19)
-- **Routing:** React Router (v7)
-- **State/Data Fetching:** React Query (@tanstack/react-query)
-- **Real-time:** Socket.io-client
-- **Visuals:** Chart.js, Lucide React (Icons)
-- **Notifications:** Sonner (Toast notifications)
-- **Auth:** Firebase Authentication
-
-### Backend
-- **Runtime:** Node.js
-- **Framework:** Express.js (v5)
-- **Database:** MongoDB with Mongoose ORM
-- **Real-time:** Socket.io
-- **Storage:** Cloudinary (via Multer)
-- **Payments:** Razorpay SDK
-- **Auth:** Firebase Admin SDK
+### 3. Automated Vastu Evaluation Engine
+The core logic is a deterministic, rule-based inference engine that:
+- Processes multi-dimensional spatial data (cardinal directions, room shapes, functional placements).
+- Executes weighted scoring algorithms to calculate compliance indices.
+- Generates context-aware remedial suggestions and spatial warnings.
 
 ---
 
-## 📁 Project Structure
+## 🛠️ Core Technologies & Implementation Details
+
+### Backend (Node.js/Express/MongoDB)
+- **Role-Based Access Control (RBAC):** Custom middleware (`requireExpert`) validates requests by intercepting headers and cross-referencing Firebase UIDs against MongoDB role attributes.
+- **Asset Pipeline:** Integrated **Cloudinary** via **Multer-Storage-Cloudinary**. Configured for `raw` resource handling to support secure PDF floor plan uploads with a 10MB buffer limit.
+- **Data Modeling:** Complex Mongoose schemas with nested sub-documents (e.g., `messages` within `Property`) and strict type validation.
+- **Payment Processing:** Server-side **Razorpay** integration with signature verification ensures idempotent and secure transaction cycles.
+
+### Frontend (React/TypeScript/Query)
+- **Server State Management:** Utilizes **React Query (@tanstack/react-query)** for efficient caching, background revalidation, and optimistic UI updates.
+- **Component Architecture:** A modular, component-based UI leveraging **Lucide React** for consistent iconography and **Sonner** for non-blocking notification management.
+- **API Strategy:** A custom `authFetch` wrapper abstracts the injection of Firebase authentication headers into standard `fetch` calls, ensuring consistent security across all network requests.
+
+---
+
+## 📁 System Design
 
 ```text
 VastuZone/
-├── vastuzone-frontend/         # React Application
-│   ├── src/
-│   │   ├── assets/            # Static images & icons
-│   │   ├── components/        # Reusable UI components
-│   │   ├── pages/             # Main view components
-│   │   ├── styles/            # CSS Modules & Global styles
-│   │   ├── utils/             # Helper functions (authFetch, etc.)
-│   │   └── firebase.js        # Firebase configuration
-│   └── package.json
-├── vastuzone-backend/          # Node.js API
-│   ├── config/                # DB and Cloudinary configs
-│   ├── middleware/            # Auth and Upload middlewares
-│   ├── models/                # Mongoose schemas (User, Property, Appointment, etc.)
-│   ├── routes/                # API endpoints
-│   ├── utils/                 # Evaluation logic, Email & Razorpay helpers
-│   └── server.js              # Entry point
-├── screenshots/               # Project preview images
-└── README.md                  # Project documentation
+├── vastuzone-backend/
+│   ├── middleware/        # RBAC & Multer-Cloudinary pipeline
+│   ├── utils/             # Deterministic Vastu logic & Payment helpers
+│   ├── config/            # DB Cluster & Cloudinary SDK setup
+│   └── models/            # Mongoose ODM schemas
+└── vastuzone-frontend/
+    ├── src/
+    │   ├── utils/         # Auth synchronization & API wrappers
+    │   ├── ProtectedRoute # Higher-Order Component for Auth Guarding
+    │   └── firebase.js    # Firebase SDK initialization
 ```
 
 ---
 
-## ⚙️ Installation & Setup
+## 🔒 Security & Data Integrity
 
-### 1️⃣ Clone the Repository
-```bash
-git clone https://github.com/Rajat125tech/VastuZone.git
-cd VastuZone
-```
-
-### 2️⃣ Backend Setup
-```bash
-cd vastuzone-backend
-npm install
-```
-Create a `.env` file in `vastuzone-backend/`:
-```env
-PORT=5001
-MONGO_URI=your_mongodb_connection_string
-FIREBASE_PROJECT_ID=your_firebase_project_id
-RAZORPAY_KEY_ID=your_razorpay_key
-RAZORPAY_KEY_SECRET=your_razorpay_secret
-CLOUDINARY_NAME=your_cloud_name
-CLOUDINARY_KEY=your_api_key
-CLOUDINARY_SECRET=your_api_secret
-```
-Run the server:
-```bash
-npm run dev
-```
-
-### 3️⃣ Frontend Setup
-```bash
-cd ../vastuzone-frontend
-npm install
-```
-Create a `.env` file in `vastuzone-frontend/`:
-```env
-REACT_APP_FIREBASE_API_KEY=your_api_key
-REACT_APP_FIREBASE_AUTH_DOMAIN=your_auth_domain
-REACT_APP_FIREBASE_PROJECT_ID=your_project_id
-REACT_APP_FIREBASE_STORAGE_BUCKET=your_storage_bucket
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-REACT_APP_FIREBASE_APP_ID=your_app_id
-```
-Run the application:
-```bash
-npm start
-```
+- **Environment Isolation:** Strict use of `.env` configurations for API secrets, connection strings, and service keys.
+- **Network Security:** Configured CORS (Cross-Origin Resource Sharing) policies to whitelist specific production and development origins.
+- **Persistence:** Auth persistence is locked to `browserSessionPersistence` for enhanced security in shared environments.
 
 ---
 
-## 📸 Screenshots
+## ⚙️ Engineering Setup
 
-| Dashboard | Vastu Report | Chat Interface |
-| :---: | :---: | :---: |
-| ![Dashboard](screenshots/dashboard.png) | ![Reports](screenshots/reports.png) | ![Chat](screenshots/chatbox.png) |
+### Environment Requirements
+- **Node.js** v18+
+- **MongoDB** Atlas Cluster
+- **Firebase** Project with Auth enabled
+- **Razorpay & Cloudinary** API Credentials
+
+### Installation Lifecycle
+1. **Initialize Cluster:** Configure MongoDB and update `MONGO_URI`.
+2. **Backend Deployment:**
+   ```bash
+   cd vastuzone-backend && npm install && npm run dev
+   ```
+3. **Frontend Deployment:**
+   ```bash
+   cd vastuzone-frontend && npm install && npm start
+   ```
 
 ---
 
-## 🔒 Security
-- **JWT & Firebase:** Authentication is handled by Firebase, with tokens verified on the backend.
-- **Environment Variables:** Sensitive keys (Razorpay, Cloudinary, DB) are managed via `.env` files.
-- **Protected Routes:** Both frontend components and backend endpoints are guarded by authentication middleware.
-
----
-
-## 👨‍💻 Author
+## 👨‍💻 Engineering Lead
 
 **Rajat Srivastava**  
-🎓 AI/ML Student @ VIT Vellore  
-📍 Vellore, India  
+*Full-Stack Engineer | AI/ML Specialist*  
+📍 VIT Vellore  
+[GitHub](https://github.com/Rajat125tech) | [Portfolio](https://yourportfolio.com)
 
 ---
 
 ## 📜 License
-This project is licensed under the **ISC License**.
+Licensed under the **ISC License** – designed for open innovation.
