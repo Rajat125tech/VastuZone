@@ -100,7 +100,7 @@ VastuZone/
 
 | User Dashboard | Automated Report | Real-time Chat |
 | :---: | :---: | :---: |
-| ![Dashboard](screenshots/dashboard.png) | ![Chat](screenshots/chatbox.png) |
+| ![Dashboard](screenshots/dashboard.png) | ![Reports](screenshots/reports.png) | ![Chat](screenshots/chatbox.png) |
 
 
 | Website link: https://vastuzone-frontend.onrender.com/
