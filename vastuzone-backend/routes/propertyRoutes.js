@@ -9,7 +9,6 @@ const logger = require("../utils/logger");
 // Cloudinary + Multer
 const multer = require("multer");
 const cloudinary = require("../config/cloudinary");
-const streamifier = require("streamifier"); // You might need to install this or use a simple buffer stream
 
 const router = express.Router();
 
