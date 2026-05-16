@@ -150,8 +150,32 @@ const API_URL = process.env.REACT_APP_API_URL || "https://vastuzone-backend.onre
 function ViewReports() {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [downloadingId, setDownloadingId] = useState(null);
   const [activePdf, setActivePdf] = useState(null);
   const navigate = useNavigate();
+
+  const handleDownload = async (propertyId, propertyName) => {
+    try {
+      setDownloadingId(propertyId);
+      const res = await fetch(`${API_URL}/api/properties/${propertyId}/download-report`);
+      if (!res.ok) throw new Error("Download failed");
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `VastuReport_${propertyName.replace(/\s+/g, "_")}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("❌ Download error:", err);
+      alert("Failed to download report. Please try again.");
+    } finally {
+      setDownloadingId(null);
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -319,12 +343,19 @@ function ViewReports() {
                       <p>{report.band}</p>
                     </div>
                     <div className="dossier-actions">
+                      <button 
+                        className="btn-lux-primary" 
+                        onClick={() => handleDownload(property._id, property.propertyName)}
+                        disabled={downloadingId === property._id}
+                      >
+                        {downloadingId === property._id ? "Generating..." : "Download Detailed Dossier"}
+                      </button>
                       {property.fileUrl && (
                         <button className="btn-lux-secondary" onClick={() => setActivePdf(property.fileUrl)}>
                           View Floor Map
                         </button>
                       )}
-                      <button className="btn-lux-primary" onClick={() => navigate("/chat")}>
+                      <button className="btn-lux-secondary" onClick={() => navigate("/chat")}>
                         Consult Expert
                       </button>
                     </div>

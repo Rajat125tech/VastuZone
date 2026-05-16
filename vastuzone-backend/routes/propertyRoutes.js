@@ -5,6 +5,7 @@ const validateRequest = require("../middleware/validateRequest");
 const { createPropertySchema } = require("../validations/propertySchema");
 const { extractDirectionsFromPDF } = require("../utils/aiVision");
 const logger = require("../utils/logger");
+const { generatePropertyPDF } = require("../utils/pdfGenerator");
 
 // Cloudinary + Multer
 const multer = require("multer");
@@ -143,6 +144,34 @@ router.get("/:id", async (req, res) => {
     res.json(property);
   } catch {
     res.status(404).json({ message: "Property not found" });
+  }
+});
+
+/* ================================
+   DOWNLOAD DETAILED REPORT (PDF)
+================================ */
+router.get("/:id/download-report", async (req, res, next) => {
+  try {
+    const property = await Property.findById(req.params.id);
+    if (!property) {
+      return res.status(404).json({ message: "Property not found" });
+    }
+
+    // Re-evaluate Vastu for fresh report data (or use saved data)
+    const report = evaluateVastu(property);
+
+    const pdfBuffer = await generatePropertyPDF(property, report);
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=VastuReport_${property.propertyName.replace(/\s+/g, "_")}.pdf`
+    );
+
+    res.send(pdfBuffer);
+  } catch (error) {
+    logger.error("PDF Download failed:", error);
+    next(error);
   }
 });
 

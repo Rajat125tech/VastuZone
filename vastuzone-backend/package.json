@@ -23,6 +23,7 @@
     "nodemailer": "^6.9.13",
     "openai": "^6.38.0",
     "pdf-img-convert": "^2.0.0",
+    "pdfkit": "^0.18.0",
     "razorpay": "^2.9.6",
     "socket.io": "^4.8.3",
     "winston": "^3.19.0",
