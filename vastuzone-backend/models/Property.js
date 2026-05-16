@@ -33,6 +33,15 @@ const propertySchema = new mongoose.Schema(
     floors: String,
     analysisFloor: String,
     notes: String,
+    
+    // Detailed Directions
+    livingRoomDirection: String,
+    kitchenDirection: String,
+    masterBedroomDirection: String,
+    kidsBedroomDirection: String,
+    bathroomDirection: String,
+    poojaRoomDirection: String,
+
     fileName: String,
     fileUrl: {
       type: String,
@@ -49,6 +58,16 @@ const propertySchema = new mongoose.Schema(
       type: String,
       default: "Preliminary Report Ready",
     },
+
+    // Vastu Report Details
+    vastuScore: {
+      type: Number,
+      default: 0,
+    },
+    scoreBand: String,
+    scoreColor: String,
+    vastuTips: [String],
+    roomWarnings: [String],
 
     reviewedAt: Date,
     reviewedBy: String,

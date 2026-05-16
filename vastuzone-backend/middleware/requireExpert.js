@@ -1,12 +1,16 @@
 const User = require("../models/User");
+const admin = require("../config/firebaseAdmin");
 
 const requireExpert = async (req, res, next) => {
   try {
-    const firebaseUid = req.headers["x-user-uid"];
-
-    if (!firebaseUid) {
-      return res.status(401).json({ message: "Unauthorized" });
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Unauthorized - No token" });
     }
+
+    const token = authHeader.split(" ")[1];
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    const firebaseUid = decodedToken.uid;
 
     const user = await User.findOne({ firebaseUid });
 
@@ -15,10 +19,11 @@ const requireExpert = async (req, res, next) => {
     }
 
     req.expert = user;
+    req.user = decodedToken;
     next();
   } catch (error) {
     console.error("Expert auth error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(401).json({ message: "Unauthorized - Invalid token or Server error" });
   }
 };
 

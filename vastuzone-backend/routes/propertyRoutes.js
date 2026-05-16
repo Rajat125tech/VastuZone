@@ -1,26 +1,22 @@
 const express = require("express");
 const Property = require("../models/Property");
 const evaluateVastu = require("../utils/vastuEvaluator");
+const validateRequest = require("../middleware/validateRequest");
+const { createPropertySchema } = require("../validations/propertySchema");
+const { extractDirectionsFromPDF } = require("../utils/aiVision");
+const logger = require("../utils/logger");
 
 // Cloudinary + Multer
 const multer = require("multer");
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cloudinary = require("../config/cloudinary");
+const streamifier = require("streamifier"); // You might need to install this or use a simple buffer stream
 
 const router = express.Router();
 
 /* ================================
-   CLOUDINARY + MULTER CONFIG
+   MULTER MEMORY STORAGE CONFIG
 ================================ */
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: "vastuzone_pdfs",
-    resource_type: "raw", // REQUIRED for PDFs
-    allowed_formats: ["pdf"],
-  },
-});
-
+const storage = multer.memoryStorage();
 const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
@@ -29,24 +25,46 @@ const upload = multer({
 /* ================================
    CREATE PROPERTY
 ================================ */
-router.post("/", upload.single("file"), async (req, res) => {
+router.post("/", upload.single("file"), validateRequest(createPropertySchema), async (req, res, next) => {
   try {
     const { userId } = req.body;
-
-    if (!userId) {
-      return res.status(400).json({ message: "userId is required" });
-    }
 
     if (!req.file) {
       return res.status(400).json({ message: "PDF file is required" });
     }
 
-    const report = evaluateVastu(req.body);
+    // 1. AI Vision: Extract directions from PDF
+    logger.info("Starting AI Vision extraction...");
+    const aiExtractedDirections = await extractDirectionsFromPDF(req.file.buffer);
 
-    // ✅ Cloudinary details
-    const fileUrl = req.file.path;
+    // Merge AI data with manual data (manual data takes priority if provided)
+    const propertyData = {
+      ...aiExtractedDirections,
+      ...req.body, // req.body values will override AI values if both exist
+    };
+
+    // 2. Evaluate Vastu using merged data
+    const report = evaluateVastu(propertyData);
+
+    // 3. Upload to Cloudinary manually from buffer
+    const uploadToCloudinary = (buffer) => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "vastuzone_pdfs", resource_type: "raw" },
+          (error, result) => {
+            if (result) resolve(result);
+            else reject(error);
+          }
+        );
+        stream.end(buffer);
+      });
+    };
+
+    const cloudinaryResult = await uploadToCloudinary(req.file.buffer);
+    const fileUrl = cloudinaryResult.secure_url;
     const fileName = req.file.originalname;
 
+    // 4. Save to Database
     const property = await Property.create({
       userId,
       propertyName: req.body.propertyName,
@@ -58,12 +76,13 @@ router.post("/", upload.single("file"), async (req, res) => {
       entrance: req.body.entrance,
       notes: req.body.notes,
 
-      livingRoomDirection: req.body.livingRoomDirection,
-      kitchenDirection: req.body.kitchenDirection,
-      masterBedroomDirection: req.body.masterBedroomDirection,
-      kidsBedroomDirection: req.body.kidsBedroomDirection,
-      bathroomDirection: req.body.bathroomDirection,
-      poojaRoomDirection: req.body.poojaRoomDirection,
+      // Using merged data
+      livingRoomDirection: propertyData.livingRoomDirection,
+      kitchenDirection: propertyData.kitchenDirection,
+      masterBedroomDirection: propertyData.masterBedroomDirection,
+      kidsBedroomDirection: propertyData.kidsBedroomDirection,
+      bathroomDirection: propertyData.bathroomDirection,
+      poojaRoomDirection: propertyData.poojaRoomDirection,
 
       fileName,
       fileUrl,
@@ -74,21 +93,19 @@ router.post("/", upload.single("file"), async (req, res) => {
       vastuTips: report.vastuTips,
       roomWarnings: report.roomWarnings,
 
-      status: "Preliminary Report Ready",
+      status: "AI-Analyzed Report Ready",
       reviewStatus: "pending",
       messages: [],
     });
 
-    console.log("✅ Property saved with Cloudinary PDF");
+    logger.info(`✅ Property ${property._id} saved with AI analysis`);
     res.status(201).json(property);
   } catch (error) {
-    console.error("❌ Property save failed:", error);
-    res.status(500).json({
-      message: "Failed to save property",
-      error: error.message,
-    });
+    logger.error("❌ Property save failed:", error);
+    next(error); // Pass to global error handler
   }
 });
+
 
 /* ================================
    GET ALL PROPERTIES

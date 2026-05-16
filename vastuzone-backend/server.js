@@ -4,6 +4,8 @@ const http = require("http");
 const { Server } = require("socket.io");
 const connectDB = require("./config/db");
 require("dotenv").config();
+const logger = require("./utils/logger");
+const errorHandler = require("./middleware/errorMiddleware");
 
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
@@ -45,6 +47,8 @@ app.get("/", (req, res) => {
   res.send("API running");
 });
 
+app.use(errorHandler);
+
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -57,15 +61,15 @@ const io = new Server(server, {
 
 
 io.on("connection", (socket) => {
-  console.log("Socket connected:", socket.id);
+  logger.info(`Socket connected: ${socket.id}`);
 
   socket.on("joinRoom", (roomId) => {
     socket.join(roomId);
-    console.log(`Socket ${socket.id} joined room ${roomId}`);
+    logger.info(`Socket ${socket.id} joined room ${roomId}`);
   });
 
   socket.on("disconnect", () => {
-    console.log("Socket disconnected:", socket.id);
+    logger.info(`Socket disconnected: ${socket.id}`);
   });
 });
 
@@ -74,5 +78,5 @@ app.set("io", io);
 const PORT = process.env.PORT || 5001;
 
 server.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  logger.info(`🚀 Server running on port ${PORT}`);
 });

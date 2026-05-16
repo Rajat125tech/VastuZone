@@ -7,11 +7,14 @@ const authFetch = async (url, options = {}) => {
     throw new Error("User not authenticated yet");
   }
 
+  const token = await user.getIdToken();
+
   return fetch(url, {
     ...options,
     headers: {
       "Content-Type": "application/json",
-      "x-user-uid": user.uid,
+      "Authorization": `Bearer ${token}`,
+      "x-user-uid": user.uid, // Keep for backward compatibility if needed temporarily
       ...(options.headers || {}),
     },
   });
