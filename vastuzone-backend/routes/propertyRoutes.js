@@ -1,4 +1,6 @@
 const express = require("express");
+const mongoose = require("mongoose");
+const connectDB = require("../config/db");
 const Property = require("../models/Property");
 const evaluateVastu = require("../utils/vastuEvaluator");
 const validateRequest = require("../middleware/validateRequest");
@@ -58,10 +60,14 @@ router.post("/", upload.single("file"), validateRequest(createPropertySchema), a
 ================================ */
 router.get("/", async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      await connectDB();
+    }
     const properties = await Property.find().sort({ createdAt: -1 });
     res.json(properties);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch properties" });
+    logger.error("❌ Failed to fetch all properties:", error);
+    res.status(500).json({ message: "Failed to fetch properties", error: error.message });
   }
 });
 
@@ -70,11 +76,22 @@ router.get("/", async (req, res) => {
 ================================ */
 router.get("/user/:userId", async (req, res) => {
   try {
-    const properties = await Property.find({ userId: req.params.userId })
-      .sort({ createdAt: -1 });
+    const { userId } = req.params;
+
+    if (!userId || userId === "undefined" || userId === "null") {
+      return res.json([]);
+    }
+
+    if (mongoose.connection.readyState !== 1) {
+      logger.warn(`[propertyRoutes] MongoDB inactive (readyState=${mongoose.connection.readyState}). Reconnecting...`);
+      await connectDB();
+    }
+
+    const properties = await Property.find({ userId }).sort({ createdAt: -1 });
     res.json(properties);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch properties" });
+    logger.error(`❌ Failed to fetch properties for user ${req.params.userId}:`, error);
+    res.status(500).json({ message: "Failed to fetch properties", error: error.message });
   }
 });
 
@@ -83,12 +100,16 @@ router.get("/user/:userId", async (req, res) => {
 ================================ */
 router.get("/:id", async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      await connectDB();
+    }
     const property = await Property.findById(req.params.id);
     if (!property) {
       return res.status(404).json({ message: "Property not found" });
     }
     res.json(property);
-  } catch {
+  } catch (error) {
+    logger.error(`❌ Failed to fetch property ${req.params.id}:`, error);
     res.status(404).json({ message: "Property not found" });
   }
 });
