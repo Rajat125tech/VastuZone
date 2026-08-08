@@ -81,6 +81,30 @@ function MyAppointments() {
         order_id: orderData.orderId,
         name: "VastuZone",
         description: "Vastu Consultation",
+        prefill: {
+          name: user?.displayName || user?.email?.split('@')[0] || "User",
+          email: user?.email || "",
+          contact: user?.phoneNumber || "",
+        },
+        config: {
+          display: {
+            blocks: {
+              upi: {
+                name: "UPI (ID or QR)",
+                instruments: [
+                  {
+                    method: "upi",
+                    flows: ["collect", "qr"],
+                  },
+                ],
+              },
+            },
+            sequence: ["block.upi", "card", "netbanking"],
+            preferences: {
+              show_default_blocks: true,
+            },
+          },
+        },
         handler: async function (response) {
           const verifyPromise = authFetch(
             `${API_URL}/api/appointments/verify-payment`,

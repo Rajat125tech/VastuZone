@@ -3,7 +3,8 @@ const Property = require("../models/Property");
 const evaluateVastu = require("../utils/vastuEvaluator");
 const validateRequest = require("../middleware/validateRequest");
 const { createPropertySchema } = require("../validations/propertySchema");
-const { extractDirectionsFromPDF } = require("../utils/aiVision");
+const { runVastuAgentGraph } = require("../agents/vastuAgentGraph");
+const { generateGroundedRecommendations } = require("../services/ragService");
 const logger = require("../utils/logger");
 const { generatePropertyPDF } = require("../utils/pdfGenerator");
 
@@ -23,7 +24,7 @@ const upload = multer({
 });
 
 /* ================================
-   CREATE PROPERTY
+   CREATE PROPERTY (LANGGRAPH ORCHESTRATED)
 ================================ */
 router.post("/", upload.single("file"), validateRequest(createPropertySchema), async (req, res, next) => {
   try {
@@ -33,75 +34,20 @@ router.post("/", upload.single("file"), validateRequest(createPropertySchema), a
       return res.status(400).json({ message: "PDF file is required" });
     }
 
-    // 1. AI Vision: Extract directions from PDF
-    logger.info("Starting AI Vision extraction...");
-    const aiExtractedDirections = await extractDirectionsFromPDF(req.file.buffer);
+    logger.info(`[propertyRoutes] Initiating LangGraph Agentic Pipeline for user ${userId}...`);
 
-    // Merge AI data with manual data (manual data takes priority if provided)
-    const propertyData = {
-      ...aiExtractedDirections,
-      ...req.body, // req.body values will override AI values if both exist
-    };
-
-    // 2. Evaluate Vastu using merged data
-    const report = evaluateVastu(propertyData);
-
-    // 3. Upload to Cloudinary manually from buffer
-    const uploadToCloudinary = (buffer) => {
-      return new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: "vastuzone_pdfs", resource_type: "raw" },
-          (error, result) => {
-            if (result) resolve(result);
-            else reject(error);
-          }
-        );
-        stream.end(buffer);
-      });
-    };
-
-    const cloudinaryResult = await uploadToCloudinary(req.file.buffer);
-    const fileUrl = cloudinaryResult.secure_url;
-    const fileName = req.file.originalname;
-
-    // 4. Save to Database
-    const property = await Property.create({
+    // Execute Phase 2 LangGraph Orchestration
+    const property = await runVastuAgentGraph({
       userId,
-      propertyName: req.body.propertyName,
-      propertyType: req.body.propertyType,
-      purpose: req.body.purpose,
-      city: req.body.city,
-      area: req.body.area,
-      facing: req.body.facing,
-      entrance: req.body.entrance,
-      notes: req.body.notes,
-
-      // Using merged data
-      livingRoomDirection: propertyData.livingRoomDirection,
-      kitchenDirection: propertyData.kitchenDirection,
-      masterBedroomDirection: propertyData.masterBedroomDirection,
-      kidsBedroomDirection: propertyData.kidsBedroomDirection,
-      bathroomDirection: propertyData.bathroomDirection,
-      poojaRoomDirection: propertyData.poojaRoomDirection,
-
-      fileName,
-      fileUrl,
-
-      vastuScore: report.vastuScore,
-      scoreBand: report.scoreBand,
-      scoreColor: report.scoreColor,
-      vastuTips: report.vastuTips,
-      roomWarnings: report.roomWarnings,
-
-      status: "AI-Analyzed Report Ready",
-      reviewStatus: "pending",
-      messages: [],
+      pdfBuffer: req.file.buffer,
+      fileName: req.file.originalname,
+      propertyMetadata: req.body,
     });
 
-    logger.info(`✅ Property ${property._id} saved with AI analysis`);
+    logger.info(`✅ Property ${property._id} successfully created via LangGraph Pipeline`);
     res.status(201).json(property);
   } catch (error) {
-    logger.error("❌ Property save failed:", error);
+    logger.error("❌ LangGraph Property processing failed:", error);
     next(error); // Pass to global error handler
   }
 });
@@ -157,8 +103,17 @@ router.get("/:id/download-report", async (req, res, next) => {
       return res.status(404).json({ message: "Property not found" });
     }
 
-    // Re-evaluate Vastu for fresh report data (or use saved data)
+    // Re-evaluate Vastu for fresh report data
     const report = evaluateVastu(property);
+
+    if ((!property.groundedRecommendations || property.groundedRecommendations.length === 0) && report.roomWarnings.length > 0) {
+      const ragResult = await generateGroundedRecommendations(property, report);
+      report.groundedRecommendations = ragResult.groundedRecommendations;
+      report.knowledgeSources = ragResult.knowledgeSources;
+    } else {
+      report.groundedRecommendations = property.groundedRecommendations;
+      report.knowledgeSources = property.knowledgeSources;
+    }
 
     const pdfBuffer = await generatePropertyPDF(property, report);
 

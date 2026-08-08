@@ -50,13 +50,18 @@ const propertySchema = new mongoose.Schema(
 
     reviewStatus: {
       type: String,
-      enum: ["pending", "reviewed"],
+      enum: ["pending", "reviewed", "APPROVED", "EDITED", "REANALYSIS_REQUESTED"],
       default: "pending",
+    },
+
+    executionStatus: {
+      type: String,
+      default: "WAITING_FOR_EXPERT",
     },
 
     status: {
       type: String,
-      default: "Preliminary Report Ready",
+      default: "Pending Expert Review",
     },
 
     // Vastu Report Details
@@ -68,6 +73,46 @@ const propertySchema = new mongoose.Schema(
     scoreColor: String,
     vastuTips: [String],
     roomWarnings: [String],
+
+    // RAG Grounded Recommendations & Knowledge Citations
+    groundedRecommendations: [
+      {
+        issue: String,
+        recommendation: String,
+        reasoning: String,
+        remedyType: String,
+        sources: [
+          {
+            title: String,
+            reference: String,
+          },
+        ],
+      },
+    ],
+    summaryNote: String,
+    knowledgeSources: [
+      {
+        title: String,
+        reference: String,
+      },
+    ],
+
+    // Phase 3 Human-in-the-Loop Audit Fields
+    aiRecommendations: [Object],
+    expertModifications: [Object],
+    finalRecommendations: [Object],
+    expertReview: {
+      expertId: String,
+      decision: {
+        type: String,
+        enum: ["APPROVE", "EDIT", "REQUEST_REANALYSIS"],
+      },
+      notes: String,
+      reanalysisReason: String,
+      reanalysisTarget: String,
+      reviewedAt: Date,
+    },
+    graphState: Object,
 
     reviewedAt: Date,
     reviewedBy: String,

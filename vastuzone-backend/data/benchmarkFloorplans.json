@@ -1,0 +1,166 @@
+[
+  {
+    "id": "bm_001",
+    "name": "Standard 3BHK Residential Layout",
+    "category": "NORMAL",
+    "description": "Standard rectangular layout with clear cardinal orientation and full room labeling.",
+    "groundTruth": {
+      "livingRoomDirection": "North-East",
+      "kitchenDirection": "South-East",
+      "masterBedroomDirection": "South-West",
+      "kidsBedroomDirection": "West",
+      "bathroomDirection": "North-West",
+      "poojaRoomDirection": "North-East"
+    },
+    "propertyMetadata": {
+      "propertyName": "Green Villa 1",
+      "propertyType": "Villa",
+      "city": "Bangalore",
+      "facing": "North",
+      "entrance": "North",
+      "livingRoomDirection": "North-East",
+      "kitchenDirection": "South-East",
+      "masterBedroomDirection": "South-West",
+      "kidsBedroomDirection": "West",
+      "bathroomDirection": "North-West",
+      "poojaRoomDirection": "North-East"
+    }
+  },
+  {
+    "id": "bm_002",
+    "name": "Rotated Apartment Layout (East-Top)",
+    "category": "ROTATED",
+    "description": "Floor plan where top of image represents East rather than North.",
+    "groundTruth": {
+      "livingRoomDirection": "East",
+      "kitchenDirection": "South-East",
+      "masterBedroomDirection": "South-West",
+      "kidsBedroomDirection": "North-West",
+      "bathroomDirection": "North",
+      "poojaRoomDirection": "North-East"
+    },
+    "propertyMetadata": {
+      "propertyName": "East Wing 402",
+      "propertyType": "Apartment",
+      "city": "Mumbai",
+      "facing": "East",
+      "entrance": "East",
+      "livingRoomDirection": "East",
+      "kitchenDirection": "South-East",
+      "masterBedroomDirection": "South-West",
+      "kidsBedroomDirection": "North-West",
+      "bathroomDirection": "North",
+      "poojaRoomDirection": "North-East"
+    }
+  },
+  {
+    "id": "bm_003",
+    "name": "Low-Quality Noisy Architectural Plan",
+    "category": "LOW_QUALITY",
+    "description": "Low-contrast floorplan scan with potential OCR misreadings.",
+    "groundTruth": {
+      "livingRoomDirection": "North",
+      "kitchenDirection": "North-East",
+      "masterBedroomDirection": "South-West",
+      "kidsBedroomDirection": "West",
+      "bathroomDirection": "South-East",
+      "poojaRoomDirection": "North-East"
+    },
+    "propertyMetadata": {
+      "propertyName": "Old Heritage Flat",
+      "propertyType": "Apartment",
+      "city": "Kolkata",
+      "facing": "North",
+      "entrance": "North",
+      "livingRoomDirection": "North",
+      "kitchenDirection": "North-East",
+      "masterBedroomDirection": "South-West",
+      "kidsBedroomDirection": "West",
+      "bathroomDirection": "South-East",
+      "poojaRoomDirection": "North-East",
+      "_simulatedError": true
+    }
+  },
+  {
+    "id": "bm_004",
+    "name": "Abbreviated Room Labels Layout",
+    "category": "AMBIGUOUS_LABELS",
+    "description": "Uses non-standard room labels (e.g. Kit, M. Bed, WC, P. Rm).",
+    "groundTruth": {
+      "livingRoomDirection": "North-East",
+      "kitchenDirection": "South-East",
+      "masterBedroomDirection": "South-West",
+      "kidsBedroomDirection": "North-West",
+      "bathroomDirection": "West",
+      "poojaRoomDirection": "North-East"
+    },
+    "propertyMetadata": {
+      "propertyName": "Compact Studio Flat",
+      "propertyType": "Apartment",
+      "city": "Pune",
+      "facing": "East",
+      "entrance": "East",
+      "livingRoomDirection": "North-East",
+      "kitchenDirection": "South-East",
+      "masterBedroomDirection": "South-West",
+      "kidsBedroomDirection": "North-West",
+      "bathroomDirection": "West",
+      "poojaRoomDirection": "North-East",
+      "_simulatedError": true
+    }
+  },
+  {
+    "id": "bm_005",
+    "name": "Missing Dedicated Pooja Room",
+    "category": "MISSING_ROOMS",
+    "description": "2BHK layout without an explicit Pooja room marked.",
+    "groundTruth": {
+      "livingRoomDirection": "North",
+      "kitchenDirection": "South-East",
+      "masterBedroomDirection": "South-West",
+      "kidsBedroomDirection": "West",
+      "bathroomDirection": "North-West",
+      "poojaRoomDirection": "East"
+    },
+    "propertyMetadata": {
+      "propertyName": "Modern 2BHK Flat",
+      "propertyType": "Apartment",
+      "city": "Delhi",
+      "facing": "North",
+      "entrance": "North",
+      "livingRoomDirection": "North",
+      "kitchenDirection": "South-East",
+      "masterBedroomDirection": "South-West",
+      "kidsBedroomDirection": "West",
+      "bathroomDirection": "North-West",
+      "poojaRoomDirection": "East"
+    }
+  },
+  {
+    "id": "bm_006",
+    "name": "Irregular Cut Corner Layout",
+    "category": "UNUSUAL",
+    "description": "L-shaped villa with missing South-East corner.",
+    "groundTruth": {
+      "livingRoomDirection": "East",
+      "kitchenDirection": "South",
+      "masterBedroomDirection": "South-West",
+      "kidsBedroomDirection": "North-West",
+      "bathroomDirection": "North",
+      "poojaRoomDirection": "North-East"
+    },
+    "propertyMetadata": {
+      "propertyName": "L-Shaped Residency",
+      "propertyType": "Villa",
+      "city": "Hyderabad",
+      "facing": "South",
+      "entrance": "South",
+      "livingRoomDirection": "East",
+      "kitchenDirection": "South",
+      "masterBedroomDirection": "South-West",
+      "kidsBedroomDirection": "North-West",
+      "bathroomDirection": "North",
+      "poojaRoomDirection": "North-East"
+    }
+  }
+]

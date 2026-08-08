@@ -27,7 +27,7 @@ function generatePropertyPDF(property, report) {
     doc.rect(50, 110, 500, 80).fill("#f9f9f9").stroke("#eeeeee");
     doc.fillColor("#111111").fontSize(16).text(property.propertyName || "Unnamed Property", 65, 125);
     doc.fillColor("#777777").fontSize(10).text(`${property.propertyType} • ${property.city}`, 65, 145);
-    doc.fillColor("#b08d57").fontSize(10).text(`REPORT ID: ${property._id.toString().toUpperCase()}`, 65, 165);
+    doc.fillColor("#b08d57").fontSize(10).text(`REPORT ID: ${(property._id || "AUDIT_PREVIEW").toString().toUpperCase()}`, 65, 165);
 
     // 3. Vastu Score Circle/Box
     doc.rect(400, 120, 130, 60).fill("#ffffff").stroke("#b08d57");
@@ -56,16 +56,16 @@ function generatePropertyPDF(property, report) {
       yPos += 20;
     });
 
-    // 5. Expert Verdict & Tips
+    // 5. Expert Verdict & Remedies (RAG Grounded + Deterministic Fallback)
     doc.moveDown(2);
-    doc.fillColor("#111111").fontSize(14).text("ANALYSIS & REMEDIES");
+    doc.fillColor("#111111").fontSize(14).text("ANALYSIS & GROUNDED REMEDIES");
     doc.moveTo(50, doc.y + 5).lineTo(550, doc.y + 5).stroke("#dddddd");
     doc.moveDown(1);
 
-    doc.fillColor("#b08d57").fontSize(11).text(`Status: ${report.scoreBand}`);
+    doc.fillColor("#b08d57").fontSize(11).text(`Compliance Status: ${report.scoreBand}`);
     doc.moveDown(0.5);
 
-    if (report.roomWarnings.length > 0) {
+    if (report.roomWarnings && report.roomWarnings.length > 0) {
       doc.fillColor("#cc0000").fontSize(10).text("CRITICAL OBSERVATIONS:");
       report.roomWarnings.forEach(warning => {
         doc.fillColor("#444444").fontSize(9).text(`• ${warning}`, { indent: 15 });
@@ -73,21 +73,35 @@ function generatePropertyPDF(property, report) {
       doc.moveDown(1);
     }
 
-    doc.fillColor("#111111").fontSize(10).text("RECOMMENDED REMEDIES:");
-    const genericTips = [
-      "Keep the North-East corner light and clean for energy flow.",
-      "Place a sea salt bowl in bathrooms to neutralize negative energy.",
-      "Ensure the center of the house (Brahmasthan) is free of heavy furniture."
-    ];
-    
-    const allTips = [...report.vastuTips, ...genericTips].slice(0, 5);
-    allTips.forEach(tip => {
-      doc.fillColor("#444444").fontSize(9).text(`• ${tip}`, { indent: 15 });
-    });
+    const groundedRecs = property.groundedRecommendations || report.groundedRecommendations || [];
+
+    if (groundedRecs.length > 0) {
+      doc.fillColor("#111111").fontSize(10).text("GROUNDED VASTU REMEDIES & CITATIONS:");
+      groundedRecs.forEach((rec, idx) => {
+        doc.fillColor("#111111").fontSize(9).text(`${idx + 1}. [${rec.issue || "Observation"}]`, { indent: 10 });
+        doc.fillColor("#444444").fontSize(9).text(`Remedy: ${rec.recommendation}`, { indent: 20 });
+        if (rec.sources && rec.sources.length > 0) {
+          doc.fillColor("#b08d57").fontSize(8).text(`Source: ${rec.sources[0].title} (${rec.sources[0].reference})`, { indent: 20 });
+        }
+        doc.moveDown(0.5);
+      });
+    } else {
+      doc.fillColor("#111111").fontSize(10).text("RECOMMENDED REMEDIES:");
+      const genericTips = [
+        "Keep the North-East corner light and clean for energy flow.",
+        "Place a sea salt bowl in bathrooms to neutralize negative energy.",
+        "Ensure the center of the house (Brahmasthan) is free of heavy furniture."
+      ];
+      
+      const allTips = [...(report.vastuTips || []), ...genericTips].slice(0, 5);
+      allTips.forEach(tip => {
+        doc.fillColor("#444444").fontSize(9).text(`• ${tip}`, { indent: 15 });
+      });
+    }
 
     // 6. Footer
-    doc.moveDown(4);
-    doc.fontSize(8).fillColor("#aaaaaa").text("This report is generated using VastuZone's proprietary AI Spatial Inference Engine. For legal purposes, this is a preliminary audit. Consult with a human expert for structural changes.", { align: "center" });
+    doc.moveDown(3);
+    doc.fontSize(8).fillColor("#aaaaaa").text("This report is generated using VastuZone's Grounded RAG & Spatial Inference Engine. For legal purposes, this is a preliminary audit. Consult with a human expert for structural changes.", { align: "center" });
 
     doc.end();
   });
