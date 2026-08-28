@@ -158,7 +158,7 @@ function Home() {
             <span className="eyebrow">The Authority</span>
             <h2 className="serif" style={{ fontSize: '4rem', marginBottom: '30px' }}>Guiding Spaces <br /> Towards Balance</h2>
             <p className="expert-bio">
-              With years of dedicated practice in Vastu Shastra, Dr. Rajni Kant Srivastava (+91 80900 00080) has transformed many living and commercial environments across India. 
+              With years of dedicated practice in Vastu Shastra, Dr. Rajni Kant Srivastava has transformed many living and commercial environments across India. 
             </p>
             <p className="expert-bio">
               His methodology is rooted in the belief that architectural logic and energy flow are the primary drivers of prosperity. He specializes in "Vastu without Breakage," providing non-structural remedies that align with modern lifestyles while respecting ancient traditions.
@@ -220,7 +220,6 @@ function Home() {
             <div className="footer-col">
               <h4>Contact</h4>
               <p>kant.online@gmail.com</p>
-              <p>+91 80900 00080</p>
               <p>Lucknow, India</p>
             </div>
           </div>
